@@ -13,7 +13,7 @@
 </script>
 
 <ModalBase {...$$restProps}>
-  <svelte:fragment slot="header">About DbGate</svelte:fragment>
+  <svelte:fragment slot="header">About DbGate2234</svelte:fragment>
   <div class="flex">
     <img src="logo192.png" />
     <div>
