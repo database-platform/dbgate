@@ -11,13 +11,7 @@ node_modules
 # production
 build
 dist
-
-app/packages/web/public
-app/packages/plugins
-docker/public
-docker/bundle.js
-docker/plugins
-docker/*.node
+lib
 
 # misc
 .DS_Store
@@ -29,7 +23,3 @@ docker/*.node
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-app/src/nativeModulesContent.js
-packages/api/src/nativeModulesContent.js
-packages/api/src/packagedPluginsContent.js
-.VSCodeCounter

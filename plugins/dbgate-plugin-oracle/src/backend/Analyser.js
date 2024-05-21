@@ -80,18 +80,21 @@ class Analyser extends DatabaseAnalyser {
     this.feedback({ analysingMessage: 'Loading foreign keys' });
     const fkColumns = await this.analyserQuery('foreignKeys', ['tables']);
     this.feedback({ analysingMessage: 'Loading views' });
-    const views = await this.analyserQuery('views', ['views']);
+    // const views = await this.analyserQuery('views', ['views']);
+    const views = { rows: [] };
     let geometryColumns = { rows: [] };
     let geographyColumns = { rows: [] };
 
     this.feedback({ analysingMessage: 'Loading materialized views' });
-    const matviews = this.driver.dialect.materializedViews ? await this.analyserQuery('matviews', ['matviews']) : null;
+    // const matviews = this.driver.dialect.materializedViews ? await this.analyserQuery('matviews', ['matviews']) : null;
+    const matviews = null;
     this.feedback({ analysingMessage: 'Loading materialized view columns' });
     const matviewColumns = this.driver.dialect.materializedViews
       ? await this.analyserQuery('matviewColumns', ['matviews'])
       : null;
     this.feedback({ analysingMessage: 'Loading routines' });
-    const routines = await this.analyserQuery('routines', ['procedures', 'functions']);
+    // const routines = await this.analyserQuery('routines', ['procedures', 'functions']);
+    const routines = { rows: [] };
     this.feedback({ analysingMessage: 'Loading indexes' });
     const indexes = this.driver.__analyserInternals.skipIndexes
       ? { rows: [] }

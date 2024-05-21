@@ -1,0 +1,41 @@
+{
+  "name": "dbgate-plugin-dameng",
+  "main": "dist/backend.js",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Dameng connector plugin for DbGate",
+  "author": "Hao Rui",
+  "repository": {
+    "type": "git",
+    "url": "http://8.134.215.8:3000/zonesec/dbgate"
+  },
+  "keywords": [
+    "dbgate",
+    "dbgateplugin",
+    "dameng",
+    "dameng8"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:frontend": "webpack --config webpack-frontend.config",
+    "build:frontend:watch": "webpack  --watch --config webpack-frontend.config",
+    "build:backend": "webpack --config webpack-backend.config.js",
+    "build": "yarn build:frontend && yarn build:backend",
+    "plugin": "yarn build && yarn pack && dbgate-plugin dbgate-plugin-dameng",
+    "plugout": "dbgate-plugout dbgate-plugin-dameng",
+    "copydist": "yarn build && yarn pack && dbgate-copydist ../dist/dbgate-plugin-dameng",
+    "prepublishOnly": "yarn build"
+  },
+  "devDependencies": {
+    "byline": "^5.0.0",
+    "dbgate-plugin-tools": "^1.0.8",
+    "dbgate-tools": "^5.0.0",
+    "dmdb": "^1.0.24984",
+    "json-stable-stringify": "^1.0.1",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {}
+}

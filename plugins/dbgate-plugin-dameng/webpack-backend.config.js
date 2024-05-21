@@ -18,24 +18,6 @@ var config = {
   //   optimization: {
   //     minimize: false,
   //   },
-
-  plugins: [
-    new webpack.IgnorePlugin({
-      checkResource(resource) {
-        console.log('oracle resource ', resource);
-        const lazyImports = ['oracledb', 'uws'];
-        if (!lazyImports.includes(resource)) {
-          return false;
-        }
-        try {
-          require.resolve(resource);
-        } catch (err) {
-          return true;
-        }
-        return false;
-      },
-    }),
-  ],
 };
 
 module.exports = config;

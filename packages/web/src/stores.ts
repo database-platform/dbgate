@@ -71,7 +71,7 @@ export function writableSettingsValue<T>(defaultValue: T, storageName) {
 function subscribeCssVariable(store, transform, cssVariable) {
   store.subscribe(value => document.documentElement.style.setProperty(cssVariable, transform(value)));
 }
-
+export const visibleIconBar = writable(false);
 export const selectedWidget = writableWithStorage('database', 'selectedWidget');
 export const lockedDatabaseMode = writableWithStorage<boolean>(false, 'lockedDatabaseMode');
 export const visibleWidgetSideBar = writableWithStorage(true, 'visibleWidgetSideBar');

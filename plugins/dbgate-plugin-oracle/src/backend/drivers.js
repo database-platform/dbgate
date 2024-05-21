@@ -62,18 +62,21 @@ const drivers = driverBases.map(driverBase => ({
     authType,
     socketPath,
   }) {
-    client = await getOracledb().getConnection({
+    const options = {
       user,
       password,
-      connectString: useDatabaseUrl ? databaseUrl : port ? `${server}:${port}` : server,
-    });
+      connectionString: database ? `${server}:${port}/${database}` : `${server}:${port}`
+    }
+    // connection = await oracledb.getConnection({ user: "demonode", password: "demonode123", connectionString: "192.168.3.196/xepdb1" });
+    const pool = await getOracledb().createPool(options);
+    client = await pool.getConnection();
     return client;
   },
   async close(pool) {
     return pool.end();
   },
   async query(client, sql) {
-    //console.log('query sql', sql);
+    console.log('query sql', sql);
     if (sql == null) {
       return {
         rows: [],
@@ -100,7 +103,7 @@ const drivers = driverBases.map(driverBase => ({
       rowMode: 'array',
     });
 */
-    // console.log('queryStream', sql);
+    console.log('queryStream', sql);
     const query = client.queryStream(sql);
     // const consumeStream = new Promise((resolve, reject) => {
     let rowcount = 0;
@@ -178,24 +181,21 @@ const drivers = driverBases.map(driverBase => ({
     //client.query(query);
   },
   async getVersion(client) {
-    //const { rows } = await this.query(client, "SELECT banner as version FROM v$version WHERE banner LIKE 'Oracle%'");
-    const { rows } = await this.query(client, 'SELECT version as "version" FROM v$instance');
-    const { version } = rows[0];
+    const { rows } = await this.query(client, "SELECT banner_full as version FROM v$version WHERE banner LIKE 'Oracle%'");
+    // const { rows } = await this.query(client, 'SELECT version as "version" FROM v$instance');
+    const { VERSION: version } = rows[0];
+    // Oracle Database 18c Express Edition Release 18.0.0.0.0 - Production Version 18.4.0.0.0
 
     const isCockroach = false; //version.toLowerCase().includes('cockroachdb');
     const isRedshift = false; // version.toLowerCase().includes('redshift');
     const isOracle = true;
 
-    const m = version.match(/([\d\.]+)/);
-    //console.log('M', m);
+    console.log('M', version);
     let versionText = null;
     let versionMajor = null;
     let versionMinor = null;
-    if (m) {
-      if (isOracle) versionText = `Oracle ${m[1]}`;
-      const numbers = m[1].split('.');
-      if (numbers[0]) versionMajor = parseInt(numbers[0]);
-      if (numbers[1]) versionMinor = parseInt(numbers[1]);
+    if (version) {
+      if (isOracle) versionText = `${version}`;
     }
 
     return {
@@ -215,7 +215,7 @@ const drivers = driverBases.map(driverBase => ({
       rowMode: 'array',
     });
 */
-    // console.log('readQuery', sql, structure);
+    console.log('readQuery', sql, structure);
     const query = await client.queryStream(sql);
 
     let wasHeader = false;
@@ -265,7 +265,9 @@ const drivers = driverBases.map(driverBase => ({
     return createBulkInsertStreamBase(this, stream, pool, name, options);
   },
   async listDatabases(client) {
-    const { rows } = await this.query(client, 'SELECT instance_name AS "name" FROM v$instance');
+    // const { rows } = await this.query(client, 'SELECT instance_name AS "name" FROM v$instance');
+    const { rows } = await this.query(client, 'SELECT ORA_DATABASE_NAME AS "name" FROM DUAL');
+    console.log('rows ', rows)
     return rows;
   },
 
@@ -284,6 +286,7 @@ const drivers = driverBases.map(driverBase => ({
 }));
 
 drivers.initialize = dbgateEnv => {
+  console.log('initialize', dbgateEnv);
   if (dbgateEnv.nativeModules && dbgateEnv.nativeModules.oracledb) {
     requireOracledb = dbgateEnv.nativeModules.oracledb;
   }

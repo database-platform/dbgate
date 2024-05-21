@@ -83,6 +83,7 @@ module.exports = {
   handle_ping() {},
 
   async ensureOpened(conid, database) {
+    console.log('ensureOpened ', conid, database)
     const existing = this.opened.find(x => x.conid == conid && x.database == database);
     if (existing) return existing;
     const connection = await connections.getCore({ conid });
@@ -369,7 +370,9 @@ module.exports = {
 
   structure_meta: true,
   async structure({ conid, database }, req) {
+    console.log('structure start')
     testConnectionPermission(conid, req);
+    console.log('structure end ', conid)
     if (conid == '__model') {
       const model = await importDbModel(database);
       return model;

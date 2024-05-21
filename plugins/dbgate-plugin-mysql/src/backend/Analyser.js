@@ -78,6 +78,7 @@ class Analyser extends DatabaseAnalyser {
   async _computeSingleObjectId() {
     const { pureName } = this.singleObjectFilter;
     this.singleObjectId = pureName;
+    console.log('_computeSingleObjectId :', this.singleObjectId);
   }
 
   async getViewTexts(allViewNames) {
@@ -103,6 +104,7 @@ class Analyser extends DatabaseAnalyser {
   async _runAnalysis() {
     this.feedback({ analysingMessage: 'Loading tables' });
     const tables = await this.analyserQuery('tables', ['tables']);
+    console.log('tables', tables);
     this.feedback({ analysingMessage: 'Loading columns' });
     const columns = await this.analyserQuery('columns', ['tables', 'views']);
     this.feedback({ analysingMessage: 'Loading primary keys' });

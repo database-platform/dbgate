@@ -250,10 +250,12 @@ const driver = {
   },
   async listDatabases(pool) {
     const res = await pool.__getDatabase().admin().listDatabases();
+    console.log('listDatabases', res);
     return res.databases;
   },
   async readCollection(pool, options) {
     try {
+      console.log('readCollection', options.pureName);
       const collection = pool.__getDatabase().collection(options.pureName);
       if (options.countDocuments) {
         const count = await collection.countDocuments(convertObjectId(options.condition) || {});

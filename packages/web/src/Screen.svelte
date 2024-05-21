@@ -12,6 +12,7 @@
     visibleCommandPalette,
     visibleTitleBar,
     visibleToolbar,
+    visibleIconBar,
   } from './stores';
   import TabsPanel from './tabpanel/TabsPanel.svelte';
   import TabRegister from './tabpanel/TabRegister.svelte';
@@ -60,9 +61,11 @@
       <TitleBar />
     </div>
   {/if}
-  <div class="iconbar">
-    <WidgetIconPanel />
-  </div>
+  {#if $visibleIconBar}
+    <div class="iconbar">
+      <WidgetIconPanel />
+    </div>
+  {/if}
   <div class="statusbar">
     <StatusBar />
   </div>

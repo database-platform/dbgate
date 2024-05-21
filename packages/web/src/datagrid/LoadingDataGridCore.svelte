@@ -49,7 +49,6 @@
     // await new Promise(resolve => setTimeout(resolve, 5000));
 
     loadedTimeRef.set(loadStart);
-    // console.log('LOAD NEXT ROWS', loadedRows);
 
     const nextRows = await loadDataPage(
       $$props,
@@ -67,9 +66,18 @@
       errorMessage = nextRows.errorMessage;
     } else {
       if (allRowCount == null) handleLoadRowCount();
-
+      
       loadedRows = [...loadedRows, ...(preprocessLoadedRow ? nextRows.map(preprocessLoadedRow) : nextRows)];
-      isLoadedAll = nextRows.length === 0;
+      
+      if (nextRows.length === 0) {
+        isLoadedAll = true;
+      } else if (loadedRows.length >= allRowCount) {
+        isLoadedAll = true;
+      } else {
+        isLoadedAll = false;
+      }
+
+      console.log(`loadedRows: ${loadedRows.length}, nextRows: ${nextRows.length} `);
       //   const loadedInfo = {
       //     loadedRows: [...loadedRows, ...nextRows],
       //     loadedTime,

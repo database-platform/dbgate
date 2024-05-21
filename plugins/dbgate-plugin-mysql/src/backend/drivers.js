@@ -48,7 +48,7 @@ const drivers = driverBases.map(driverBase => ({
       // TODO: test following options
       // multipleStatements: true,
     };
-
+    
     const connection = mysql2.createConnection(options);
     connection._database_name = database;
     if (isReadOnly) {
@@ -60,6 +60,7 @@ const drivers = driverBases.map(driverBase => ({
     return pool.close();
   },
   query(connection, sql) {
+    console.log('mysql query: ', sql);
     if (sql == null) {
       return {
         rows: [],
@@ -172,6 +173,7 @@ const drivers = driverBases.map(driverBase => ({
   },
   async listDatabases(connection) {
     const { rows } = await this.query(connection, 'show databases');
+    console.log('mysql listDatabases: ', rows);
     return rows.map(x => ({ name: x.Database }));
   },
   async writeTable(pool, name, options) {

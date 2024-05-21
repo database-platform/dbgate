@@ -82,7 +82,6 @@ const drivers = driverBases.map(driverBase => ({
             application_name: 'DbGate',
           };
     }
-
     const client = new pg.Client(options);
     await client.connect();
 
@@ -102,6 +101,7 @@ const drivers = driverBases.map(driverBase => ({
         columns: [],
       };
     }
+    console.log('postgres sql: ', sql)
     const res = await client.query({ text: sql, rowMode: 'array' });
     const columns = extractPostgresColumns(res);
     return { rows: (res.rows || []).map(row => zipDataRow(row, columns)), columns };
@@ -199,6 +199,7 @@ const drivers = driverBases.map(driverBase => ({
     };
   },
   async readQuery(client, sql, structure) {
+    console.log('readQuery sql: ', sql);
     const query = new pg.Query({
       text: sql,
       rowMode: 'array',
@@ -253,6 +254,7 @@ const drivers = driverBases.map(driverBase => ({
   },
   async listDatabases(client) {
     const { rows } = await this.query(client, 'SELECT datname AS name FROM pg_database WHERE datistemplate = false');
+    console.log('listDatabases rows: ', rows);
     return rows;
   },
 

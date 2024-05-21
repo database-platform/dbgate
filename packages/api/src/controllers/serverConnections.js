@@ -133,6 +133,7 @@ module.exports = {
     if (!conid) return [];
     testConnectionPermission(conid, req);
     const opened = await this.ensureOpened(conid);
+    // console.log('listDatabases opened ', opened);
     return opened.databases;
   },
 

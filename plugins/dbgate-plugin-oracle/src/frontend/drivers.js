@@ -110,10 +110,10 @@ const oracleDriverBase = {
   getQuerySplitterOptions: () => oracleSplitterOptions,
   readOnlySessions: true,
 
-  databaseUrlPlaceholder: 'e.g. oracledb://user:password@localhost:1521',
+  // databaseUrlPlaceholder: 'e.g. oracledb://user:password@localhost:1521/service_name',
 
   showConnectionField: (field, values) => {
-    if (field == 'useDatabaseUrl') return true;
+    // if (field == 'useDatabaseUrl') return true;
     if (values.useDatabaseUrl) {
       return ['databaseUrl', 'isReadOnly'].includes(field);
     }
