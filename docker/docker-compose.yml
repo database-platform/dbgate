@@ -2,14 +2,14 @@ services:
   server:
     image: myregistry.dataleapinfo.com:5443/dbgate:latest
     init: true
-    environment:
-      - DATABASE_URL=mysql://dbsun:@Sun12345@8.134.215.8:3306/smartdata
-      - OAUTH_AUTH=https://sso.dataleapinfo.com/auth
-      - OAUTH_TOKEN=https://sso.dataleapinfo.com/token
-      - OAUTH_LOGOUT=https://sso.dataleapinfo.com/logout
-      - OAUTH_CLIENT_ID=dbgate
-      - OAUTH_CLIENT_SECRET=xxxx
-      - OAUTH_SCOPE=email
+    #environment:
+      # - DATABASE_URL=mysql://dbsun:@Sun12345@8.134.215.8:3306/smartdata
+      # - OAUTH_AUTH=https://sso.dataleapinfo.com/auth
+      # - OAUTH_TOKEN=https://sso.dataleapinfo.com/token
+      # - OAUTH_LOGOUT=https://sso.dataleapinfo.com/logout
+      # - OAUTH_CLIENT_ID=dbgate
+      # - OAUTH_CLIENT_SECRET=xxxx
+      # - OAUTH_SCOPE=email
     ports:
       - "3020:3000"
     deploy:

@@ -65,6 +65,10 @@
     if (removed) removed.remove();
   });
 
+  onMount(() => {
+    console.log('app mount.');
+  })
+
   $: {
     if (loadedApi && $loadingPluginStore?.loaded) {
       setAppLoaded();

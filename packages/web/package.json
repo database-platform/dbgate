@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "cross-env API_URL=http://localhost:3000 node --max-old-space-size=4096 ../../node_modules/rollup/dist/bin/rollup -c -w",
-    "start": "sirv public --port 5001",
+    "start": "sirv public --port 5001 --host 0.0.0.0 --cors",
     "validate": "svelte-check",
     "prepublishOnly": "yarn build"
   },

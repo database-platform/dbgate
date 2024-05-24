@@ -1,7 +1,9 @@
 <script lang="ts" context="module">
   async function loadPlugins(pluginsDict, installedPlugins) {
     window['DBGATE_TOOLS'] = dbgateTools;
-
+    console.log('windw: ', window);
+    console.log('Function("return window")(): ', Function("return window")());
+    
     const newPlugins = {};
     for (const installed of installedPlugins || []) {
       if (!_.keys(pluginsDict).includes(installed.name)) {
