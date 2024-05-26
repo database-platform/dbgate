@@ -25,6 +25,7 @@ export function writableWithStorage<T>(defaultValue: T, storageName) {
   const init = localStorage.getItem(storageName);
   const res = writable<T>(init ? safeJsonParse(init, defaultValue, true) : defaultValue);
   res.subscribe(value => {
+    console.log('storageName ', storageName, value);
     localStorage.setItem(storageName, JSON.stringify(value));
   });
   return res;
@@ -130,7 +131,7 @@ export const currentDropDownMenu = writable(null);
 export const openedModals = writable([]);
 export const draggedPinnedObject = writable(null);
 export const openedSnackbars = writable([]);
-export const nullStore = readable(null, () => {});
+export const nullStore = readable(null, () => { });
 export const currentArchive = writableWithStorage('default', 'currentArchive');
 export const currentApplication = writableWithStorage(null, 'currentApplication');
 export const isFileDragActive = writable(false);

@@ -35,7 +35,7 @@
   }
 </script>
 
-<div class="main-container" bind:clientHeight class:hidden>
+<div class="dbgate-main-container" bind:clientHeight class:hidden>
   <slot />
 </div>
 
@@ -44,14 +44,14 @@
     display: none;
   }
 
-  .main-container {
+  .dbgate-main-container {
     position: relative;
     flex: 1;
     flex-direction: column;
     user-select: none;
   }
 
-  .main-container:not(.hidden) {
+  .dbgate-main-container:not(.hidden) {
     display: flex;
   }
 </style>

@@ -1,4 +1,7 @@
 :root {
+  --dim-micro-app-left: 0px; /* set from micro app JS */
+  --dim-micro-app-top: 0px; /* set from micro app JS */
+
   --dim-widget-icon-size: 1px;
   --dim-statusbar-height: 22px;
   --dim-left-panel-width: 300px;
@@ -8,7 +11,7 @@
 
   --dim-visible-left-panel: 1; /* set from JS */
   --dim-content-left: calc(
-    var(--dim-widget-icon-size) + var(--dim-visible-left-panel) *
+    var(--dim-micro-app-left) + var(--dim-widget-icon-size) + var(--dim-visible-left-panel) *
       (var(--dim-left-panel-width) + var(--dim-splitter-thickness))
   );
 
@@ -20,7 +23,8 @@
   --dim-titlebar-height: 30px;
   --dim-toolbar-top: calc(var(--dim-titlebar-height) * var(--dim-visible-titlebar));
   --dim-header-top: calc(
-    var(--dim-titlebar-height) * var(--dim-visible-titlebar) + var(--dim-toolbar-height) * var(--dim-visible-toolbar)
+    var(--dim-micro-app-top) + var(--dim-titlebar-height) * var(--dim-visible-titlebar) + var(--dim-toolbar-height) *
+      var(--dim-visible-toolbar)
   );
 
   --dim-large-form-margin: 20px;

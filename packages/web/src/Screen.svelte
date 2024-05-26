@@ -123,7 +123,7 @@
     position: fixed;
     background: var(--theme-bg-statusbar-inv);
     height: var(--dim-statusbar-height);
-    left: 0;
+    left: var(--dim-micro-app-left);
     right: 0;
     bottom: 0;
     display: flex;
@@ -131,7 +131,7 @@
   .leftpanel {
     position: fixed;
     top: var(--dim-header-top);
-    left: var(--dim-widget-icon-size);
+    left: calc(var(--dim-micro-app-left) + var(--dim-widget-icon-size));
     bottom: var(--dim-statusbar-height);
     width: var(--dim-left-panel-width);
     background-color: var(--theme-bg-1);
@@ -152,10 +152,10 @@
   }
 
   .splitter {
-    position: absolute;
+    position: fixed;
     top: var(--dim-header-top);
     bottom: var(--dim-statusbar-height);
-    left: calc(var(--dim-widget-icon-size) + var(--dim-left-panel-width));
+    left: calc(var(--dim-micro-app-left) + var(--dim-widget-icon-size) + var(--dim-left-panel-width));
   }
 
   .snackbar-container {

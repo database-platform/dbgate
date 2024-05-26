@@ -21,6 +21,7 @@
   import AppStartInfo from './widgets/AppStartInfo.svelte';
   import SettingsListener from './utility/SettingsListener.svelte';
   import { handleAuthOnStartup, handleOauthCallback } from './clientAuth';
+  import { startMicroApp } from './microApp';
 
   let loadedApi = false;
   let loadedPlugins = false;
@@ -66,8 +67,11 @@
   });
 
   onMount(() => {
-    console.log('app mount.');
-  })
+    console.log('app mount.', window.__MICRO_APP_ENVIRONMENT__);
+    if (window.__MICRO_APP_ENVIRONMENT__) {
+      startMicroApp();
+    }
+  });
 
   $: {
     if (loadedApi && $loadingPluginStore?.loaded) {
