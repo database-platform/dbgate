@@ -1,3 +1,5 @@
+import { currentTheme } from './stores';
+
 export interface MicroAppGlobalProps {
   layout?: MicroAppLayoutProps;
 }
@@ -5,7 +7,7 @@ export interface MicroAppGlobalProps {
 export interface MicroAppLayoutProps {
   left: string;
   top: string;
-  themeMode: string; // light, dark, auto
+  darkMode: boolean;
 }
 
 export function startMicroApp() {
@@ -26,6 +28,7 @@ function fromMainAppData(data: MicroAppGlobalProps) {
       const { layout } = data;
       rootStyle.setProperty('--dim-micro-app-left', layout.left);
       rootStyle.setProperty('--dim-micro-app-top', layout.top);
+      currentTheme.update(() => (data.layout.darkMode ? 'theme-dark' : 'theme-light'));
     }
   } catch (error) {
     console.log('error ', error);
