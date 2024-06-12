@@ -1,18 +1,20 @@
-var webpack = require("webpack");
-var path = require("path");
+var webpack = require('webpack');
+var path = require('path');
 
 var config = {
-  context: __dirname + "/src/frontend",
+  context: __dirname + '/src/frontend',
 
   entry: {
-    app: "./index.js",
+    app: './index.js',
   },
-  target: "web",
+  target: 'web',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "frontend.js",
-    libraryTarget: "var",
-    library: 'plugin',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'frontend.js',
+    library: {
+      name: 'plugin',
+      type: 'var',
+    },
   },
 
   plugins: [

@@ -34,7 +34,7 @@
     "build:api": "yarn workspace dbgate-api build",
     "build:web:docker": "yarn workspace dbgate-web build",
     "build:plugins:frontend": "workspaces-run --only=\"dbgate-plugin-*\" -- yarn build:frontend",
-    "build:plugins:frontend:watch": "workspaces-run --parallel --only=\"dbgate-plugin-*\" -- yarn build:frontend:watch",
+    "build:plugins:frontend:watch": "workspaces-run --parallel --only=\"dbgate-plugin-csv\" -- yarn build:frontend:watch",
     "plugins:copydist": "workspaces-run --only=\"dbgate-plugin-{mysql,postgres,redis,sqlite}\" -- yarn copydist",
     "build:app:local": "yarn plugins:copydist && cd app && yarn build:local",
     "start:app:local": "cd app && yarn start:local",
@@ -66,5 +66,6 @@
     "copyfiles": "^2.2.0",
     "prettier": "^2.2.1",
     "workspaces-run": "^1.0.1"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
