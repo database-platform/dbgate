@@ -22,9 +22,9 @@
     "icon.svg"
   ],
   "scripts": {
-    "build:frontend": "webpack --config webpack-frontend.config",
-    "build:frontend:watch": "webpack --watch --config webpack-frontend.config",
-    "build:backend": "webpack --config webpack-backend.config.js",
+    "build:frontend": "webpack --mode=production --config webpack-frontend.config",
+    "build:frontend:watch": "webpack --mode=production --watch --config webpack-frontend.config",
+    "build:backend": "webpack --mode=production --config webpack-backend.config.js",
     "build": "yarn build:frontend && yarn build:backend",
     "plugin": "yarn build && dbgate-plugin dbgate-plugin-excel",
     "copydist": "yarn build && yarn pack && dbgate-copydist ../dist/dbgate-plugin-excel",
@@ -32,10 +32,10 @@
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
-    "lodash": "^4.17.21",
-    "xlsx": "0.16.9",
     "dbgate-plugin-tools": "^1.0.7",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "lodash": "^4.17.21",
+    "webpack": "5.92.0",
+    "webpack-cli": "5.1.4",
+    "xlsx": "0.16.9"
   }
 }
