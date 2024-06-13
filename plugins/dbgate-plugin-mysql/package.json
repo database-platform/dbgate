@@ -21,9 +21,9 @@
     "icon.svg"
   ],
   "scripts": {
-    "build:frontend": "webpack --config webpack-frontend.config",
-    "build:frontend:watch": "webpack --watch --config webpack-frontend.config",
-    "build:backend": "webpack --config webpack-backend.config.js",
+    "build:frontend": "webpack --mode=production --config webpack-frontend.config",
+    "build:frontend:watch": "webpack --mode=production --watch --config webpack-frontend.config",
+    "build:backend": "webpack --mode=production --config webpack-backend.config.js",
     "build": "yarn build:frontend && yarn build:backend",
     "plugin": "yarn build && yarn pack && dbgate-plugin dbgate-plugin-mysql",
     "copydist": "yarn build && yarn pack && dbgate-copydist ../dist/dbgate-plugin-mysql",
@@ -36,7 +36,7 @@
     "dbgate-tools": "^5.0.0-alpha.1",
     "mysql2": "^3.6.5",
     "r-dbgate-plugin-tools": "^2.0.0",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
+    "webpack": "5.92.0",
+    "webpack-cli": "5.1.4"
   }
 }
