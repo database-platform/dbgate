@@ -29,14 +29,14 @@
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
-    "dbgate-plugin-tools": "^1.0.7",
+    "async": "^3.2.3",
     "dbgate-query-splitter": "^4.9.3",
     "dbgate-tools": "^5.0.0-alpha.1",
-    "lodash": "^4.17.21",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11",
-    "async": "^3.2.3",
     "ioredis": "^4.28.5",
-    "node-redis-dump2": "^0.5.0"
+    "lodash": "^4.17.21",
+    "node-redis-dump2": "^0.5.0",
+    "r-dbgate-plugin-tools": "^2.0.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
   }
 }
