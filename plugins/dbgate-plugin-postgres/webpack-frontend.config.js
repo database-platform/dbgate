@@ -11,8 +11,10 @@ var config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'frontend.js',
-    libraryTarget: 'var',
-    library: 'plugin',
+    library: {
+      name: 'plugin',
+      type: 'var',
+    },
   },
 
   plugins: [
