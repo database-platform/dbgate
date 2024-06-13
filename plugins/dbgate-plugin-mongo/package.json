@@ -31,11 +31,13 @@
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
+    "@mongodb-js/zstd": "^1.2.0",
     "dbgate-query-splitter": "^4.9.3",
     "dbgate-tools": "^5.0.0-alpha.1",
     "is-promise": "^4.0.0",
-    "mongodb": "^4.7.0",
-    "mongodb-client-encryption": "^2.1.0",
+    "kerberos": "^2.1.0",
+    "mongodb": "^6.7.0",
+    "mongodb-client-encryption": "^6.0.1",
     "r-dbgate-plugin-tools": "^2.0.0",
     "webpack": "5.92.0",
     "webpack-cli": "5.1.4"

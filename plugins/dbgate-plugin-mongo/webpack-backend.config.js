@@ -11,9 +11,19 @@ var config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'backend.js',
-    libraryTarget: 'commonjs2',
+    library: {
+      type: 'commonjs2',
+    },
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.node$/,
+        use: 'node-loader',
+      },
+    ],
+  },
   // uncomment for disable minimalization
   //   optimization: {
   //     minimize: false,
