@@ -61,7 +61,7 @@
       chart.type = type;
       chart.options = _.cloneDeep(options);
       // chart.plugins = plugins;
-      //chart.update();
+      chart.update();
     } catch (error) {
       console.error('error: ', error);
     }

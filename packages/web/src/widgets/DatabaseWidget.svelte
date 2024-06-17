@@ -31,7 +31,7 @@
       <SingleConnectionDatabaseList connection={$config?.singleConnection} />
     </WidgetColumnBarItem>
   {:else if !$config?.singleDbConnection}
-    <WidgetColumnBarItem title="Connections" name="connections" height="35%" storageName="connectionsWidget">
+    <WidgetColumnBarItem title="数据资产" name="connections" height="35%" storageName="connectionsWidget">
       <ConnectionList />
     </WidgetColumnBarItem>
   {/if}
@@ -47,7 +47,7 @@
   </WidgetColumnBarItem>
 
   <WidgetColumnBarItem
-    title={driver?.databaseEngineTypes?.includes('document') ? 'Collections' : 'Tables, views, functions'}
+    title={driver?.databaseEngineTypes?.includes('document') ? 'Collections' : '表，视图，函数'}
     name="dbObjects"
     storageName="dbObjectsWidget"
     skip={!(
@@ -69,13 +69,13 @@
   </WidgetColumnBarItem>
 
   <WidgetColumnBarItem
-    title="Database content"
+    title="数据资产详情"
     name="dbObjects"
     storageName="dbObjectsWidget"
     skip={conid && (database || singleDatabase)}
   >
     <WidgetsInnerContainer>
-      <ErrorInfo message="Database not selected" icon="img alert" />
+      <ErrorInfo message="无数据" icon="img alert" />
     </WidgetsInnerContainer>
   </WidgetColumnBarItem>
 </WidgetColumnBar>

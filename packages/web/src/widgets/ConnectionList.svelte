@@ -109,7 +109,7 @@
 </script>
 
 <SearchBoxWrapper>
-  <SearchInput placeholder="Search connection or database" bind:value={filter} />
+  <SearchInput placeholder="搜索 connection or database" bind:value={filter} />
   <CloseSearchButton bind:filter />
   {#if $commandsCustomized['new.connection']?.enabled}
     <InlineButton on:click={() => runCommand('new.connection')} title="Add new connection">

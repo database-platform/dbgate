@@ -125,7 +125,7 @@
   </WidgetsInnerContainer>
 {:else}
   <SearchBoxWrapper>
-    <SearchInput placeholder="Search in tables, objects, # prefix in columns" bind:value={filter} />
+    <SearchInput placeholder="搜索表，对象..." bind:value={filter} />
     <CloseSearchButton bind:filter />
     <DropDownButton icon="icon plus-thick" menu={createAddMenu} />
     <InlineButton on:click={handleRefreshDatabase} title="Refresh database connection and object list">
