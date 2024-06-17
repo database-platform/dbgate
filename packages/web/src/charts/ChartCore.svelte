@@ -43,24 +43,32 @@
   let domChart;
 
   onMount(() => {
+    console.log('domChart: ', domChart, data);
     chart = new Chart(domChart, {
       type,
       data: data,
       // options must be cloned, because chartjs modifies options object, without cloning fails passing options to electron invoke
-      options: _.cloneDeep(options), 
+      options: _.cloneDeep(options),
     });
   });
 
   afterUpdate(() => {
+    console.log('afterUpdate ');
     if (!chart) return;
-    chart.data = data;
-    chart.type = type;
-    chart.options = _.cloneDeep(options);
-    // chart.plugins = plugins;
-    chart.update();
+    try {
+      console.log('afterUpdate: ', options);
+      chart.data = data;
+      chart.type = type;
+      chart.options = _.cloneDeep(options);
+      // chart.plugins = plugins;
+      //chart.update();
+    } catch (error) {
+      console.error('error: ', error);
+    }
   });
 
   onDestroy(() => {
+    console.log('onDestroy: ', domChart);
     chart = null;
   });
 

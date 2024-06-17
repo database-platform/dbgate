@@ -79,6 +79,7 @@ export default [
       }),
 
       replace({
+        preventAssignment: true,
         'process.env.API_URL': JSON.stringify(process.env.API_URL),
       }),
 
