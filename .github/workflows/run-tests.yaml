@@ -8,7 +8,7 @@ on:
 jobs:
   test-runner:
     runs-on: ubuntu-latest
-    container: node:16.20
+    container: node:18
 
     steps:
       - name: Context
@@ -25,7 +25,7 @@ jobs:
         run: |
           cd integration-tests
           yarn test:ci
-#          yarn wait:ci
+      #          yarn wait:ci
       - name: Filter parser tests
         if: always()
         run: |
@@ -77,6 +77,6 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: Pwd2020Db
           MSSQL_PID: Express
-          
+
       # cockroachdb:
       #   image: cockroachdb/cockroach

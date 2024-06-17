@@ -2,6 +2,9 @@ import type { DatabaseInfo, TableInfo, ApplicationDefinition, ViewInfo, Collecti
 import _flatten from 'lodash/flatten';
 
 export function addTableDependencies(db: DatabaseInfo): DatabaseInfo {
+  if (!db.tables) {
+    return db;
+  }
   const allForeignKeys = _flatten(db.tables.map(x => x.foreignKeys || []));
   return {
     ...db,
@@ -23,11 +26,11 @@ export function extendTableInfo(table: TableInfo): TableInfo {
     })),
     primaryKey: table.primaryKey
       ? {
-          ...table.primaryKey,
-          pureName: table.pureName,
-          schemaName: table.schemaName,
-          constraintType: 'primaryKey',
-        }
+        ...table.primaryKey,
+        pureName: table.pureName,
+        schemaName: table.schemaName,
+        constraintType: 'primaryKey',
+      }
       : undefined,
     foreignKeys: (table.foreignKeys || []).map(cnt => ({
       ...cnt,

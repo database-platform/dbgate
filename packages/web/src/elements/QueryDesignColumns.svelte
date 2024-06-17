@@ -49,11 +49,9 @@
       if (index >= 0 && index + d >= 0 && index + d < current.columns?.length) {
         let columns = [...current.columns];
 
-        let newColumns = [...columns];
-        let temp = newColumns[index];
-        newColumns[index] = newColumns[index + d];
-        newColumns[index + d] = temp;
-        // [columns[index], columns[index + d]] = [columns[index + d], columns[index]];
+        let tmp = columns[index + d];
+        columns[index + d] = columns[index];
+        columns[index] = tmp;
 
         return {
           ...current,

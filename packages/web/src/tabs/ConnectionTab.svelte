@@ -26,7 +26,7 @@
   } from '../stores';
   import _, { Dictionary } from 'lodash';
   import { apiCall } from '../utility/api';
-  import { showSnackbarSuccess } from '../utility/snackbar';
+  import { showSnackbarError, showSnackbarSuccess } from '../utility/snackbar';
   import { changeTab } from '../utility/common';
   import getConnectionLabel from '../utility/getConnectionLabel';
   import { onMount } from 'svelte';
@@ -161,7 +161,12 @@
 
   onMount(async () => {
     if (conid) {
-      $values = await apiCall('connections/get', { conid });
+      const con = await apiCall('connections/get', { conid });
+      if (con) {
+        $values = con;
+      } else {
+        showSnackbarError(`Connection not found: ${conid}`);
+      }
     }
   });
 

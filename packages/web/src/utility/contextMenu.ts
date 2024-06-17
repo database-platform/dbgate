@@ -64,7 +64,7 @@ function processTags(items) {
   for (const menu of items.filter(x => !x.tag)) {
     if (menu.placeTag) {
       const placeTags = getAsArray(menu.placeTag);
-      for (let index = 0; index < tagged.length; ) {
+      for (let index = 0; index < tagged.length;) {
         const current = tagged[index];
         if (_.intersection(placeTags, current.tags).length > 0) {
           tagged.splice(index, 1);
@@ -97,7 +97,7 @@ function mapItem(item, commands) {
     if (command) {
       return {
         text: item.text || command.menuName || command.toolbarName || command.name,
-        keyText: command.keyText || command.keyTextFromGroup,
+        keyText: command.keyText || command.keyTextFromGroup || command.disableHandleKeyText,
         onClick: () => {
           if (command.isGroupCommand) {
             runGroupCommand(command.group);

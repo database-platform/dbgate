@@ -38,6 +38,8 @@
     id: 'dataGrid.revertAllChanges',
     category: 'Data grid',
     name: 'Revert all changes',
+    toolbarName: 'Revert all',
+    icon: 'icon undo',
     testEnabled: () => getCurrentDataGrid()?.getGrider()?.containsChanges,
     onClick: () => getCurrentDataGrid().revertAllChanges(),
   });
@@ -689,7 +691,6 @@
       return;
     }
 
-
     openNewTab(
       {
         title: 'Map',
@@ -1164,7 +1165,6 @@
     if (event.target.closest('.showFormButtonMarker')) return;
     if (event.target.closest('.inplaceeditor-container')) return;
     if (event.target.closest('input')) return;
-
 
     shiftDragStartCell = null;
     // event.target.closest('table').focus();

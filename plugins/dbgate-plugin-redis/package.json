@@ -32,7 +32,7 @@
     "async": "^3.2.3",
     "dbgate-query-splitter": "^4.9.3",
     "dbgate-tools": "^5.0.0-alpha.1",
-    "ioredis": "^4.28.5",
+    "ioredis": "^5.4.1",
     "lodash": "^4.17.21",
     "node-redis-dump2": "^0.5.0",
     "r-dbgate-plugin-tools": "^2.0.0",
