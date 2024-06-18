@@ -9,6 +9,15 @@ Builds:
 - linux - application for linux
 - win - application for Windows
 
+### 5.2.9
+
+- FIXED: PostgresSQL doesn't show tables when connected
+- FIXED: MongoDB write operations fail
+- FIXED: Electron app logging losed most of log messages
+- FIXED: Connection error with SSH tunnel
+- ADDED: option to disable autoupgrades
+- ADDED: Send error context to github gist
+
 ### 5.2.8
 
 - FIXED: file menu save and save as not working
@@ -26,6 +35,9 @@ Builds:
 - ADDED: Add copy name to table list
 - FIXED: Make TabControl scrollable (#730)
 - ADDED: Add copy to column list
+- FIXED: Problems with SQLite + glibc in docker containers
+- ADDED: Button for discard/reset changes (#759)
+- FIXED: Don't show error dialog when subprocess fails, as DbGate handles this correctly(#751, #746, #542, #272)
 
 ### 5.2.7
 

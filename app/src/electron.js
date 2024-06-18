@@ -17,7 +17,7 @@ const path = require('path');
 const url = require('url');
 const mainMenuDefinition = require('./mainMenuDefinition');
 const { settings } = require('cluster');
-
+let disableAutoUpgrade = false;
 // require('@electron/remote/main').initialize();
 
 const configRootPath = path.join(app.getPath('userData'), 'config-root.json');
@@ -49,11 +49,20 @@ const isMac = () => os.platform() == 'darwin';
 
 try {
   initialConfig = JSON.parse(fs.readFileSync(configRootPath, { encoding: 'utf-8' }));
+  disableAutoUpgrade = initialConfig['disableAutoUpgrade'] || false;
 } catch (err) {
   console.log('Error loading config-root:', err.message);
   initialConfig = {};
 }
 
+if (process.argv.includes('--disable-auto-upgrade')) {
+  console.log('Disabling auto-upgrade');
+  disableAutoUpgrade = true;
+}
+if (process.argv.includes('--enable-auto-upgrade')) {
+  console.log('Enabling auto-upgrade');
+  disableAutoUpgrade = false;
+}
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -321,6 +330,7 @@ function createWindow() {
           JSON.stringify({
             winBounds: mainWindow.getBounds(),
             winIsMaximized: mainWindow.isMaximized(),
+            disableAutoUpgrade,
           }),
           'utf-8'
         );
@@ -383,7 +393,10 @@ function createWindow() {
 }
 
 function onAppReady() {
-  if (!process.env.DEVMODE) {
+  if (disableAutoUpgrade) {
+    console.log('auto-upgrade is disabled, run dbgate --enabled-auto-upgrade to enable');
+  }
+  if (!process.env.DEVMODE && !disableAutoUpgrade) {
     autoUpdater.checkForUpdatesAndNotify();
   }
   createWindow();

@@ -1,7 +1,7 @@
+const crypto = require('crypto');
 const _ = require('lodash');
 const path = require('path');
 const fs = require('fs-extra');
-const uuidv1 = require('uuid/v1');
 const byline = require('byline');
 const socket = require('../utility/socket');
 const { fork } = require('child_process');
@@ -28,8 +28,7 @@ const requirePluginsTemplate = (plugins, isExport) =>
   plugins
     .map(
       packageName =>
-        `const ${_.camelCase(packageName)} = require(${
-          isExport ? `'${packageName}'` : `process.env.PLUGIN_${_.camelCase(packageName)}`
+        `const ${_.camelCase(packageName)} = require(${isExport ? `'${packageName}'` : `process.env.PLUGIN_${_.camelCase(packageName)}`
         });\n`
     )
     .join('') + `dbgateApi.registerPlugins(${plugins.map(x => _.camelCase(x)).join(',')});\n`;
@@ -87,7 +86,7 @@ module.exports = {
     }
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   handle_freeData(runid, { freeData }) {
     const [resolve, reject] = this.requests[runid];
@@ -165,7 +164,7 @@ module.exports = {
 
   start_meta: true,
   async start({ script }) {
-    const runid = uuidv1();
+    const runid = crypto.randomUUID();
 
     if (script.type == 'json') {
       const js = jsonScriptToJavascript(script);
@@ -213,7 +212,7 @@ module.exports = {
   loadReader_meta: true,
   async loadReader({ functionName, props }) {
     const promise = new Promise((resolve, reject) => {
-      const runid = uuidv1();
+      const runid = crypto.randomUUID();
       this.requests[runid] = [resolve, reject];
       this.startCore(runid, loaderScriptTemplate(functionName, props, runid));
     });

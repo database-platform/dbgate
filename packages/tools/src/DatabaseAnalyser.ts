@@ -4,6 +4,7 @@ import _groupBy from 'lodash/groupBy';
 import _pick from 'lodash/pick';
 import _compact from 'lodash/compact';
 import { getLogger } from './getLogger';
+import { type Logger } from 'pinomin';
 
 const logger = getLogger('dbAnalyser');
 
@@ -37,9 +38,11 @@ export class DatabaseAnalyser {
   singleObjectFilter: any;
   singleObjectId: string = null;
   dialect: SqlDialect;
+  logger: Logger;
 
   constructor(public pool, public driver: EngineDriver, version) {
     this.dialect = (driver?.dialectByVersion && driver?.dialectByVersion(version)) || driver?.dialect;
+    this.logger = logger;
   }
 
   async _runAnalysis() {
@@ -50,7 +53,7 @@ export class DatabaseAnalyser {
     return null;
   }
 
-  async _computeSingleObjectId() {}
+  async _computeSingleObjectId() { }
 
   addEngineField(db: DatabaseInfo) {
     if (!this.driver?.engine) return;
@@ -236,9 +239,9 @@ export class DatabaseAnalyser {
       this.pool.feedback(obj);
     }
     if (obj && obj.analysingMessage) {
-        logger.debug(obj.analysingMessage);
+      logger.debug(obj.analysingMessage);
     }
-  } 
+  }
 
   async getModifications() {
     const snapshot = await this._getFastSnapshot();
@@ -266,18 +269,18 @@ export class DatabaseAnalyser {
 
         const action = obj
           ? {
-              newName: { schemaName, pureName },
-              oldName: _pick(obj, ['schemaName', 'pureName']),
-              action: 'change',
-              objectTypeField: field,
-              objectId,
-            }
+            newName: { schemaName, pureName },
+            oldName: _pick(obj, ['schemaName', 'pureName']),
+            action: 'change',
+            objectTypeField: field,
+            objectId,
+          }
           : {
-              newName: { schemaName, pureName },
-              action: 'add',
-              objectTypeField: field,
-              objectId,
-            };
+            newName: { schemaName, pureName },
+            action: 'add',
+            objectTypeField: field,
+            objectId,
+          };
         res.push(action);
       }
     }

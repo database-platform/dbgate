@@ -28,17 +28,17 @@
   });
 
   async function loadDataPage(props, offset, limit) {
-    console.log('loadDataPage', props, offset, limit)
+    console.log('loadDataPage', props, offset, limit);
     const { display, conid, database } = props;
 
     const select = display.getPageQuery(offset, limit);
-    console.log('select ', select)
+    console.log('select ', select);
     const response = await apiCall('database-connections/sql-select', {
       conid,
       database,
       select,
     });
-    
+
     if (response.errorMessage) return response;
     // return [];
     return response.rows;
@@ -52,7 +52,7 @@
 
   async function loadRowCount(props) {
     const { display, conid, database } = props;
-    
+
     const select = display.getCountQuery();
 
     const response = await apiCall('database-connections/sql-select', {
@@ -60,7 +60,7 @@
       database,
       select,
     });
-    console.log('loadRowCount', response.rows[0].count)
+    console.log('loadRowCount', response.rows[0].count);
     return parseInt(response.rows[0].count);
   }
 </script>
@@ -214,6 +214,10 @@
       tag: 'export',
     })
   );
+
+  function handleSetLoadedRows(rows) {
+    loadedRows = rows;
+  }
 </script>
 
 <LoadingDataGridCore
@@ -221,7 +225,7 @@
   {loadDataPage}
   {dataPageAvailable}
   {loadRowCount}
-  bind:loadedRows
+  setLoadedRows={handleSetLoadedRows}
   bind:selectedCellsPublished
   frameSelection={!!macroPreview}
   {grider}

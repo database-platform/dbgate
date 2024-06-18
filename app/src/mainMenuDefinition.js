@@ -40,17 +40,17 @@ module.exports = ({ editMenu }) => [
 
   editMenu
     ? {
-        label: 'Edit',
-        submenu: [
-          { command: 'edit.undo' },
-          { command: 'edit.redo' },
-          { divider: true },
-          { command: 'edit.cut' },
-          { command: 'edit.copy' },
-          { command: 'edit.paste' },
-          { command: 'edit.selectAll' },
-        ],
-      }
+      label: 'Edit',
+      submenu: [
+        { command: 'edit.undo' },
+        { command: 'edit.redo' },
+        { divider: true },
+        { command: 'edit.cut' },
+        { command: 'edit.copy' },
+        { command: 'edit.paste' },
+        { command: 'edit.selectAll' },
+      ],
+    }
     : null,
 
   // {
@@ -90,6 +90,7 @@ module.exports = ({ editMenu }) => [
       { divider: true },
       { command: 'folder.showLogs', hideDisabled: true },
       { command: 'folder.showData', hideDisabled: true },
+      { command: 'new.gist', hideDisabled: true },
     ],
   },
   {

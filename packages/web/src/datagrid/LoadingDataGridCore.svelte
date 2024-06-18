@@ -16,10 +16,10 @@
   export let rowCountLoaded = null;
 
   export let preprocessLoadedRow = null;
-
+  export let setLoadedRows = null;
   // export let griderFactory;
 
-  export let loadedRows = [];
+  let loadedRows = [];
   let isLoading = false;
   let isLoadedAll = false;
   let loadedTime = new Date().getTime();
@@ -66,9 +66,9 @@
       errorMessage = nextRows.errorMessage;
     } else {
       if (allRowCount == null) handleLoadRowCount();
-      
+
       loadedRows = [...loadedRows, ...(preprocessLoadedRow ? nextRows.map(preprocessLoadedRow) : nextRows)];
-      
+
       if (nextRows.length === 0) {
         isLoadedAll = true;
       } else if (loadedRows.length >= allRowCount) {
@@ -129,6 +129,8 @@
       display.reload();
     }
   }
+
+  $: if (setLoadedRows) setLoadedRows(loadedRows);
 </script>
 
 <DataGridCore

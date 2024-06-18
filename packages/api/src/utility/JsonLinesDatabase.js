@@ -1,6 +1,6 @@
+const crypto = require('crypto');
 const AsyncLock = require('async-lock');
 const fs = require('fs-extra');
-const uuidv1 = require('uuid/v1');
 
 const lock = new AsyncLock();
 
@@ -56,9 +56,9 @@ class JsonLinesDatabase {
     const elem = obj._id
       ? obj
       : {
-          ...obj,
-          _id: uuidv1(),
-        };
+        ...obj,
+        _id: crypto.randomUUID(),
+      };
     this.data.push(elem);
     await this._save();
     return elem;
