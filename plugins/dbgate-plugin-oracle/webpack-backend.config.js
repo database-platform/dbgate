@@ -24,8 +24,7 @@ var config = {
   plugins: [
     new webpack.IgnorePlugin({
       checkResource(resource) {
-        console.log('oracle resource ', resource);
-        const lazyImports = ['oracledb', 'uws'];
+        const lazyImports = ['uws'];
         if (!lazyImports.includes(resource)) {
           return false;
         }

@@ -195,18 +195,12 @@ export class SqlDumper implements AlterProcessor {
     this.putCmd('^drop ^database %i', name);
   }
 
-  specialColumnOptions(column) {}
+  specialColumnOptions(column) { }
 
-  selectScopeIdentity(table: TableInfo) {}
+  selectScopeIdentity(table: TableInfo) { }
 
-  columnDefinition(column: ColumnInfo, { includeDefault = true, includeNullable = true, includeCollate = true } = {}) {
-    if (column.computedExpression) {
-      this.put('^as %s', column.computedExpression);
-      if (column.isPersisted) this.put(' ^persisted');
-      return;
-    }
-
-    const type = column.dataType || this.dialect.fallbackDataType;
+  columnType(dataType: string) {
+    const type = dataType || this.dialect.fallbackDataType;
     const typeWithValues = type.match(/([^(]+)(\(.+[^)]\))/);
 
     if (typeWithValues?.length) {
@@ -216,6 +210,16 @@ export class SqlDumper implements AlterProcessor {
     } else {
       this.putRaw(SqlDumper.convertKeywordCase(type));
     }
+  }
+
+  columnDefinition(column: ColumnInfo, { includeDefault = true, includeNullable = true, includeCollate = true } = {}) {
+    if (column.computedExpression) {
+      this.put('^as %s', column.computedExpression);
+      if (column.isPersisted) this.put(' ^persisted');
+      return;
+    }
+
+    this.columnType(column.dataType);
 
     if (column.autoIncrement) {
       this.autoIncrement();
@@ -306,8 +310,8 @@ export class SqlDumper implements AlterProcessor {
     dumpExpr();
   }
 
-  allowIdentityInsert(table: NamedObjectInfo, allow: boolean) {}
-  enableConstraints(table: NamedObjectInfo, enabled: boolean) {}
+  allowIdentityInsert(table: NamedObjectInfo, allow: boolean) { }
+  enableConstraints(table: NamedObjectInfo, enabled: boolean) { }
 
   comment(value: string) {
     if (!value) return;
@@ -327,8 +331,8 @@ export class SqlDumper implements AlterProcessor {
     this.putRaw(obj.createSql.replace(/create\s+view/i, 'ALTER VIEW'));
     this.endCommand();
   }
-  changeViewSchema(obj: ViewInfo, newSchema: string) {}
-  renameView(obj: ViewInfo, newSchema: string) {}
+  changeViewSchema(obj: ViewInfo, newSchema: string) { }
+  renameView(obj: ViewInfo, newSchema: string) { }
 
   createMatview(obj: ViewInfo) {
     this.putRaw(obj.createSql);
@@ -341,8 +345,8 @@ export class SqlDumper implements AlterProcessor {
     this.putRaw(obj.createSql.replace(/create\s+view/i, 'ALTER VIEW'));
     this.endCommand();
   }
-  changeMatviewSchema(obj: ViewInfo, newSchema: string) {}
-  renameMatview(obj: ViewInfo, newSchema: string) {}
+  changeMatviewSchema(obj: ViewInfo, newSchema: string) { }
+  renameMatview(obj: ViewInfo, newSchema: string) { }
 
   createProcedure(obj: ProcedureInfo) {
     this.putRaw(obj.createSql);
@@ -355,8 +359,8 @@ export class SqlDumper implements AlterProcessor {
     this.putRaw(obj.createSql.replace(/create\s+procedure/i, 'ALTER PROCEDURE'));
     this.endCommand();
   }
-  changeProcedureSchema(obj: ProcedureInfo, newSchema: string) {}
-  renameProcedure(obj: ProcedureInfo, newSchema: string) {}
+  changeProcedureSchema(obj: ProcedureInfo, newSchema: string) { }
+  renameProcedure(obj: ProcedureInfo, newSchema: string) { }
 
   createFunction(obj: FunctionInfo) {
     this.putRaw(obj.createSql);
@@ -369,8 +373,8 @@ export class SqlDumper implements AlterProcessor {
     this.putRaw(obj.createSql.replace(/create\s+function/i, 'ALTER FUNCTION'));
     this.endCommand();
   }
-  changeFunctionSchema(obj: FunctionInfo, newSchema: string) {}
-  renameFunction(obj: FunctionInfo, newSchema: string) {}
+  changeFunctionSchema(obj: FunctionInfo, newSchema: string) { }
+  renameFunction(obj: FunctionInfo, newSchema: string) { }
 
   createTrigger(obj: TriggerInfo) {
     this.putRaw(obj.createSql);
@@ -383,8 +387,8 @@ export class SqlDumper implements AlterProcessor {
     this.putRaw(obj.createSql.replace(/create\s+trigger/i, 'ALTER TRIGGER'));
     this.endCommand();
   }
-  changeTriggerSchema(obj: TriggerInfo, newSchema: string) {}
-  renameTrigger(obj: TriggerInfo, newSchema: string) {}
+  changeTriggerSchema(obj: TriggerInfo, newSchema: string) { }
+  renameTrigger(obj: TriggerInfo, newSchema: string) { }
 
   dropConstraintCore(cnt: ConstraintInfo) {
     this.putCmd('^alter ^table %f ^drop ^constraint %i', cnt, cnt.constraintName);
@@ -427,7 +431,7 @@ export class SqlDumper implements AlterProcessor {
         break;
     }
   }
-  changeConstraint(oldConstraint: ConstraintInfo, newConstraint: ConstraintInfo) {}
+  changeConstraint(oldConstraint: ConstraintInfo, newConstraint: ConstraintInfo) { }
   dropForeignKey(fk: ForeignKeyInfo) {
     if (this.dialect.explicitDropConstraint) {
       this.putCmd('^alter ^table %f ^drop ^foreign ^key %i', fk, fk.constraintName);
@@ -505,7 +509,7 @@ export class SqlDumper implements AlterProcessor {
     this.endCommand();
   }
 
-  renameConstraint(constraint: ConstraintInfo, newName: string) {}
+  renameConstraint(constraint: ConstraintInfo, newName: string) { }
 
   createColumn(column: ColumnInfo, constraints: ConstraintInfo[]) {
     this.put('^alter ^table %f ^add %i ', column, column.columnName);
@@ -530,17 +534,17 @@ export class SqlDumper implements AlterProcessor {
     this.putCmd('^alter ^table %f ^drop ^column %i', column, column.columnName);
   }
 
-  renameColumn(column: ColumnInfo, newName: string) {}
+  renameColumn(column: ColumnInfo, newName: string) { }
 
-  changeColumn(oldcol: ColumnInfo, newcol: ColumnInfo, constraints: ConstraintInfo[]) {}
+  changeColumn(oldcol: ColumnInfo, newcol: ColumnInfo, constraints: ConstraintInfo[]) { }
 
   dropTable(obj: TableInfo, { testIfExists = false } = {}) {
     this.putCmd('^drop ^table %f', obj);
   }
 
-  changeTableSchema(obj: TableInfo, schema: string) {}
+  changeTableSchema(obj: TableInfo, schema: string) { }
 
-  renameTable(obj: TableInfo, newname: string) {}
+  renameTable(obj: TableInfo, newname: string) { }
 
   beginTransaction() {
     this.putCmd('^begin ^transaction');
@@ -554,8 +558,8 @@ export class SqlDumper implements AlterProcessor {
     this.putCmd('^rollback');
   }
 
-  alterProlog() {}
-  alterEpilog() {}
+  alterProlog() { }
+  alterEpilog() { }
 
   selectTableIntoNewTable(sourceName: NamedObjectInfo, targetName: NamedObjectInfo) {
     this.putCmd('^select * ^into %f ^from %f', targetName, sourceName);

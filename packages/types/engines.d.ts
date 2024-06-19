@@ -24,6 +24,7 @@ export interface WriteTableOptions {
   dropIfExists?: boolean;
   truncate?: boolean;
   createIfNotExists?: boolean;
+  commitAfterInsert?: boolean;
 }
 
 export interface EngineAuthType {
@@ -64,7 +65,7 @@ export interface SummaryColumn {
   header: string;
   dataType: 'string' | 'number' | 'bytes';
 }
-export interface ServerSummaryDatabase {}
+export interface ServerSummaryDatabase { }
 export interface ServerSummary {
   columns: SummaryColumn[];
   databases: ServerSummaryDatabase[];

@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@mongodb-js/zstd": "^1.2.0",
-    "dbgate-query-splitter": "^4.9.3",
+    "dbgate-query-splitter": "^4.10.1",
     "dbgate-tools": "^5.0.0-alpha.1",
     "is-promise": "^4.0.0",
     "kerberos": "^2.1.0",

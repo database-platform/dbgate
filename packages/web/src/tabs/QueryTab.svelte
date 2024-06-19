@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-  import registerCommand from "../commands/registerCommand";
-  import {copyTextToClipboard} from "../utility/clipboard";
+  import registerCommand from '../commands/registerCommand';
+  import { copyTextToClipboard } from '../utility/clipboard';
 
   const getCurrentEditor = () => getActiveComponent('QueryTab');
 
@@ -40,7 +40,7 @@
     toggleComment: true,
     findReplace: true,
     executeAdditionalCondition: () => getCurrentEditor()?.hasConnection(),
-    copyPaste: true
+    copyPaste: true,
   });
   registerCommand({
     id: 'query.executeCurrent',
@@ -51,6 +51,8 @@
       getCurrentEditor() != null && !getCurrentEditor()?.isBusy() && getCurrentEditor()?.hasConnection(),
     onClick: () => getCurrentEditor().executeCurrent(),
   });
+
+  export const allowSwitchDatabase = props => true;
 </script>
 
 <script lang="ts">
@@ -83,7 +85,7 @@
   import ToolStripExportButton, { createQuickExportHandlerRef } from '../buttons/ToolStripExportButton.svelte';
   import ToolStripSaveButton from '../buttons/ToolStripSaveButton.svelte';
   import ToolStripCommandSplitButton from '../buttons/ToolStripCommandSplitButton.svelte';
-  import {getClipboardText} from "../utility/clipboard";
+  import { getClipboardText } from '../utility/clipboard';
 
   export let tabid;
   export let conid;
@@ -250,7 +252,7 @@
   }
 
   export function paste() {
-    getClipboardText().then((text) => {
+    getClipboardText().then(text => {
       domEditor.getEditor().execCommand('paste', text);
     });
   }
@@ -335,6 +337,15 @@
   }
 
   const quickExportHandlerRef = createQuickExportHandlerRef();
+
+  $: {
+    conid;
+    database;
+    if (canKill()) {
+      kill();
+    }
+    errorMessages = [];
+  }
 
   let isInitialized = false;
 </script>

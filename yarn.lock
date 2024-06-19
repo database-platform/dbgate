@@ -3373,7 +3373,7 @@ dbgate-plugin-xml@^5.0.0-alpha.1:
   resolved "https://registry.yarnpkg.com/dbgate-plugin-xml/-/dbgate-plugin-xml-5.3.0.tgz#ec701f09088cca3c3a0ee1572caf76e8287c7b61"
   integrity sha512-Itg0jT9EzzM7umUSBpJDpTnuoAsuEny9glD/uVx+991AvG6m2Y8D/TsUbY+PQgUcHJsm7nNk53V2NcN9mr0qMw==
 
-dbgate-query-splitter@^4.10.1, dbgate-query-splitter@^4.9.0, dbgate-query-splitter@^4.9.3:
+dbgate-query-splitter@^4.10.1:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/dbgate-query-splitter/-/dbgate-query-splitter-4.10.1.tgz#dc40d792de06f779a743cad054d5e786006b03a9"
   integrity sha512-KqrB7NLP1jXbx8rN7gSmYUVorm6ICeqOV+oR+jHaBLXqqhWepHsKr6JJlFEeb/LhoVjnTDY/cy5zhW1dMIQF6A==
@@ -8208,7 +8208,7 @@ optionator@^0.8.1, optionator@^0.8.3:
   resolved "https://registry.yarnpkg.com/opts/-/opts-2.0.2.tgz#a17e189fbbfee171da559edd8a42423bc5993ce1"
   integrity sha512-k41FwbcLnlgnFh69f4qdUfvDQ+5vaSDnVPFI/y5XuhKRq97EnVVneO9F1ESVCdiVu4fCS2L8usX3mU331hB7pg==
 
-oracledb@^6.5.0, oracledb@^6.5.1:
+oracledb@^6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/oracledb/-/oracledb-6.5.1.tgz#814d985035acdb1a6470b1152af0ca3767569ede"
   integrity sha512-JzoSGei1wnvmqgKnAZK1W650mzHTZXx+7hClV4mwsbY/ZjUtrpnojNJMYJ2jkOhj7XG5oJPfXc4GqDKaNzkxqg==
@@ -8547,7 +8547,7 @@ pino-pretty@^9.1.1:
     sonic-boom "^3.0.0"
     strip-json-comments "^3.1.1"
 
-pinomin@^1.0.1, pinomin@^1.0.4:
+pinomin@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/pinomin/-/pinomin-1.0.4.tgz#fcbc5e50745f1769a6b4d9a5a49475927e3ce556"
   integrity sha512-UJFXLxbgP9t9PDIWiKeVp3/+kudjeq/7IqWUFXqmNFD7810bh3+/3H8jvf+CCvEDkKVY8ckbCNIDWHWymurqHw==
@@ -10267,7 +10267,7 @@ svelte-select@^4.4.7:
   resolved "https://registry.yarnpkg.com/svelte-select/-/svelte-select-4.4.7.tgz#fc85414af070487d68e438f7249c653178860af3"
   integrity sha512-fIf9Z8rPI6F8naHZ9wjXT0Pv5gLyhdHAFkHFJnCfVVfELE8e82uOoF0xEVQP6Kir+b4Q5yOvNAzZ61WbSU6A0A==
 
-svelte@^3.46.4:
+svelte@^3.59.2:
   version "3.59.2"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.59.2.tgz#a137b28e025a181292b2ae2e3dca90bf8ec73aec"
   integrity sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==

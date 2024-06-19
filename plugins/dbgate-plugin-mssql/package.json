@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "async-lock": "^1.2.6",
-    "dbgate-query-splitter": "^4.9.3",
+    "dbgate-query-splitter": "^4.10.1",
     "dbgate-tools": "^5.0.0-alpha.1",
     "r-dbgate-plugin-tools": "^2.0.0",
     "tedious": "^18.2.0",

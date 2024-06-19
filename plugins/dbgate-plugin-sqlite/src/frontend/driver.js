@@ -17,6 +17,7 @@ const dialect = {
   explicitDropConstraint: true,
   stringEscapeChar: "'",
   fallbackDataType: 'nvarchar',
+  allowMultipleValuesInsert: true,
   dropColumnDependencies: ['indexes', 'primaryKey', 'uniques'],
   quoteIdentifier(s) {
     return `[${s}]`;
@@ -55,8 +56,8 @@ const driver = {
     usage == 'editor'
       ? { ...sqliteSplitterOptions, ignoreComments: true, preventSingleLineSplit: true }
       : usage == 'stream'
-      ? noSplitSplitterOptions
-      : sqliteSplitterOptions,
+        ? noSplitSplitterOptions
+        : sqliteSplitterOptions,
 
   // isFileDatabase: true,
   isElectronOnly: true,
