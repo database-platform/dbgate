@@ -54,7 +54,9 @@ class DatastoreProxy {
         if (handleProcessCommunication(message, this.subprocess)) return;
 
         // if (this.disconnected) return;
-        this[`handle_${msgtype}`](message);
+        if (msgtype) {
+          this[`handle_${msgtype}`](message);
+        }
       });
       this.subprocess.on('exit', () => {
         // if (this.disconnected) return;

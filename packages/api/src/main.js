@@ -26,7 +26,25 @@ const plugins = require('./controllers/plugins');
 const files = require('./controllers/files');
 const scheduler = require('./controllers/scheduler');
 const queryHistory = require('./controllers/queryHistory');
+
 const onFinished = require('on-finished');
+
+const onlineConnections = require('./onlineControllers/connections');
+const onlineServerConnections = require('./onlineControllers/serverConnections');
+const onlineDatabaseConnections = require('./onlineControllers/databaseConnections');
+const onlineMetadata = require('./onlineControllers/metadata');
+const onlineSessions = require('./onlineControllers/sessions');
+const onlineRunners = require('./onlineControllers/runners');
+const onlineJsldata = require('./onlineControllers/jsldata');
+const onlineConfig = require('./onlineControllers/config');
+const onlineArchive = require('./onlineControllers/archive');
+const onlineApps = require('./onlineControllers/apps');
+const onlineAuth = require('./onlineControllers/auth');
+const onlineUploads = require('./onlineControllers/uploads');
+const onlinePlugins = require('./onlineControllers/plugins');
+const onlineFiles = require('./onlineControllers/files');
+const onlineScheduler = require('./onlineControllers/scheduler');
+const onlineQueryHistory = require('./onlineControllers/queryHistory');
 
 const { rundir } = require('./utility/directories');
 const platformInfo = require('./utility/platformInfo');
@@ -38,7 +56,8 @@ const { getLogger } = require('dbgate-tools');
 const logger = getLogger('main');
 
 function start() {
-  // console.log('process.argv', process.argv);
+  logger.info(process.argv, 'process.argv');
+  logger.info(process.env, 'process.env');
 
   const app = express();
 
@@ -76,6 +95,10 @@ function start() {
     app.use(auth.authMiddleware);
   }
 
+  if (process.env.ENABLE_ONLINE === '1') {
+    //app.use(onlineAuth.authMiddleware);
+  }
+
   app.get(getExpressPath('/stream'), async function (req, res) {
     const strmid = req.query.strmid;
     res.set({
@@ -102,8 +125,11 @@ function start() {
       limits: { fileSize: 4 * 1024 * 1024 },
     })
   );
-
-  useAllControllers(app, null);
+  if (process.env.ENABLE_ONLINE === '1') {
+    useOnlineAllControllers(app, null);
+  } else {
+    useAllControllers(app, null);
+  }
 
   // if (process.env.PAGES_DIRECTORY) {
   //   app.use('/pages', express.static(process.env.PAGES_DIRECTORY));
@@ -151,6 +177,25 @@ function start() {
   process.on('SIGINT', shutdown);
   process.on('SIGTERM', shutdown);
   process.on('SIGBREAK', shutdown);
+}
+
+function useOnlineAllControllers(app, electron) {
+  useController(app, electron, '/connections', onlineConnections);
+  useController(app, electron, '/server-connections', onlineServerConnections);
+  useController(app, electron, '/database-connections', onlineDatabaseConnections);
+  useController(app, electron, '/metadata', onlineMetadata);
+  useController(app, electron, '/sessions', onlineSessions);
+  useController(app, electron, '/runners', onlineRunners);
+  useController(app, electron, '/jsldata', onlineJsldata);
+  useController(app, electron, '/config', onlineConfig);
+  useController(app, electron, '/archive', onlineArchive);
+  useController(app, electron, '/uploads', onlineUploads);
+  useController(app, electron, '/plugins', onlinePlugins);
+  useController(app, electron, '/files', onlineFiles);
+  useController(app, electron, '/scheduler', onlineScheduler);
+  useController(app, electron, '/query-history', onlineQueryHistory);
+  useController(app, electron, '/apps', onlineApps);
+  useController(app, electron, '/auth', onlineAuth);
 }
 
 function useAllControllers(app, electron) {

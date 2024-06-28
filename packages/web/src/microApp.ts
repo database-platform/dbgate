@@ -2,6 +2,12 @@ import { currentTheme } from './stores';
 
 export interface MicroAppGlobalProps {
   layout?: MicroAppLayoutProps;
+  permission?: {
+    username: string;
+    roleId: string;
+    groupId: string;
+    token: string;
+  };
 }
 
 export interface MicroAppLayoutProps {
@@ -17,14 +23,18 @@ export function startMicroApp() {
 }
 
 function fromMainAppData(data: MicroAppGlobalProps) {
-  console.log('from main app data2: ', data);
   try {
-    const rootStyle = window.document.documentElement.style;
-    const mainElColorPrimary = rootStyle.getPropertyValue('--el-color-primary');
-    const leftPanelWidth = rootStyle.getPropertyValue('--dim-left-panel-width');
-    console.log('rootStyle : ', mainElColorPrimary, leftPanelWidth);
+    if (data?.permission) {
+      const { token, username, groupId } = data?.permission;
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('mainUsername', username);
+      localStorage.setItem('groupId', groupId);
+    }
 
-    if (data && data.layout) {
+    const rootStyle = window.document.documentElement.style;
+    // const mainElColorPrimary = rootStyle.getPropertyValue('--el-color-primary');
+    // const leftPanelWidth = rootStyle.getPropertyValue('--dim-left-panel-width');
+    if (data?.layout) {
       const { layout } = data;
       rootStyle.setProperty('--dim-micro-app-left', layout.left);
       rootStyle.setProperty('--dim-micro-app-top', layout.top);

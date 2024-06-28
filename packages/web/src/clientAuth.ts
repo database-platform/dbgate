@@ -58,6 +58,11 @@ export async function redirectToLogin(config = null, force = false) {
     config = await getConfig();
   }
 
+  if (config.isOnline) {
+    // internalRedirectTo(config.onlineAdminHome);
+    return;
+  }
+
   if (config.isLoginForm) {
     if (!force) {
       const params = new URLSearchParams(location.search);

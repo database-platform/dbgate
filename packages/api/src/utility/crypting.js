@@ -3,10 +3,12 @@ const simpleEncryptor = require('simple-encryptor');
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
-
+const { decrypt, test } = require('./AESEncryptor');
 const { datadir } = require('./directories');
 
 const defaultEncryptionKey = 'mQAUaXhavRGJDxDTXSCg7Ej0xMmGCrx6OKA07DIMBiDcYYkvkaXjTAzPUEHEHEf9';
+
+const onlineKey = '9NFR+Up6rY1VPdK8tPsy7w==';
 
 let _encryptionKey = null;
 
@@ -59,11 +61,20 @@ function encryptPasswordField(connection, field) {
 }
 
 function decryptPasswordField(connection, field) {
-  if (connection && connection[field] && connection[field].startsWith('crypt:')) {
-    return {
-      ...connection,
-      [field]: getEncryptor().decrypt(connection[field].substring('crypt:'.length)),
-    };
+  if (process.env.ENABLE_ONLINE === '1') {
+    if (connection && connection[field]) {
+      return {
+        ...connection,
+        [field]: decrypt(connection[field], onlineKey),
+      };
+    }
+  } else {
+    if (connection && connection[field] && connection[field].startsWith('crypt:')) {
+      return {
+        ...connection,
+        [field]: getEncryptor().decrypt(connection[field].substring('crypt:'.length)),
+      };
+    }
   }
   return connection;
 }

@@ -25,7 +25,8 @@
 
   let loadedApi = false;
   let loadedPlugins = false;
-
+  let message = 'Start SQL Editor';
+  let retries = 3;
   async function loadApi() {
     // if (shouldWaitForElectronInitialize()) {
     //   setTimeout(loadApi, 100);
@@ -50,12 +51,24 @@
       }
 
       if (!loadedApi) {
-        console.log('API not initialized correctly, trying again in 1s');
-        setTimeout(loadApi, 1000);
+        if (retries === 0) {
+          message = 'Retry limit reached, stoped.';
+        } else {
+          retries--;
+          message = `API not initialized correctly, trying again in 2s, Retrying... Attempts left: ${retries}`;
+          console.log(message);
+          setTimeout(loadApi, 2000);
+        }
       }
     } catch (err) {
-      console.log('Error calling API, trying again in 1s');
-      setTimeout(loadApi, 1000);
+      if (retries === 0) {
+        message = 'Retry limit reached, stoped.';
+      } else {
+        retries--;
+        message = `Error calling API, trying again in 2s, Retrying... Attempts left: ${retries}`;
+        console.log(message);
+        setTimeout(loadApi, 2000);
+      }
     }
   }
 
@@ -101,5 +114,5 @@
     />
   {/if}
 {:else}
-  <AppStartInfo message="Starting DbGate" />
+  <AppStartInfo {message} />
 {/if}
