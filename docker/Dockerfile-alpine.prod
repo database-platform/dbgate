@@ -5,13 +5,13 @@ WORKDIR /app
 RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories \
     && echo "http://mirrors.ustc.edu.cn/alpine/v3.19/community/" >> /etc/apk/repositories \
     && apk --no-cache upgrade \
- && apk add --no-cache iputils \
- make \
- g++ \
- python3 \ 
- py3-pip \
- && rm -rf /var/cache/apk/* \
- && npm config set python /usr/bin/python3
+    && apk add --no-cache iputils \
+    make \
+    g++ \
+    python3 \
+    py3-pip \
+    && rm -rf /var/cache/apk/* \
+    && npm config set python /usr/bin/python3
 
 COPY . .
 
