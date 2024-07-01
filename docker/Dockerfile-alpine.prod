@@ -1,12 +1,16 @@
 FROM node:20.12.2-alpine3.19 as base
 
-WORKDIR /home/dbgate-docker
+WORKDIR /app
 
 RUN apk --no-cache upgrade \
  && apk --no-cache add  \
     iputils
 
 COPY . .
+
+RUN yarn run install && yarn run prepare:docker
+
+FROM base as production
 
 WORKDIR /home/dbgate-docker
 
