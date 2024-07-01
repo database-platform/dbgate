@@ -19,7 +19,7 @@ RUN yarn install --ignore-optional
 
 COPY . .
 
-yarn run prepare:docker
+RUN yarn run prepare:docker
 
 FROM base as production
 
