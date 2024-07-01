@@ -26,6 +26,7 @@ function fromMainAppData(data: MicroAppGlobalProps) {
   try {
     if (data?.permission) {
       const { token, username, groupId } = data?.permission;
+      console.log('token ', token);
       localStorage.setItem('accessToken', token);
       localStorage.setItem('mainUsername', username);
       localStorage.setItem('groupId', groupId);

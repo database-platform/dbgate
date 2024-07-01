@@ -90,8 +90,8 @@ module.exports = {
     //   return portalConnections.map(maskConnection).filter(x => connectionHasPermission(x, req));
     // }
     // return (await this.datastore.find()).filter(x => connectionHasPermission(x, req));
-    const params = _params;
-    // const params = { username: 'admin', groupId: '2' };
+    // const params = _params;
+    const params = { username: 'admin', groupId: '1' };
     const conns = [];
     if (!params?.username || !params?.groupId) {
       return {
@@ -100,7 +100,7 @@ module.exports = {
     }
     try {
       const auth = req.headers.authorization || '';
-      const url = `${process.env.ONLINE_ADMIN_API}/system/group/queryAllDataSource`;
+      const url = `${process.env.ONLINE_ADMIN_API}/system/group/queryDataSource`;
       const response = await axios.default.post(
         url,
         {
@@ -114,11 +114,11 @@ module.exports = {
           },
         }
       );
-      console.log('response ', response.data);
       const respData = response.data;
       if (respData.code !== 200) {
         throw new Error(respData.msg);
       }
+      console.log('response data: ', respData?.data);
       for (const item of respData.data.list) {
         const conn = {
           server: item.dbIp,
@@ -130,8 +130,10 @@ module.exports = {
           originId: item.id,
           _id: generateFixedId(item.id, params.username, params.groupId),
           displayName: item.dbName,
-          singleDatabase: true,
+          // singleDatabase: true,
+          // defaultDatabase: item.dbDatabaseName,
         };
+        console.log('response conn: ', conn);
         conns.push(conn);
         await this.save(conn);
       }

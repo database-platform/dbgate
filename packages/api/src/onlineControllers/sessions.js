@@ -11,6 +11,7 @@ const { appdir } = require('../utility/directories');
 const { getLogger } = require('dbgate-tools');
 const pipeForkLogs = require('../utility/pipeForkLogs');
 const config = require('./config');
+const axios = require('axios');
 
 const logger = getLogger('sessions');
 
@@ -81,7 +82,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }) {
@@ -133,7 +134,28 @@ module.exports = {
   },
 
   executeQuery_meta: true,
-  async executeQuery({ sesid, sql }) {
+  async executeQuery({ sesid, sql }, req) {
+    try {
+      const params = {
+        userId: 'admin',
+        sql,
+      };
+      const auth = req.headers.authorization || '';
+      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
+      const response = await axios.default.post(url, params, {
+        headers: {
+          authorization: auth,
+          'content-type': 'application/json',
+        },
+      });
+      const respdata = response.data;
+      console.log('response data: ', respdata);
+      if (respdata.code !== 0) {
+        throw new Error(respdata.msg);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
     const session = this.opened.find(x => x.sesid == sesid);
     if (!session) {
       throw new Error('Invalid session');

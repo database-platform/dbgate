@@ -48,10 +48,11 @@ function authMiddleware(req, res, next) {
     return unauthorizedResponse(req, res, 'missing authorization header');
   }
   const token = authHeader.split(' ')[1];
+  console.log('token ', token);
   try {
     let decoded = null;
     if (process.env.ENABLE_ONLINE === '1') {
-      decoded = jwt.verify(token, onlineSecret);
+      decoded = jwt.verify(token, onlineSecret, { algorithms: ['HS256', 'HS512'] });
     } else {
       decoded = jwt.verify(token, tokenSecret);
       req.user = decoded;
