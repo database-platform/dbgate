@@ -15,9 +15,11 @@ RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories
 
 COPY package.json yarn.lock .
 
-RUN yarn install --ignore-optional && yarn run prepare:docker
+RUN yarn install --ignore-optional
 
 COPY . .
+
+yarn run prepare:docker
 
 FROM base as production
 
