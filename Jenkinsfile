@@ -19,7 +19,8 @@ pipeline {
     stage('Build') {
       steps {
         sh '''
-        docker build -t myregistry.dataleapinfo.com:5443/dbgate:latest -t myregistry.dataleapinfo.com:5443/dbgate:${commitId}-${_version} .
+        yarn run prepare:docker
+        docker build -t myregistry.dataleapinfo.com:5443/dbgate:latest -t myregistry.dataleapinfo.com:5443/dbgate:${commitId}-${_version} ./docker/Dockerfile-alpine
         echo builded.
         '''
       }
@@ -30,7 +31,7 @@ pipeline {
           sh '''docker push myregistry.dataleapinfo.com:5443/dbgate:latest
                 docker push myregistry.dataleapinfo.com:5443/dbgater:${commitId}-${_version}
                 docker rmi myregistry.dataleapinfo.com:5443/dbgate:latest
-                docker rmi myregistry.dataleapinfo.com:5443/dbmanager:${commitId}-${_version}
+                docker rmi myregistry.dataleapinfo.com:5443/dbgate:${commitId}-${_version}
               '''
         }
       }
