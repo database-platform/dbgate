@@ -1,10 +1,10 @@
 FROM node:20.12.2-alpine3.19 as base
 
 WORKDIR /home/dbgate-docker
-
-RUN apk --no-cache upgrade \
- && apk --no-cache add  \
-    iputils
+RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories \
+    && echo "http://mirrors.ustc.edu.cn/alpine/v3.19/community/" >> /etc/apk/repositories \
+    && apk --no-cache upgrade \
+    && apk --no-cache add iputils
 
 COPY . .
 
