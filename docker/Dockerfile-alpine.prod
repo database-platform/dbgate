@@ -11,13 +11,12 @@ RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories
     python3 \
     py3-pip \
     && rm -rf /var/cache/apk/*
-# && npm config set python /usr/bin/python3
 
-COPY package.json yarn.lock .
-
-COPY . .
+COPY package.json yarn.lock ./
 
 RUN yarn install --ignore-optional
+
+COPY . .
 
 RUN yarn run prepare:docker
 
@@ -25,6 +24,7 @@ FROM base as production
 
 WORKDIR /home/dbgate-docker
 
+COPY --from=base /app /app
 COPY ./docker .
 
 RUN ["chmod", "+x", "/home/dbgate-docker/entrypoint.sh"]
@@ -33,3 +33,4 @@ EXPOSE 3000
 VOLUME /root/.dbgate
 
 CMD ["/home/dbgate-docker/entrypoint.sh"]
+
