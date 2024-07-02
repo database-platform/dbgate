@@ -46,9 +46,12 @@ module.exports = {
 
   write_meta: true,
   async write({ data }) {
-    const fileName = path.join(datadir(), 'query-history.jsonl');
-    await fs.appendFile(fileName, JSON.stringify(data) + '\n');
+    // data {"sql":"select * from sys_config limit 10","conid":"admin_1_1_maindb","database":"maindb","date":1719924559444}
     socket.emit('query-history-changed');
     return 'OK';
+    // const fileName = path.join(datadir(), 'query-history.jsonl');
+    // await fs.appendFile(fileName, JSON.stringify(data) + '\n');
+    // socket.emit('query-history-changed');
+    // return 'OK';
   },
 };

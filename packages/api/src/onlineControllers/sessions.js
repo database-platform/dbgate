@@ -83,10 +83,10 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   create_meta: true,
-  async create({ conid, database }) {
+  async create({ conid, database }, req) {
     const sesid = crypto.randomUUID();
     const connection = await connections.getCore({ conid });
     const subprocess = fork(
@@ -109,6 +109,7 @@ module.exports = {
       subprocess,
       connection,
       sesid,
+      srcIp: getRealIp(req),
     };
     this.opened.push(newOpened);
     subprocess.on('message', message => {
@@ -136,19 +137,19 @@ module.exports = {
 
   executeQuery_meta: true,
   async executeQuery({ sesid, sql }, req) {
+    const session = this.opened.find(x => x.sesid == sesid);
+    if (!session) {
+      throw new Error('Invalid session');
+    }
+    const srcIp = getRealIp(req);
+    const main = session.conid.split('_');
     try {
-      const session = this.opened.find(x => x.sesid == sesid);
-      if (!session) {
-        throw new Error('Invalid session');
-      }
-      const main = session.conid.split('_');
-
       const params = {
         userId: main[0],
         groupId: main[1],
         dataBaseId: main[2],
         dbName: main[3],
-        srcIp: getRealIp(req),
+        srcIp: srcIp,
         sql,
       };
       console.log('verifysql params: ', params);
@@ -163,8 +164,8 @@ module.exports = {
       });
       const respdata = response.data;
       console.log('verifysql result: ', respdata);
-      if (respdata.code !== 0) {
-        throw new Error(respdata.msg);
+      if (respdata.code !== 200) {
+        throw new Error(`验证接口: ${respdata.msg}`);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -174,6 +175,35 @@ module.exports = {
     this.dispatchMessage(sesid, 'Query execution started');
     session.subprocess.send({ msgtype: 'executeQuery', sql });
 
+    try {
+      const params = {
+        userId: main[0],
+        groupId: main[1],
+        dataBaseId: main[2],
+        dbName: main[3],
+        srcIp: srcIp,
+        tarIp: '',
+        executeStat: sql,
+        responseSize: '',
+        responseTime: '',
+        effectedRows: '',
+        executeTime: '',
+        sqllang: '',
+        affectConts: '',
+        connNum: '',
+      };
+      console.log('log params: ', params);
+      const auth = req.headers['x-authorization'] || '';
+      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/afterprocess`;
+      axios.default.post(url, params, {
+        headers: {
+          authorization: `Bearer ${auth}`,
+          'content-type': 'application/json',
+        },
+      });
+    } catch (err) {
+      logger.error({ err: err.message }, 'save log error.');
+    }
     return { state: 'ok' };
   },
 
@@ -182,7 +212,7 @@ module.exports = {
     const { sesid } = await this.create({ conid, database });
     const session = this.opened.find(x => x.sesid == sesid);
     session.killOnDone = true;
-    const jslid = uuidv1();
+    const jslid = crypto.randomUUID();
     session.loadingReader_jslid = jslid;
     const fileName = queryName && appFolder ? path.join(appdir(), appFolder, `${queryName}.query.sql`) : null;
 
@@ -202,7 +232,7 @@ module.exports = {
 
   startProfiler_meta: true,
   async startProfiler({ sesid }) {
-    const jslid = uuidv1();
+    const jslid = crypto.randomUUID();
     const session = this.opened.find(x => x.sesid == sesid);
     if (!session) {
       throw new Error('Invalid session');
