@@ -1,15 +1,18 @@
 <script lang="ts">
   export let message;
+  export let retries;
 </script>
 
 <div class="starting-dbgate">
   <div class="inner-flex">
-    <div class="lds-ellipsis">
-      <div />
-      <div />
-      <div />
-      <div />
-    </div>
+    {#if retries !== 0}
+      <div class="lds-ellipsis">
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+    {/if}
     <div>{message}</div>
   </div>
 </div>

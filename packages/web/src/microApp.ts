@@ -3,9 +3,7 @@ import { currentTheme } from './stores';
 export interface MicroAppGlobalProps {
   layout?: MicroAppLayoutProps;
   permission?: {
-    username: string;
-    roleId: string;
-    groupId: string;
+    dataToken: string;
     token: string;
   };
 }
@@ -25,11 +23,9 @@ export function startMicroApp() {
 function fromMainAppData(data: MicroAppGlobalProps) {
   try {
     if (data?.permission) {
-      const { token, username, groupId } = data?.permission;
-      console.log('token ', token);
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem('mainUsername', username);
-      localStorage.setItem('groupId', groupId);
+      const { token, dataToken } = data?.permission;
+      localStorage.setItem('accessToken', dataToken);
+      localStorage.setItem('apiToken', token);
     }
 
     const rootStyle = window.document.documentElement.style;

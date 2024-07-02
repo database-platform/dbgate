@@ -96,7 +96,7 @@ function start() {
   }
 
   if (process.env.ENABLE_ONLINE === '1') {
-    //app.use(onlineAuth.authMiddleware);
+    app.use(onlineAuth.authMiddleware);
   }
 
   app.get(getExpressPath('/stream'), async function (req, res) {

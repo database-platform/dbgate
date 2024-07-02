@@ -83,7 +83,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }) {
@@ -141,11 +141,15 @@ module.exports = {
       if (!session) {
         throw new Error('Invalid session');
       }
+      const main = session.conid.split('_');
+
       const params = {
-        userId: 'admin',
-        sql,
-        dataBaseId: session.conid.split('_')[2],
+        userId: main[0],
+        groupId: main[1],
+        dataBaseId: main[2],
+        dbName: main[3],
         srcIp: getRealIp(req),
+        sql,
       };
       console.log('verifysql params: ', params);
       const auth = req.headers.authorization || '';

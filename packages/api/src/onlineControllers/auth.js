@@ -52,7 +52,16 @@ function authMiddleware(req, res, next) {
   try {
     let decoded = null;
     if (process.env.ENABLE_ONLINE === '1') {
-      decoded = jwt.verify(token, onlineSecret, { algorithms: ['HS256', 'HS512'] });
+      decoded = jwt.verify(token, onlineSecret, { algorithms: ['HS512'] });
+      // {
+      //   "sub": "admin",
+      //   "aud": "7648e1f8dff21aa6f65e112d",
+      //   "groupId": "1",
+      //   "roles": "[\"admin\"]",
+      //   "exp": 3439826620,
+      //   "username": "admin"
+      // }
+      req.auth = decoded;
     } else {
       decoded = jwt.verify(token, tokenSecret);
       req.user = decoded;

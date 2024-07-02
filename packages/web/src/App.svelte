@@ -114,5 +114,5 @@
     />
   {/if}
 {:else}
-  <AppStartInfo {message} />
+  <AppStartInfo {retries} {message} />
 {/if}
