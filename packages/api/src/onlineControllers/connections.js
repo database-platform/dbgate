@@ -4,61 +4,29 @@ const fs = require('fs-extra');
 const crypto = require('crypto');
 
 const { datadir, filesdir } = require('../utility/directories');
-const socket = require('../utility/socket');
-const { encryptConnection, maskConnection } = require('../utility/crypting');
+// const socket = require('../utility/socket');
+// const { encryptConnection, maskConnection } = require('../utility/crypting');
 const { handleProcessCommunication } = require('../utility/processComm');
 
-const JsonLinesDatabase = require('../utility/JsonLinesDatabase');
+// const JsonLinesDatabase = require('../utility/JsonLinesDatabase');
+const OnlineDatabase = require('../db/services/databaseService');
 const processArgs = require('../utility/processArgs');
 const { safeJsonParse, getLogger } = require('dbgate-tools');
-const platformInfo = require('../utility/platformInfo');
+// const platformInfo = require('../utility/platformInfo');
 const { connectionHasPermission, testConnectionPermission } = require('../utility/hasPermission');
 const pipeForkLogs = require('../utility/pipeForkLogs');
-const axios = require('axios');
+// const axios = require('axios');
 
 const logger = getLogger('connections');
 
-function generateFixedId(id, username, groupId) {
-  const combinedStr = `${id}:${username}:${groupId}`;
-  const hash = crypto.createHash('sha256');
-  hash.update(combinedStr);
-  const fixedId = hash.digest('hex');
-  logger.info({ combinedStr, fixedId }, 'generateFixedId');
-  return fixedId;
-}
-
-function getEngine(val) {
-  let engine;
-  switch (val.toLowerCase()) {
-    case 'mysql':
-      engine = 'mysql@dbgate-plugin-mysql';
-      break;
-    case 'mariadb':
-      engine = 'mariadb@dbgate-plugin-mysql';
-      break;
-    case 'postgresql':
-      engine = 'postgre@dbgate-plugin-postgres';
-      break;
-    case 'sqlserver':
-      engine = 'mssql@dbgate-plugin-mssql';
-      break;
-    case 'sqlite':
-      engine = 'sqlite@dbgate-plugin-sqlite';
-      break;
-    case 'cockroachdb':
-      engine = 'cockroach@dbgate-plugin-postgres';
-      break;
-    case 'oracle':
-      engine = 'oracle@dbgate-plugin-oracle';
-      break;
-    case 'amazonredshift':
-      engine = 'redshift@dbgate-plugin-postgres';
-    default:
-      engine = '';
-      break;
-  }
-  return engine;
-}
+// function generateFixedId(id, username, groupId) {
+//   const combinedStr = `${id}:${username}:${groupId}`;
+//   const hash = crypto.createHash('sha256');
+//   hash.update(combinedStr);
+//   const fixedId = hash.digest('hex');
+//   logger.info({ combinedStr, fixedId }, 'generateFixedId');
+//   return fixedId;
+// }
 
 let volatileConnections = {};
 
@@ -76,10 +44,11 @@ module.exports = {
 
   async _init() {
     logger.info('Multi user connections init.');
-    const dir = datadir();
+    // const dir = datadir();
     if (!portalConnections) {
       // @ts-ignore
-      this.datastore = new JsonLinesDatabase(path.join(dir, 'connections.jsonl'));
+      // this.datastore = new JsonLinesDatabase(path.join(dir, 'connections.jsonl'));
+      this.datastore = new OnlineDatabase();
     }
   },
 
@@ -91,59 +60,70 @@ module.exports = {
     // }
     // return (await this.datastore.find()).filter(x => connectionHasPermission(x, req));
     // const params = _params;
-    const params = { username: 'admin', groupId: '1' };
-    const conns = [];
-    if (!params?.username || !params?.groupId) {
-      return {
-        apiErrorMessage: 'The params cannot be null.',
-      };
-    }
+    let databases = [];
     try {
-      const auth = req.headers.authorization || '';
-      const url = `${process.env.ONLINE_ADMIN_API}/system/group/queryDataSource`;
-      const response = await axios.default.post(
-        url,
-        {
-          username: params?.username,
-          groupId: params?.groupId,
-        },
-        {
-          headers: {
-            Authorization: auth,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      const respData = response.data;
-      if (respData.code !== 200) {
-        throw new Error(respData.msg);
-      }
-      console.log('response data: ', respData?.data);
-      for (const item of respData.data.list) {
-        const conn = {
-          server: item.dbIp,
-          engine: getEngine(item.dbType),
-          port: item.dbPort,
-          user: item.dbUserId,
-          password: item.dbPwd,
-          unsaved: false,
-          originId: item.id,
-          _id: generateFixedId(item.id, params.username, params.groupId),
-          displayName: item.dbName,
-          // singleDatabase: true,
-          // defaultDatabase: item.dbDatabaseName,
-        };
-        console.log('response conn: ', conn);
-        conns.push(conn);
-        await this.save(conn);
-      }
+      databases = await this.datastore.find('admin', '1');
+      console.log('databases ', databases);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
       return {
         apiErrorMessage: err.message,
       };
     }
-    return conns;
+    return databases;
+    // const params = { username: 'admin', groupId: '1' };
+    // const conns = [];
+    // if (!params?.username || !params?.groupId) {
+    //   return {
+    //     apiErrorMessage: 'The params cannot be null.',
+    //   };
+    // }
+    // try {
+    //   const auth = req.headers.authorization || '';
+    //   const url = `${process.env.ONLINE_ADMIN_API}/system/group/queryDataSource`;
+    //   const response = await axios.default.post(
+    //     url,
+    //     {
+    //       username: params?.username,
+    //       groupId: params?.groupId,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: auth,
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
+    //   );
+    //   const respData = response.data;
+    //   if (respData.code !== 200) {
+    //     throw new Error(respData.msg);
+    //   }
+    //   console.log('response data: ', respData?.data);
+    //   for (const item of respData.data.list) {
+    //     const conn = {
+    //       server: item.dbIp,
+    //       engine: getEngine(item.dbType),
+    //       port: item.dbPort,
+    //       user: item.dbUserId,
+    //       password: item.dbPwd,
+    //       unsaved: false,
+    //       originId: item.id,
+    //       _id: generateFixedId(item.id, params.username, params.groupId),
+    //       displayName: item.dbName,
+    //       // singleDatabase: true,
+    //       // defaultDatabase: item.dbDatabaseName,
+    //     };
+    //     console.log('response conn: ', conn);
+    //     conns.push(conn);
+    //     await this.save(conn);
+    //   }
+    // } catch (err) {
+    //   logger.error({ err }, 'Error list connections.');
+    //   return {
+    //     apiErrorMessage: err.message,
+    //   };
+    // }
+    // return conns;
   },
 
   test_meta: true,
