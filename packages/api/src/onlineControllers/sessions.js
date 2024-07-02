@@ -152,11 +152,12 @@ module.exports = {
         sql,
       };
       console.log('verifysql params: ', params);
-      const auth = req.headers.authorization || '';
+      const auth = req.headers['x-authorization'] || '';
+      console.log('verifysql token: ', auth);
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
       const response = await axios.default.post(url, params, {
         headers: {
-          authorization: auth,
+          authorization: `Bearer ${auth}`,
           'content-type': 'application/json',
         },
       });

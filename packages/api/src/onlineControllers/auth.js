@@ -48,7 +48,6 @@ function authMiddleware(req, res, next) {
     return unauthorizedResponse(req, res, 'missing authorization header');
   }
   const token = authHeader.split(' ')[1];
-  console.log('token ', token);
   try {
     let decoded = null;
     if (process.env.ENABLE_ONLINE === '1') {

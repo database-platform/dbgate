@@ -17,8 +17,10 @@ export function resolveApiHeaders() {
 
   const res = {};
   const accessToken = localStorage.getItem('accessToken');
+  const apiToken = localStorage.getItem('apiToken');
   if (accessToken) {
     res['Authorization'] = `Bearer ${accessToken}`;
+    res['x-authorization'] = `${apiToken}`;
   }
   return res;
 }
