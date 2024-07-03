@@ -83,7 +83,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -183,12 +183,12 @@ module.exports = {
         dbName: main[3],
         srcIp: srcIp,
         tarIp: '',
-        executeStat: sql,
+        executeStat: '',
         responseSize: '',
         responseTime: '',
         effectedRows: '',
         executeTime: '',
-        sqllang: '',
+        sqllang: sql,
         affectConts: '',
         connNum: '',
       };
