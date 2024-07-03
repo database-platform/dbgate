@@ -51,6 +51,20 @@ module.exports = {
       this.datastore = new OnlineDatabase();
     }
   },
+  listParam_meta: true,
+  async listParam(_params) {
+    let databases = [];
+    try {
+      databases = await this.datastore.find(_params.username, _params.groupId);
+      console.log('list param databases ', databases);
+    } catch (err) {
+      logger.error({ err }, 'Error list connections.');
+      return {
+        apiErrorMessage: err.message,
+      };
+    }
+    return databases;
+  },
 
   list_meta: true,
   async list(_params, req) {
@@ -62,7 +76,12 @@ module.exports = {
     // const params = _params;
     let databases = [];
     try {
-      const auth = req.auth;
+      let auth;
+      if (_params.username) {
+        auth = _params;
+      } else {
+        auth = req.auth;
+      }
       databases = await this.datastore.find(auth.username, auth.groupId);
       console.log('databases ', databases);
     } catch (err) {

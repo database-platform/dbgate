@@ -49,7 +49,21 @@ module.exports = {
       });
     }
   },
-
+  saveLog(params, req) {
+    try {
+      console.log('log params: ', params);
+      const auth = req.headers['x-authorization'] || '';
+      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/afterprocess`;
+      axios.default.post(url, params, {
+        headers: {
+          authorization: `Bearer ${auth}`,
+          'content-type': 'application/json',
+        },
+      });
+    } catch (err) {
+      logger.error({ err: err.message }, 'save log error.');
+    }
+  },
   handle_info(sesid, props) {
     const { info } = props;
     this.dispatchMessage(sesid, info);
@@ -83,7 +97,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -168,6 +182,28 @@ module.exports = {
         throw new Error(`验证接口: ${respdata.msg}`);
       }
     } catch (err) {
+      this.dispatchMessage(sesid, err.message);
+
+      this.saveLog(
+        {
+          userId: main[0],
+          groupId: main[1],
+          dataBaseId: main[2],
+          dbName: main[3],
+          srcIp: srcIp,
+          tarIp: '',
+          executeStat: err.message,
+          responseSize: '',
+          responseTime: '',
+          effectedRows: '',
+          executeTime: '',
+          sqllang: sql,
+          affectConts: '',
+          connNum: '',
+        },
+        req
+      );
+
       throw new Error(err.message);
     }
 
@@ -175,8 +211,8 @@ module.exports = {
     this.dispatchMessage(sesid, 'Query execution started');
     session.subprocess.send({ msgtype: 'executeQuery', sql });
 
-    try {
-      const params = {
+    this.saveLog(
+      {
         userId: main[0],
         groupId: main[1],
         dataBaseId: main[2],
@@ -191,19 +227,10 @@ module.exports = {
         sqllang: sql,
         affectConts: '',
         connNum: '',
-      };
-      console.log('log params: ', params);
-      const auth = req.headers['x-authorization'] || '';
-      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/afterprocess`;
-      axios.default.post(url, params, {
-        headers: {
-          authorization: `Bearer ${auth}`,
-          'content-type': 'application/json',
-        },
-      });
-    } catch (err) {
-      logger.error({ err: err.message }, 'save log error.');
-    }
+      },
+      req
+    );
+
     return { state: 'ok' };
   },
 
