@@ -2,6 +2,27 @@ const { Database, Group, DatabaseGroup } = require('../models');
 const { getEngine } = require('../../utility/utils');
 
 class OnlineDatabase {
+  /**
+   * result:
+   [
+    {
+        "server": "8.134.215.8",
+        "engine": "mysql@dbgate-plugin-mysql",
+        "port": 3306,
+        "user": "smart",
+        "password": "DR0kKY4inoKvDP91jrL+Gw==",
+        "unsaved": false,
+        "originId": 5,
+        "_id": "admin_2_5_platform",
+        "displayName": "身份管理系统",
+        "singleDatabase": true,
+        "defaultDatabase": "platform",
+        "permission": {
+          
+        }
+    }
+   ]
+   **/
   async find(username, groupId, dbId, dbName) {
     let dbWhere = {};
     if (dbId) {
