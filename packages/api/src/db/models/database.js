@@ -55,8 +55,8 @@ module.exports = sequelize => {
       timestamps: false,
     }
   );
-  Database.associate = function (models) {
-    Database.hasMany(models.DatabaseGroup, { foreignKey: 'dbId' });
-  };
+  // Database.associate = function (models) {
+  //   Database.hasMany(models.DatabaseGroup, { foreignKey: 'dbId' });
+  // };
   return Database;
 };

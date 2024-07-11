@@ -52,6 +52,9 @@ module.exports = sequelize => {
       tty: {
         type: DataTypes.TINYINT,
       },
+      hidden: {
+        type: DataTypes.TINYINT,
+      },
       dql_export: {
         type: DataTypes.TINYINT,
       },
@@ -115,8 +118,5 @@ module.exports = sequelize => {
       timestamps: false,
     }
   );
-  DatabaseAuth.associate = function (models) {
-    //Group.hasMany(models.DatabaseGroup, { foreignKey: 'groupId' });
-  };
   return DatabaseAuth;
 };

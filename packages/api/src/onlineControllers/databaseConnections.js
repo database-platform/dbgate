@@ -6,7 +6,7 @@ const {
   DatabaseAnalyser,
   computeDbDiffRows,
   getCreateObjectScript,
-  getAlterDatabaseScript,
+  // getAlterDatabaseScript,
   generateDbPairingId,
   matchPairedObjects,
   extendDatabaseInfo,
@@ -22,7 +22,7 @@ const { archivedir, resolveArchiveFolder, uploadsdir } = require('../utility/dir
 const path = require('path');
 const importDbModel = require('../utility/importDbModel');
 const requireEngineDriver = require('../utility/requireEngineDriver');
-const generateDeploySql = require('../shell/generateDeploySql');
+// const generateDeploySql = require('../shell/generateDeploySql');
 const { createTwoFilesPatch } = require('diff');
 const diff2htmlPage = require('../utility/diff2htmlPage');
 const processArgs = require('../utility/processArgs');
@@ -30,8 +30,10 @@ const { testConnectionPermission } = require('../utility/hasPermission');
 const { MissingCredentialsError } = require('../utility/exceptions');
 const pipeForkLogs = require('../utility/pipeForkLogs');
 const crypto = require('crypto');
+const PermissionService = require('../db/services/permissionService');
 
 const logger = getLogger('databaseConnections');
+const permissionService = new PermissionService();
 
 module.exports = {
   /** @type {import('dbgate-types').OpenedDatabaseConnection[]} */
@@ -83,7 +85,7 @@ module.exports = {
   handle_ping() { },
 
   async ensureOpened(conid, database) {
-    console.log('ensureOpened ', conid, database);
+    console.log('database connections ensureOpened ', conid, database);
     const existing = this.opened.find(x => x.conid == conid && x.database == database);
     if (existing) return existing;
     const connection = await connections.getCore({ conid });
@@ -371,6 +373,17 @@ module.exports = {
     return { status: 'ok' };
   },
 
+  columnPermission_meta: true,
+  async columnPermission({ conid, database, tname }, req) {
+    try {
+      const conids = conid.split('_');
+      const columnPermission = await permissionService.findColumn(conids[1], conids[2], database, tname);
+      return { code: 200, data: columnPermission };
+    } catch (error) {
+      return { code: 400, msg: error.message };
+    }
+  },
+
   structure_meta: true,
   async structure({ conid, database }, req) {
     testConnectionPermission(conid, req);
@@ -380,6 +393,45 @@ module.exports = {
     }
 
     const opened = await this.ensureOpened(conid, database);
+    if (opened.structure) {
+      const { tables, views, procedures, functions } = opened.structure;
+      // username_groupId_dbId_dbName
+      const conids = conid.split('_');
+      if (tables.length !== 0) {
+        const tablePermissions = await permissionService.findStructure(conids[1], conids[2], conids[3], 'table');
+        tables.map(table => {
+          const tablePermission = tablePermissions.find(p => p.tname === table.pureName);
+          table.permission = tablePermission ?? null;
+        });
+      }
+      if (views.length) {
+        const viewPermissions = await permissionService.findStructure(conids[1], conids[2], conids[3], 'view');
+        views.map(view => {
+          const viewPermission = viewPermissions.find(p => p.tname === view.pureName);
+          view.permission = viewPermission ?? null;
+        });
+      }
+      if (procedures.length) {
+        const procedurePermissions = await permissionService.findStructure(
+          conids[1],
+          conids[2],
+          conids[3],
+          'procedure'
+        );
+        procedures.map(procedure => {
+          const procedurePermission = procedurePermissions.find(p => p.tname === procedure.pureName);
+          procedure.permission = procedurePermission ?? null;
+        });
+      }
+      if (functions.length) {
+        const functionPermissions = await permissionService.findStructure(conids[1], conids[2], conids[3], 'function');
+        functions.map(func => {
+          const functionPermission = functionPermissions.find(p => p.tname === func.pureName);
+          func.permission = functionPermission ?? null;
+        });
+      }
+    }
+
     return opened.structure;
     // const existing = this.opened.find((x) => x.conid == conid && x.database == database);
     // if (existing) return existing.status;

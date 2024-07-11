@@ -8,7 +8,7 @@ function getEngine(val) {
       engine = 'mariadb@dbgate-plugin-mysql';
       break;
     case 'postgresql':
-      engine = 'postgre@dbgate-plugin-postgres';
+      engine = 'postgres@dbgate-plugin-postgres';
       break;
     case 'sqlserver':
       engine = 'mssql@dbgate-plugin-mssql';

@@ -10,10 +10,12 @@ const processArgs = require('../utility/processArgs');
 const { testConnectionPermission } = require('../utility/hasPermission');
 const { MissingCredentialsError } = require('../utility/exceptions');
 const pipeForkLogs = require('../utility/pipeForkLogs');
+const PermissionService = require('../db/services/permissionService');
 const { getLogger } = require('dbgate-tools');
 
 const logger = getLogger('serverConnection');
 
+const permissionService = new PermissionService();
 module.exports = {
   opened: [],
   closed: {},
@@ -47,7 +49,7 @@ module.exports = {
 
   async ensureOpened(conid) {
     const res = await lock.acquire(conid, async () => {
-      console.log('ensureOpened 0 ');
+      console.log('server connections ensureOpened ', conid);
       const existing = this.opened.find(x => x.conid == conid);
       if (existing) return existing;
       const connection = await connections.getCore({ conid });
@@ -135,8 +137,20 @@ module.exports = {
   async listDatabases({ conid }, req) {
     if (!conid) return [];
     testConnectionPermission(conid, req);
+    const conids = conid.split('_');
     const opened = await this.ensureOpened(conid);
-    // console.log('listDatabases opened ', opened);
+    if (opened.databases && opened.databases.length != 0) {
+      const permissions = await permissionService.findDatbase(conids[1], conids[2]);
+      console.log('permissions ', permissions);
+      opened.databases?.map(db => {
+        const permission = permissions.find(p => p.schema === db.name);
+        if (permission) {
+          db.permission = permission;
+        } else {
+          db.permission = null;
+        }
+      });
+    }
     return opened.databases;
   },
 

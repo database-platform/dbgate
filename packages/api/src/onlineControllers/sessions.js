@@ -156,6 +156,7 @@ module.exports = {
       throw new Error('Invalid session');
     }
     const srcIp = getRealIp(req);
+    // coind: username_groupId_dbId_dbName
     const main = session.conid.split('_');
     try {
       const params = {

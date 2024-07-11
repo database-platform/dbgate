@@ -1,8 +1,11 @@
-const { Database, Group, DatabaseGroup } = require('../models');
+const { Database, Group, DatabaseGroup, DatabaseAuth } = require('../models');
 const { getEngine } = require('../../utility/utils');
 
 class OnlineDatabase {
   /**
+   * 
+   * _id(conid): `${username}_${groupId}_${db_id}`
+   *
    * result:
    [
     {
@@ -13,7 +16,7 @@ class OnlineDatabase {
         "password": "DR0kKY4inoKvDP91jrL+Gw==",
         "unsaved": false,
         "originId": 5,
-        "_id": "admin_2_5_platform",
+        "_id": "admin_2_5",
         "displayName": "身份管理系统",
         "singleDatabase": true,
         "defaultDatabase": "platform",
@@ -23,10 +26,10 @@ class OnlineDatabase {
     }
    ]
    **/
-  async find(username, groupId, dbId, dbName) {
+  async find(username, groupId, dbId) {
     let dbWhere = {};
     if (dbId) {
-      dbWhere.db_dbname = dbName;
+      // dbWhere.db_dbname = dbName;
       dbWhere.id = dbId;
     }
     const groups = await Group.findAll({
@@ -74,8 +77,8 @@ class OnlineDatabase {
           password: item.db_pwd,
           unsaved: false,
           originId: item.id,
-          _id: `${username}_${groupId}_${item.id}_${item.db_dbname}`,
-          displayName: item.db_name ?? item.db_dbname,
+          _id: `${username}_${groupId}_${item.id}`,
+          displayName: item.db_name ?? item.db_ip,
           singleDatabase: true,
           defaultDatabase: item.db_dbname,
         };
@@ -85,11 +88,11 @@ class OnlineDatabase {
   }
 
   /**
-   * id: username_groupId_dbId_dbname
+   * id: username_groupId_dbId
    * */
   async get(id) {
     const ids = id.split('_');
-    const databases = await this.find(ids[0], ids[1], ids[2], ids[3]);
+    const databases = await this.find(ids[0], ids[1], ids[2]);
     return databases[0];
   }
 }
