@@ -15,6 +15,7 @@ class PermissionService {
   }
 
   async find(where) {
+    console.log('permission find ', where);
     try {
       const permissions = await DatabaseAuth.findAll({
         where,

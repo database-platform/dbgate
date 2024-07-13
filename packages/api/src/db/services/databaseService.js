@@ -79,8 +79,8 @@ class OnlineDatabase {
           originId: item.id,
           _id: `${username}_${groupId}_${item.id}`,
           displayName: item.db_name ?? item.db_ip,
-          singleDatabase: true,
-          defaultDatabase: item.db_dbname,
+          singleDatabase: item.db_dbname ? true : false,
+          defaultDatabase: item.db_dbname ?? '',
         };
       });
       return acc.concat(databases);

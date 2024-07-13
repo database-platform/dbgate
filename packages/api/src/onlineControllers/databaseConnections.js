@@ -398,33 +398,28 @@ module.exports = {
       // username_groupId_dbId_dbName
       const conids = conid.split('_');
       if (tables.length !== 0) {
-        const tablePermissions = await permissionService.findStructure(conids[1], conids[2], conids[3], 'table');
+        const tablePermissions = await permissionService.findStructure(conids[1], conids[2], database, 'table');
         tables.map(table => {
           const tablePermission = tablePermissions.find(p => p.tname === table.pureName);
           table.permission = tablePermission ?? null;
         });
       }
       if (views.length) {
-        const viewPermissions = await permissionService.findStructure(conids[1], conids[2], conids[3], 'view');
+        const viewPermissions = await permissionService.findStructure(conids[1], conids[2], database, 'view');
         views.map(view => {
           const viewPermission = viewPermissions.find(p => p.tname === view.pureName);
           view.permission = viewPermission ?? null;
         });
       }
       if (procedures.length) {
-        const procedurePermissions = await permissionService.findStructure(
-          conids[1],
-          conids[2],
-          conids[3],
-          'procedure'
-        );
+        const procedurePermissions = await permissionService.findStructure(conids[1], conids[2], database, 'procedure');
         procedures.map(procedure => {
           const procedurePermission = procedurePermissions.find(p => p.tname === procedure.pureName);
           procedure.permission = procedurePermission ?? null;
         });
       }
       if (functions.length) {
-        const functionPermissions = await permissionService.findStructure(conids[1], conids[2], conids[3], 'function');
+        const functionPermissions = await permissionService.findStructure(conids[1], conids[2], database, 'function');
         functions.map(func => {
           const functionPermission = functionPermissions.find(p => p.tname === func.pureName);
           func.permission = functionPermission ?? null;

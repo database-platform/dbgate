@@ -204,8 +204,9 @@ module.exports = {
         },
         req
       );
-
-      throw new Error(err.message);
+      session.subprocess.kill();
+      this.dispatchMessage(sesid, 'Connection closed');
+      return { state: 'error' };
     }
 
     logger.info({ sesid, sql }, 'Processing query');
