@@ -1,6 +1,7 @@
-FROM node:20.12.2-alpine3.19 as base
+FROM node:20.12.2-alpine3.19
 
 WORKDIR /home/dbgate-docker
+
 RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories \
     && echo "http://mirrors.ustc.edu.cn/alpine/v3.19/community/" >> /etc/apk/repositories \
     && apk --no-cache upgrade \
@@ -8,12 +9,9 @@ RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories
 
 COPY . .
 
-WORKDIR /home/dbgate-docker
-
-COPY ./docker .
-
 RUN ["chmod", "+x", "/home/dbgate-docker/entrypoint.sh"]
 
+WORKDIR /home/dbgate-docker
 EXPOSE 3000
 VOLUME /root/.dbgate
 

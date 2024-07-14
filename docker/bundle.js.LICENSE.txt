@@ -139,6 +139,15 @@ object-assign
  */
 
 /*!
+ * inflection
+ * Copyright(c) 2011 Ben Lin <ben@dreamerslab.com>
+ * MIT Licensed
+ *
+ * @fileoverview
+ * A port of inflection-js to node.js module.
+ */
+
+/*!
  * media-typer
  * Copyright(c) 2014 Douglas Christopher Wilson
  * MIT Licensed
@@ -272,6 +281,16 @@ object-assign
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
 
+//! Copyright (c) JS Foundation and other contributors
+
+//! github.com/moment/moment-timezone
+
+//! license : MIT
+
+//! moment-timezone.js
+
 //! moment.js
 
 //! moment.js locale configuration
+
+//! version : 0.5.45

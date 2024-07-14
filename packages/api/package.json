@@ -53,6 +53,8 @@
     "ncp": "^2.0.0",
     "node-cron": "^2.0.3",
     "on-finished": "^2.4.1",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
     "pinomin": "^1.0.4",
     "portfinder": "^1.0.28",
     "rimraf": "^3.0.0",

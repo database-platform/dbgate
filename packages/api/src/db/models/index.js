@@ -8,7 +8,9 @@ console.log('env ', env);
 
 console.log('env base url: ', process.env.ONLINE_DATABASE_URL);
 const db = {};
-const sequelize = new Sequelize(process.env.ONLINE_DATABASE_URL);
+const sequelize = new Sequelize(process.env.ONLINE_DATABASE_URL, {
+  dialect: 'mysql',
+});
 
 fs.readdirSync(__dirname)
   .filter(file => {

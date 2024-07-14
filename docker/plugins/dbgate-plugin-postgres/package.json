@@ -1,0 +1,44 @@
+{
+  "name": "dbgate-plugin-postgres",
+  "main": "dist/backend.js",
+  "version": "5.0.0-alpha.1",
+  "license": "MIT",
+  "description": "PostgreSQL connector plugin for DbGate",
+  "homepage": "https://dbgate.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbgate/dbgate"
+  },
+  "author": "Jan Prochazka",
+  "keywords": [
+    "dbgate",
+    "dbgateplugin",
+    "postgresql"
+  ],
+  "files": [
+    "dist",
+    "icon.svg"
+  ],
+  "scripts": {
+    "build:frontend": "webpack --mode=production --config webpack-frontend.config",
+    "build:frontend:watch": "webpack --mode=production --watch --config webpack-frontend.config",
+    "build:backend": "webpack --mode=production --config webpack-backend.config.js",
+    "build": "yarn build:frontend && yarn build:backend",
+    "plugin": "yarn build && yarn pack && dbgate-plugin dbgate-plugin-postgres",
+    "copydist": "yarn build && yarn pack && dbgate-copydist ../dist/dbgate-plugin-postgres",
+    "plugout": "dbgate-plugout dbgate-plugin-postgres",
+    "prepublishOnly": "yarn build"
+  },
+  "devDependencies": {
+    "dbgate-query-splitter": "^4.10.1",
+    "dbgate-tools": "^5.0.0-alpha.1",
+    "lodash": "^4.17.21",
+    "pg": "^8.12.0",
+    "r-dbgate-plugin-tools": "^2.0.0",
+    "webpack": "5.92.0",
+    "webpack-cli": "5.1.4"
+  },
+  "dependencies": {
+    "pg": "8.12.0"
+  }
+}
