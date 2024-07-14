@@ -8,4 +8,5 @@ then
   echo "$HOST_IP $HOST_DOMAIN" >> /etc/hosts
 fi
 
-exec node bundle.js --listen-api
+exec node api/src/index.js --listen-api
+# exec node bundle.js --listen-api

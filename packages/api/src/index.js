@@ -6,6 +6,8 @@ const path = require('path');
 const { logsdir, setLogsFilePath, getLogsFilePath } = require('./utility/directories');
 const { createLogger } = require('pinomin');
 
+console.log('processArgs ', processArgs);
+
 if (processArgs.startProcess) {
   setLoggerName(processArgs.startProcess.replace(/Process$/, ''));
 }
@@ -13,6 +15,7 @@ if (processArgs.processDisplayName) {
   setLoggerName(processArgs.processDisplayName);
 }
 
+console.log('step 1');
 // function loadLogsContent(maxLines) {
 //   const text = fs.readFileSync(getLogsFilePath(), { encoding: 'utf8' });
 //   if (maxLines) {
@@ -26,6 +29,7 @@ if (processArgs.processDisplayName) {
 // }
 
 function configureLogger() {
+  console.log('step 2');
   const logsFilePath = path.join(logsdir(), `${moment().format('YYYY-MM-DD-HH-mm')}-${process.pid}.ndjson`);
   setLogsFilePath(logsFilePath);
   setLoggerName('main');
@@ -85,11 +89,13 @@ function configureLogger() {
   //     ],
   //   },
   // });
-
+  // @ts-ignore
   setLogConfig(logConfig);
 }
 
 if (processArgs.listenApi) {
+  console.log('step 3');
+
   configureLogger();
 }
 
@@ -97,14 +103,19 @@ const shell = require('./shell/index');
 const dbgateTools = require('dbgate-tools');
 
 global['DBGATE_TOOLS'] = dbgateTools;
+console.log('step 4');
 
 if (processArgs.startProcess) {
+  console.log('step 5');
+
   const proc = require('./proc');
   const module = proc[processArgs.startProcess];
   module.start();
 }
 
 if (processArgs.listenApi) {
+  console.log('step 6');
+
   const main = require('./main');
   main.start();
 }

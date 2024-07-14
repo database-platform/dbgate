@@ -46,6 +46,10 @@ var config = {
     }),
   ],
   externals: {
+    mysql2: 'commonjs mysql2',
+    pg: 'commonjs pg',
+    'pg-hstore': 'commonjs pg-hstore',
+    sequelize: 'commonjs sequelize',
     'better-sqlite3': 'commonjs better-sqlite3',
   },
 };

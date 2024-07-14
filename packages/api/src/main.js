@@ -56,9 +56,10 @@ const { getLogger } = require('dbgate-tools');
 const logger = getLogger('main');
 
 function start() {
-  logger.info(process.argv, 'process.argv');
-  logger.info(process.env, 'process.env');
-
+  // logger.info(process.argv, 'process.argv');
+  // logger.info(process.env, 'process.env');
+  console.log('step 7');
+  console.log('platformInfo: ', platformInfo);
   const app = express();
 
   const server = http.createServer(app);
@@ -75,6 +76,7 @@ function start() {
   }
 
   app.use(cors());
+  console.log('step 8');
 
   if (platformInfo.isDocker) {
     // server static files inside docker container
@@ -96,6 +98,8 @@ function start() {
   }
 
   if (process.env.ENABLE_ONLINE === '1') {
+    console.log('step 9');
+
     app.use(onlineAuth.authMiddleware);
   }
 
@@ -173,6 +177,7 @@ function start() {
       process.exit(0);
     }, 1000);
   }
+  console.log('step 10');
 
   process.on('SIGINT', shutdown);
   process.on('SIGTERM', shutdown);
@@ -221,4 +226,4 @@ function setElectronSender(electronSender) {
   socket.setElectronSender(electronSender);
 }
 
-module.exports = { start, useAllControllers, setElectronSender, configController: config };
+module.exports = { start, useAllControllers, useOnlineAllControllers, setElectronSender, configController: config };
