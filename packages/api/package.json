@@ -57,6 +57,7 @@
     "pg-hstore": "^2.3.4",
     "pinomin": "^1.0.4",
     "portfinder": "^1.0.28",
+    "request-ip": "^3.3.0",
     "rimraf": "^3.0.0",
     "sequelize": "^6.37.3",
     "simple-encryptor": "^4.0.0",

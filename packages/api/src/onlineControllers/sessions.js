@@ -155,7 +155,8 @@ module.exports = {
     if (!session) {
       throw new Error('Invalid session');
     }
-    const srcIp = getRealIp(req);
+    const srcIp = req.clientIp;
+    // const srcIp = getRealIp(req);
     // coind: username_groupId_dbId_dbName
     const main = session.conid.split('_');
     try {
@@ -190,7 +191,7 @@ module.exports = {
           userId: main[0],
           groupId: main[1],
           dataBaseId: main[2],
-          dbName: main[3],
+          dbName: session.database,
           srcIp: srcIp,
           tarIp: '',
           executeStat: err.message,
@@ -218,7 +219,7 @@ module.exports = {
         userId: main[0],
         groupId: main[1],
         dataBaseId: main[2],
-        dbName: main[3],
+        dbName: session.database,
         srcIp: srcIp,
         tarIp: '',
         executeStat: '',

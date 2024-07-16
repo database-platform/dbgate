@@ -52,6 +52,7 @@ const getExpressPath = require('./utility/getExpressPath');
 const { getLogins } = require('./utility/hasPermission');
 const _ = require('lodash');
 const { getLogger } = require('dbgate-tools');
+const requestIp = require('request-ip');
 
 const logger = getLogger('main');
 
@@ -62,6 +63,7 @@ function start() {
   console.log('platformInfo: ', platformInfo);
   const app = express();
 
+  app.set('trust proxy', true);
   const server = http.createServer(app);
 
   const logins = getLogins();
@@ -74,7 +76,7 @@ function start() {
       })
     );
   }
-
+  app.use(requestIp.mw());
   app.use(cors());
   console.log('step 8');
 
