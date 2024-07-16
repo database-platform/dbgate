@@ -68,7 +68,27 @@ export function copyTextToClipboard(text) {
 
 /* Currently this doesn't work in firefox stable, but works in nightly */
 export async function getClipboardText() {
-  return await navigator.clipboard.readText();
+  // return await navigator.clipboard.readText();
+
+  try {
+    let result;
+    if (window.__MICRO_APP_ENVIRONMENT__) {
+      result = await window.parent.navigator.permissions.query({ name: 'clipboard-read' });
+    } else {
+      result = navigator.permissions.query({ name: 'clipboard-read' });
+    }
+    console.log('result ', result);
+    if (result.state === 'granted' || result.state === 'prompt') {
+      if (window.__MICRO_APP_ENVIRONMENT__) {
+        return await window.parent.navigator.clipboard.readText();
+      } else {
+        return await navigator.clipboard.readText();
+      }
+    }
+  } catch (error) {
+    console.log('Failed to read text from clipboard: ', error);
+  }
+  return '';
 }
 
 export function extractRowCopiedValue(row, col) {

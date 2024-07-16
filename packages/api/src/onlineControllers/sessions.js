@@ -97,7 +97,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -163,7 +163,7 @@ module.exports = {
         userId: main[0],
         groupId: main[1],
         dataBaseId: main[2],
-        dbName: main[3],
+        dbName: session.database,
         srcIp: srcIp,
         sql,
       };
