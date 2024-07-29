@@ -5,13 +5,14 @@ const { getLogins } = require('../utility/hasPermission');
 const { getLogger } = require('dbgate-tools');
 const AD = require('activedirectory2').promiseWrapper;
 const crypto = require('crypto');
-const { group } = require('console');
-const { decode } = require('punycode');
+// const { group } = require('console');
+// const { decode } = require('punycode');
 
 const logger = getLogger('auth');
 
 const tokenSecret = crypto.randomUUID();
 const onlineSecret = 'abcdefghijklmnopqrstuvwxyz';
+const SKIP_AUTH_PATHS = ['/config/get', '/auth/oauth-token', '/auth/login', '/stream'];
 
 function shouldAuthorizeApi() {
   const logins = getLogins();
@@ -33,8 +34,6 @@ function unauthorizedResponse(req, res, text) {
 }
 
 function authMiddleware(req, res, next) {
-  const SKIP_AUTH_PATHS = ['/config/get', '/auth/oauth-token', '/auth/login', '/stream'];
-
   // if (!shouldAuthorizeApi()) {
   //   return next();
   // }

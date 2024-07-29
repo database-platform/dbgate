@@ -97,7 +97,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -155,8 +155,8 @@ module.exports = {
     if (!session) {
       throw new Error('Invalid session');
     }
-    const srcIp = req.clientIp;
-    // const srcIp = getRealIp(req);
+    // const srcIp = req.clientIp;
+    const srcIp = getRealIp(req);
     // coind: username_groupId_dbId_dbName
     const main = session.conid.split('_');
     try {

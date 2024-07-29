@@ -6,7 +6,7 @@ const path = require('path');
 const { logsdir, setLogsFilePath, getLogsFilePath } = require('./utility/directories');
 const { createLogger } = require('pinomin');
 
-console.log('processArgs ', processArgs);
+// console.log('processArgs ', processArgs);
 
 if (processArgs.startProcess) {
   setLoggerName(processArgs.startProcess.replace(/Process$/, ''));

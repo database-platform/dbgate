@@ -32,7 +32,7 @@ function getEngine(val) {
 }
 
 function getRealIp(req) {
-  let ipAddress = req.header['x-forwarded-for'] || req.header['x-real-ip'] || req.connection.remoteAddress;
+  let ipAddress = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.ip || req.connection.remoteAddress;
   if (ipAddress instanceof Array) {
     ipAddress = ipAddress[0];
   }
