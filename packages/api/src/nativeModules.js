@@ -9,5 +9,4 @@ function requireDynamic(file) {
     return require(redirectFile);
   }
 }
-console.log('redirectFile ', redirectFile);
 module.exports = redirectFile ? requireDynamic(redirectFile) : require('./nativeModulesContent');

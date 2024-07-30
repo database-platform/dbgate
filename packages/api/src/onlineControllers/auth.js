@@ -38,7 +38,6 @@ function authMiddleware(req, res, next) {
   //   return next();
   // }
   let skipAuth = !!SKIP_AUTH_PATHS.find(x => req.path == getExpressPath(x));
-
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     if (skipAuth) {
@@ -51,6 +50,9 @@ function authMiddleware(req, res, next) {
     let decoded = null;
     if (process.env.ENABLE_ONLINE === '1') {
       decoded = jwt.verify(token, onlineSecret, { algorithms: ['HS512'] });
+      if (decoded.exp < Math.floor(Date.now() / 1000)) {
+        throw new Error('token expired');
+      }
       // {
       //   "sub": "admin",
       //   "aud": "7648e1f8dff21aa6f65e112d",

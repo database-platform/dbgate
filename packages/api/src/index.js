@@ -15,7 +15,6 @@ if (processArgs.processDisplayName) {
   setLoggerName(processArgs.processDisplayName);
 }
 
-console.log('step 1');
 // function loadLogsContent(maxLines) {
 //   const text = fs.readFileSync(getLogsFilePath(), { encoding: 'utf8' });
 //   if (maxLines) {
@@ -29,7 +28,6 @@ console.log('step 1');
 // }
 
 function configureLogger() {
-  console.log('step 2');
   const logsFilePath = path.join(logsdir(), `${moment().format('YYYY-MM-DD-HH-mm')}-${process.pid}.ndjson`);
   setLogsFilePath(logsFilePath);
   setLoggerName('main');
@@ -94,8 +92,6 @@ function configureLogger() {
 }
 
 if (processArgs.listenApi) {
-  console.log('step 3');
-
   configureLogger();
 }
 
@@ -103,10 +99,9 @@ const shell = require('./shell/index');
 const dbgateTools = require('dbgate-tools');
 
 global['DBGATE_TOOLS'] = dbgateTools;
-console.log('step 4');
 
 if (processArgs.startProcess) {
-  console.log('step 5');
+  console.log('startProcess ', processArgs.startProcess);
 
   const proc = require('./proc');
   const module = proc[processArgs.startProcess];
@@ -114,7 +109,7 @@ if (processArgs.startProcess) {
 }
 
 if (processArgs.listenApi) {
-  console.log('step 6');
+  console.log('main start');
 
   const main = require('./main');
   main.start();

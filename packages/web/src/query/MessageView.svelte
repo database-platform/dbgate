@@ -14,7 +14,10 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import moment from 'moment';
+  import { apiCall } from '../utility/api';
+  import localforage from 'localforage';
 
+  export let eventName = '';
   export let items: any[];
   export let showProcedure = false;
   export let showLine = false;
@@ -23,6 +26,26 @@
   $: time0 = items[0] && new Date(items[0].time).getTime();
 
   const dispatch = createEventDispatcher();
+
+  async function saveLog() {
+    console.log('items ', items, eventName);
+    if (!eventName) {
+      return;
+    }
+    const sql = await localforage.getItem(eventName);
+    await apiCall('sessions/save-logs', {
+      sesid: eventName.split('session-info-')[1],
+      sql,
+      message: JSON.stringify(items),
+    });
+    localforage.removeItem(eventName);
+  }
+
+  $: {
+    if (items.length > 1) {
+      saveLog();
+    }
+  }
 </script>
 
 <div class="main">

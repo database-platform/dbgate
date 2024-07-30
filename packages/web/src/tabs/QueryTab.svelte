@@ -86,6 +86,7 @@
   import ToolStripSaveButton from '../buttons/ToolStripSaveButton.svelte';
   import ToolStripCommandSplitButton from '../buttons/ToolStripCommandSplitButton.svelte';
   import { getClipboardText } from '../utility/clipboard';
+  import localforage from 'localforage';
 
   export let tabid;
   export let conid;
@@ -198,6 +199,8 @@
       sesid = resp.sesid;
       sessionId = sesid;
     }
+    await localforage.setItem(`session-info-${sesid}`, sql);
+
     busy = true;
     timerLabel.start();
     await apiCall('sessions/execute-query', {

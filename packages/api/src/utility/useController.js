@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const express = require('express');
 const getExpressPath = require('./getExpressPath');
-const { MissingCredentialsError } = require('./exceptions');
+const { MissingCredentialsError, UnauthorizedError } = require('./exceptions');
 const { getLogger } = require('dbgate-tools');
 
 const logger = getLogger('useController');

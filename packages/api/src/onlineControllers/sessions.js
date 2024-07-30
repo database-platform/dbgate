@@ -97,7 +97,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -148,6 +148,36 @@ module.exports = {
     });
     return _.pick(newOpened, ['conid', 'database', 'sesid']);
   },
+  saveLogs_meta: true,
+  async saveLogs({ sesid, message, sql }, req) {
+    const session = this.opened.find(x => x.sesid == sesid);
+    if (!session) {
+      throw new Error('Invalid session');
+    }
+    const srcIp = getRealIp(req);
+    // coind: username_groupId_dbId_dbName
+    const main = session.conid.split('_');
+    this.saveLog(
+      {
+        userId: main[0],
+        groupId: main[1],
+        dataBaseId: main[2],
+        dbName: session.database,
+        srcIp: srcIp,
+        tarIp: '',
+        executeStat: message,
+        responseSize: '',
+        responseTime: '',
+        effectedRows: '',
+        executeTime: '',
+        sqllang: sql,
+        affectConts: '',
+        connNum: '',
+      },
+      req
+    );
+    return { state: 'ok' };
+  },
 
   executeQuery_meta: true,
   async executeQuery({ sesid, sql }, req) {
@@ -170,7 +200,7 @@ module.exports = {
       };
       console.log('verifysql params: ', params);
       const auth = req.headers['x-authorization'] || '';
-      console.log('verifysql token: ', auth);
+      // console.log('verifysql token: ', auth);
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
       const response = await axios.default.post(url, params, {
         headers: {
@@ -181,7 +211,7 @@ module.exports = {
       const respdata = response.data;
       console.log('verifysql result: ', respdata);
       if (respdata.code !== 200) {
-        throw new Error(`验证接口: ${respdata.msg}`);
+        throw new Error(respdata.msg);
       }
     } catch (err) {
       this.dispatchMessage(sesid, err.message);
@@ -213,26 +243,6 @@ module.exports = {
     logger.info({ sesid, sql }, 'Processing query');
     this.dispatchMessage(sesid, 'Query execution started');
     session.subprocess.send({ msgtype: 'executeQuery', sql });
-
-    this.saveLog(
-      {
-        userId: main[0],
-        groupId: main[1],
-        dataBaseId: main[2],
-        dbName: session.database,
-        srcIp: srcIp,
-        tarIp: '',
-        executeStat: '',
-        responseSize: '',
-        responseTime: '',
-        effectedRows: '',
-        executeTime: '',
-        sqllang: sql,
-        affectConts: '',
-        connNum: '',
-      },
-      req
-    );
 
     return { state: 'ok' };
   },

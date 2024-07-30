@@ -40,7 +40,7 @@ module.exports = {
     existing.status = status;
     socket.emitChanged(`server-status-changed`);
   },
-  handle_ping() { },
+  handle_ping() {},
   handle_response(conid, { msgid, ...response }) {
     const [resolve, reject] = this.requests[msgid];
     resolve(response);
@@ -141,7 +141,7 @@ module.exports = {
     const opened = await this.ensureOpened(conid);
     if (opened.databases && opened.databases.length != 0) {
       const permissions = await permissionService.findDatbase(conids[1], conids[2]);
-      console.log('permissions ', permissions);
+      console.log('permissions ', permissions.length);
       opened.databases?.map(db => {
         const permission = permissions.find(p => p.schema === db.name);
         if (permission) {
@@ -162,7 +162,19 @@ module.exports = {
   },
 
   serverStatus_meta: true,
-  async serverStatus() {
+  async serverStatus({ conid }) {
+    if (conid) {
+      return {
+        ...this.closed[conid],
+        ..._.mapValues(
+          _.keyBy(
+            this.opened.filter(item => item.conid === conid),
+            'conid'
+          ),
+          'status'
+        ),
+      };
+    }
     return {
       ...this.closed,
       ..._.mapValues(_.keyBy(this.opened, 'conid'), 'status'),

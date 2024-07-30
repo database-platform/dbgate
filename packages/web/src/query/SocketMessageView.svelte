@@ -23,7 +23,7 @@
 
   const displayCachedMessages = _.throttle(() => {
     displayedMessages = [...cachedMessagesRef.get()];
-  }, 500);
+  }, 1000);
 
   const handleInfo = info => {
     cachedMessagesRef.get().push(info);
@@ -68,5 +68,5 @@
 {#if showNoMessagesAlert && (!displayedMessages || displayedMessages.length == 0)}
   <ErrorInfo message="No messages" icon="img alert" />
 {:else}
-  <MessageView items={displayedMessages} on:messageclick {showProcedure} {showLine} {startLine} />
+  <MessageView items={displayedMessages} on:messageclick {eventName} {showProcedure} {showLine} {startLine} />
 {/if}

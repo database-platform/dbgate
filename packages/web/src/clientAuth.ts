@@ -59,7 +59,7 @@ export async function redirectToLogin(config = null, force = false) {
   }
 
   if (config.isOnline) {
-    // internalRedirectTo(config.onlineAdminHome);
+    internalRedirectTo(config.onlineAdminHome);
     return;
   }
 
