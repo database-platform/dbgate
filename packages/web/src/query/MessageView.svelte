@@ -42,7 +42,7 @@
   }
 
   $: {
-    if (items.length > 1) {
+    if (items.length > 1 && eventName) {
       saveLog();
     }
   }

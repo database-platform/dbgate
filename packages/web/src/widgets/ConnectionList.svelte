@@ -37,7 +37,11 @@
 
   $: connectionsWithStatus =
     $connections && $serverStatus
-      ? $connections.map(conn => ({ ...conn, status: $serverStatus[getVolatileRemapping(conn._id)] }))
+      ? $connections?.map(conn => {
+          if (conn._id) {
+            return { ...conn, status: $serverStatus[getVolatileRemapping(conn._id)] };
+          }
+        })
       : $connections;
 
   $: connectionsWithStatusFiltered = connectionsWithStatus?.filter(

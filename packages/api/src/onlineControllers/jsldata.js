@@ -3,7 +3,7 @@ const fs = require('fs');
 const lineReader = require('line-reader');
 const _ = require('lodash');
 const { __ } = require('lodash/fp');
-const DatastoreProxy = require('../utility/DatastoreProxy');
+// const DatastoreProxy = require('../utility/DatastoreProxy');
 const getJslFileName = require('../utility/getJslFileName');
 const JsonLinesDatastore = require('../utility/JsonLinesDatastore');
 const requirePluginFunction = require('../utility/requirePluginFunction');
@@ -100,6 +100,7 @@ module.exports = {
   // },
 
   async ensureDatastore(jslid, formatterFunction) {
+    console.log('ensureDatastore ', jslid, formatterFunction);
     let datastore = this.datastores[jslid];
     if (!datastore || datastore.formatterFunction != formatterFunction) {
       if (datastore) {
@@ -113,6 +114,7 @@ module.exports = {
   },
 
   async closeDataStore(jslid) {
+    console.log('closeDataStore ', jslid);
     const datastore = this.datastores[jslid];
     if (datastore) {
       await datastore._closeReader();
@@ -122,6 +124,7 @@ module.exports = {
 
   getInfo_meta: true,
   async getInfo({ jslid }) {
+    console.log('getInfo ', jslid);
     const file = getJslFileName(jslid);
     try {
       const firstLine = await readFirstLine(file);
@@ -144,17 +147,30 @@ module.exports = {
   getRows_meta: true,
   async getRows({ jslid, offset, limit, filters, sort, formatterFunction }) {
     const datastore = await this.ensureDatastore(jslid, formatterFunction);
-    return datastore.getRows(offset, limit, _.isEmpty(filters) ? null : filters, _.isEmpty(sort) ? null : sort);
+    console.log('getRows: ', jslid);
+    const rows = await datastore.getRows(
+      offset,
+      limit,
+      _.isEmpty(filters) ? null : filters,
+      _.isEmpty(sort) ? null : sort
+    );
+
+    console.log('getRows session: ');
+    return rows;
   },
 
   exists_meta: true,
   async exists({ jslid }) {
+    console.log('exists ', jslid);
+
     const fileName = getJslFileName(jslid);
     return fs.existsSync(fileName);
   },
 
   getStats_meta: true,
   getStats({ jslid }) {
+    console.log('getStats ', jslid);
+
     const file = `${getJslFileName(jslid)}.stats`;
     if (fs.existsSync(file)) {
       try {
@@ -168,6 +184,8 @@ module.exports = {
 
   loadFieldValues_meta: true,
   async loadFieldValues({ jslid, field, search, formatterFunction }) {
+    console.log('loadFieldValues ', jslid);
+
     const datastore = await this.ensureDatastore(jslid, formatterFunction);
     const res = new Set();
     await datastore.enumRows(row => {
@@ -180,7 +198,7 @@ module.exports = {
   },
 
   async notifyChangedStats(stats) {
-    // console.log('SENDING STATS', JSON.stringify(stats));
+    console.log('SENDING STATS', JSON.stringify(stats));
     const datastore = this.datastores[stats.jslid];
     if (datastore) await datastore.notifyChanged();
     socket.emit(`jsldata-stats-${stats.jslid}`, stats);
@@ -196,12 +214,16 @@ module.exports = {
 
   saveText_meta: true,
   async saveText({ jslid, text }) {
+    console.log('saveText ', jslid);
+
     await fs.promises.writeFile(getJslFileName(jslid), text);
     return true;
   },
 
   saveRows_meta: true,
   async saveRows({ jslid, rows }) {
+    console.log('saveRows ', jslid);
+
     const fileStream = fs.createWriteStream(getJslFileName(jslid));
     for (const row of rows) {
       await fileStream.write(JSON.stringify(row) + '\n');
@@ -212,6 +234,8 @@ module.exports = {
 
   extractTimelineChart_meta: true,
   async extractTimelineChart({ jslid, timestampFunction, aggregateFunction, measures }) {
+    console.log('extractTimelineChart ', jslid);
+
     const timestamp = requirePluginFunction(timestampFunction);
     const aggregate = requirePluginFunction(aggregateFunction);
     const datastore = new JsonLinesDatastore(getJslFileName(jslid));

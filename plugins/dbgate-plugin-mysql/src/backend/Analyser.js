@@ -104,7 +104,6 @@ class Analyser extends DatabaseAnalyser {
   async _runAnalysis() {
     this.feedback({ analysingMessage: 'Loading tables' });
     const tables = await this.analyserQuery('tables', ['tables']);
-    console.log('tables', tables);
     this.feedback({ analysingMessage: 'Loading columns' });
     const columns = await this.analyserQuery('columns', ['tables', 'views']);
     this.feedback({ analysingMessage: 'Loading primary keys' });

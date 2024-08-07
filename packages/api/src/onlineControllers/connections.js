@@ -56,7 +56,7 @@ module.exports = {
     let databases = [];
     try {
       databases = await this.datastore.find(_params.username, _params.groupId);
-      console.log('list param databases ', databases);
+      // console.log('list param databases ', databases);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
       return {
@@ -83,7 +83,7 @@ module.exports = {
         auth = req.auth;
       }
       databases = await this.datastore.find(auth.username, auth.groupId);
-      console.log('databases ', databases);
+      // console.log('databases ', databases);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
       return {

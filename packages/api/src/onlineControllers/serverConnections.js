@@ -49,7 +49,7 @@ module.exports = {
 
   async ensureOpened(conid) {
     const res = await lock.acquire(conid, async () => {
-      console.log('server connections ensureOpened ', conid);
+      // console.log('server connections ensureOpened ', conid);
       const existing = this.opened.find(x => x.conid == conid);
       if (existing) return existing;
       const connection = await connections.getCore({ conid });

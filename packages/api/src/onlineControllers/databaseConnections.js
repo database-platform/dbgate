@@ -82,10 +82,10 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   async ensureOpened(conid, database) {
-    console.log('database connections ensureOpened ', conid, database);
+    // console.log('database connections ensureOpened ', conid, database);
     const existing = this.opened.find(x => x.conid == conid && x.database == database);
     if (existing) return existing;
     const connection = await connections.getCore({ conid });
@@ -170,9 +170,10 @@ module.exports = {
 
   sqlSelect_meta: true,
   async sqlSelect({ conid, database, select }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'sqlSelect', select });
+    console.log('select: ', res);
     return res;
   },
 

@@ -7,7 +7,7 @@ const { splitQuery } = require('dbgate-query-splitter');
 
 const { jsldir } = require('../utility/directories');
 const requireEngineDriver = require('../utility/requireEngineDriver');
-const { decryptConnection } = require('../utility/crypting');
+// const { decryptConnection } = require('../utility/crypting');
 const connectUtility = require('../utility/connectUtility');
 const { handleProcessCommunication } = require('../utility/processComm');
 const { getLogger, extractIntSettingsValue, extractBoolSettingsValue } = require('dbgate-tools');
@@ -150,8 +150,11 @@ class StreamHandler {
     // }, 500);
   }
   row(row) {
-    if (this.currentWriter) this.currentWriter.row(row);
-    else if (row.message) process.send({ msgtype: 'info', info: { message: row.message } });
+    if (this.currentWriter) {
+      this.currentWriter.row(row);
+    } else if (row.message) {
+      process.send({ msgtype: 'info', info: { message: row.message } });
+    }
     // this.onRow(this.jslid);
   }
   // error(error) {
@@ -247,7 +250,6 @@ async function handleStopProfiler({ jslid }) {
 
 async function handleExecuteQuery({ sql }) {
   lastActivity = new Date().getTime();
-
   await waitConnected();
   const driver = requireEngineDriver(storedConnection);
 
