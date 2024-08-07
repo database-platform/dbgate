@@ -1,4 +1,4 @@
-const { Database, Group, DatabaseGroup, DatabaseAuth } = require('../models');
+const { Database, Group, DatabaseGroup } = require('../models');
 const { getEngine } = require('../../utility/utils');
 
 class OnlineDatabase {

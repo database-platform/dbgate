@@ -118,5 +118,8 @@ module.exports = sequelize => {
       timestamps: false,
     }
   );
+  DatabaseAuth.associate = function (models) {
+    DatabaseAuth.hasOne(models.AuthMask, { foreignKey: 'id' });
+  };
   return DatabaseAuth;
 };

@@ -1,4 +1,4 @@
-const { DatabaseAuth } = require('../models');
+const { DatabaseAuth, AuthMask, DesensType } = require('../models');
 
 class PermissionService {
   async findDatbase(group_id, db_id, schema, type) {
@@ -19,6 +19,14 @@ class PermissionService {
     try {
       const permissions = await DatabaseAuth.findAll({
         where,
+        include: {
+          model: AuthMask,
+          include: {
+            where: { status: 0 },
+            model: DesensType,
+            required: false,
+          },
+        },
       });
       return permissions?.map(p => p.get({ plain: true }));
     } catch (error) {

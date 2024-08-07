@@ -31,6 +31,7 @@ const { MissingCredentialsError } = require('../utility/exceptions');
 const pipeForkLogs = require('../utility/pipeForkLogs');
 const crypto = require('crypto');
 const PermissionService = require('../db/services/permissionService');
+const { processMask } = require('../utility/dataMask');
 
 const logger = getLogger('databaseConnections');
 const permissionService = new PermissionService();
@@ -168,12 +169,37 @@ module.exports = {
     return res;
   },
 
+  /**
+   * res: {
+   *  msgtype: '',
+   *  rows: [
+   *    {
+   *      id: 'xxx',
+   *      col: 'xx'
+   *    }
+   *  ],
+   *  columns: [
+   *    { columnName: 'id' },
+   *    { columnName: 'col' }
+   *  ]
+   * }
+   * */
   sqlSelect_meta: true,
   async sqlSelect({ conid, database, select }, req) {
     // testConnectionPermission(conid, req);
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'sqlSelect', select });
-    console.log('select: ', res);
+    if (select.range && res.rows && res.rows.length !== 0) {
+      const tname = select.from.name.pureName;
+      const conids = conid.split('_');
+      const columnPermission = await permissionService.findColumn(conids[1], conids[2], database, tname);
+      console.log('select permission: ', columnPermission);
+      if (columnPermission && columnPermission.length !== 0) {
+        columnPermission.map(permission => {
+          processMask(permission.tcolumn, permission.AuthMask, res.rows);
+        });
+      }
+    }
     return res;
   },
 
