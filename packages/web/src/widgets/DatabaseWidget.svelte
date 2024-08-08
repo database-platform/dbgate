@@ -16,13 +16,25 @@
   import _ from 'lodash';
 
   export let hidden = false;
-
-  $: conid = $currentDatabase?.connection?._id;
+  let singleDatabase = false;
+  let database = null;
+  let conid = null;
+  $: {
+    const username = $currentDatabase?.connection?._id.split('_')[0];
+    const userInfo = JSON.parse(localStorage.getItem('user-info'));
+    if (username === userInfo.username) {
+      singleDatabase = $currentDatabase.connection.singleDatabase;
+      database = $currentDatabase.name;
+      conid = $currentDatabase.connection._id;
+    }
+  }
+  // $: singleDatabase = $currentDatabase?.connection?.singleDatabase;
+  // $: database = $currentDatabase?.name;
+  // $: conid = $currentDatabase?.connection?._id;
   $: connection = useConnectionInfo({ conid });
   $: driver = findEngineDriver($connection, $extensions);
   $: config = useConfig();
-  $: singleDatabase = $currentDatabase?.connection?.singleDatabase;
-  $: database = $currentDatabase?.name;
+  $: console.log('=$currentDatabase: ', $currentDatabase, conid);
 </script>
 
 <WidgetColumnBar {hidden}>

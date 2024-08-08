@@ -92,7 +92,6 @@
   export let conid;
   export let database;
   export let initialArgs;
-
   export const activator = createActivator('QueryTab', false);
 
   const tabVisible: any = getContext('tabVisible');

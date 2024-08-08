@@ -132,7 +132,7 @@ export const currentDropDownMenu = writable(null);
 export const openedModals = writable([]);
 export const draggedPinnedObject = writable(null);
 export const openedSnackbars = writable([]);
-export const nullStore = readable(null, () => { });
+export const nullStore = readable(null, () => {});
 export const currentArchive = writableWithStorage('default', 'currentArchive');
 export const currentApplication = writableWithStorage(null, 'currentApplication');
 export const isFileDragActive = writable(false);
@@ -228,7 +228,12 @@ export const getCurrentConfig = () => currentConfigValue;
 
 let recentDatabasesValue = null;
 recentDatabases.subscribe(value => {
-  recentDatabasesValue = value;
+  const userInfo = JSON.parse(localStorage.getItem('user-info'));
+  recentDatabasesValue = value.filter(item => {
+    const username = item.connection._id.split('_')[0];
+    return username === userInfo.username;
+  });
+  console.log('store recentDatabases: ', recentDatabasesValue);
 });
 export const getRecentDatabases = () => _.compact(recentDatabasesValue);
 
@@ -246,13 +251,18 @@ export const getLockedDatabaseMode = () => lockedDatabaseModeValue;
 
 let currentDatabaseValue = null;
 currentDatabase.subscribe(value => {
-  currentDatabaseValue = value;
   if (value?.connection?._id) {
-    if (value?.connection?.singleDatabase) {
-      openedSingleDatabaseConnections.update(x => _.uniq([...x, value?.connection?._id]));
-    } else {
-      openedConnections.update(x => _.uniq([...x, value?.connection?._id]));
-      expandedConnections.update(x => _.uniq([...x, value?.connection?._id]));
+    const userInfo = JSON.parse(localStorage.getItem('user-info'));
+    const username = value.connection._id.split('_')[0];
+    if (userInfo.username === username) {
+      if (value?.connection?.singleDatabase) {
+        openedSingleDatabaseConnections.update(x => _.uniq([...x, value?.connection?._id]));
+      } else {
+        openedConnections.update(x => _.uniq([...x, value?.connection?._id]));
+        expandedConnections.update(x => _.uniq([...x, value?.connection?._id]));
+      }
+      currentDatabaseValue = value;
+      console.log('store currentDatabase: ', value);
     }
   }
   invalidateCommands();
@@ -285,6 +295,7 @@ export function subscribeApiDependendStores() {
     currentConfigValue = value;
     invalidateCommands();
     if (value.singleDbConnection) {
+      console.log('store use config currentDatabase: ', value);
       currentDatabase.set(value.singleDbConnection);
     }
   });

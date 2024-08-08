@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
   const getCurrentValueMarker: any = {};
 
+  let username = '';
   export function shouldShowTab(tab, lockedDbModeArg = getCurrentValueMarker, currentDbArg = getCurrentValueMarker) {
     const lockedDbMode = lockedDbModeArg == getCurrentValueMarker ? getLockedDatabaseMode() : lockedDbModeArg;
-
     if (lockedDbMode) {
       const currentDb = currentDbArg == getCurrentValueMarker ? getCurrentDatabase() : currentDbArg;
       return (
@@ -13,7 +13,15 @@
           (tab.props?.conid == currentDb?.connection?._id && tab.props?.database == currentDb?.name))
       );
     }
-    return tab.closedTime == null;
+    if (!username) {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('user-info'));
+        username = userInfo.username;
+      } catch (err) {}
+    }
+    const tabUsername = tab.props.conid.split('_')[0];
+    return username === tabUsername && tab.closedTime == null;
+    // return tab.closedTime == null;
   }
 
   function allowCloseTabs(tabs) {

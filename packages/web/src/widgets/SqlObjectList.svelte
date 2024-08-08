@@ -51,7 +51,7 @@
 
   $: dbApps = filterAppsForDatabase($currentDatabase?.connection, $currentDatabase?.name, $apps || []);
 
-  // $: console.log('OBJECTS', $objects);
+  $: console.log('OBJECTS', $objects);
 
   $: objectList = _.flatten([
     ...['tables', 'collections', 'views', 'matviews', 'procedures', 'functions'].map(objectTypeField =>

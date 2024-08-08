@@ -5,6 +5,12 @@ import registerCommand from './registerCommand';
 
 currentDatabase.subscribe(value => {
   if (!value) return;
+  const userInfo = JSON.parse(localStorage.getItem('user-info'));
+  const username = value.connection._id.split('_')[0];
+  if (userInfo.username !== username) {
+    return;
+  }
+  console.log('recentDatabases switch: ', value);
   recentDatabases.update(list => {
     const res = [
       value,

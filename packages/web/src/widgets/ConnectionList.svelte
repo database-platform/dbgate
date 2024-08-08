@@ -172,14 +172,14 @@
       expandedConnections.update(old => (value ? [...old, data._id] : old.filter(x => x != data._id)));
     }}
   />
-  {#if $connections && !$connections.find(x => !x.unsaved) && $openedConnections.length == 0 && $commandsCustomized['new.connection']?.enabled && !$openedTabs.find(x => !x.closedTime && x.tabComponent == 'ConnectionTab' && !x.props?.conid)}
-    <LargeButton icon="icon new-connection" on:click={() => runCommand('new.connection')} fillHorizontal
-      >Add new connection</LargeButton
-    >
-    <!-- <ToolbarButton icon="icon new-connection" on:click={() => runCommand('new.connection')}>
-      Add new connection
+  <!-- {#if $connections && !$connections.find(x => !x.unsaved) && $openedConnections.length == 0 && $commandsCustomized['new.connection']?.enabled && !$openedTabs.find(x => !x.closedTime && x.tabComponent == 'ConnectionTab' && !x.props?.conid)} -->
+  <!--   <LargeButton icon="icon new-connection" on:click={() => runCommand('new.connection')} fillHorizontal -->
+  <!--     >Add new connection</LargeButton -->
+  <!--   > -->
+  <!-- <ToolbarButton icon="icon new-connection" on:click={() => runCommand('new.connection')}>
+      Add new connection 
     </ToolbarButton> -->
-  {/if}
+  <!-- {/if} -->
 </WidgetsInnerContainer>
 
 <style>

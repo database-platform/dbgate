@@ -298,7 +298,7 @@ module.exports = {
         message: 'No connection',
       };
     }
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     const existing = this.opened.find(x => x.conid == conid && x.database == database);
     if (existing) {
       return {

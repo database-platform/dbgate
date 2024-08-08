@@ -77,6 +77,7 @@ module.exports = {
     let databases = [];
     try {
       let auth;
+      // 根据传入参数加载
       if (_params.username) {
         auth = _params;
       } else {
@@ -316,7 +317,15 @@ module.exports = {
 
   get_meta: true,
   async get({ conid }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
+    if (!conid) {
+      return null;
+    }
+    // const username = conid.split('_')[0];
+    // const auth = req.auth;
+    // if (auth.username !== username) {
+    //   return null;
+    // }
     return this.getCore({ conid, mask: true });
   },
 
