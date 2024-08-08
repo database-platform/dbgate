@@ -32,6 +32,8 @@ const pipeForkLogs = require('../utility/pipeForkLogs');
 const crypto = require('crypto');
 const PermissionService = require('../db/services/permissionService');
 const { processMask } = require('../utility/dataMask');
+const { getRealIp } = require('../utility/utils');
+const { default: axios } = require('axios');
 
 const logger = getLogger('databaseConnections');
 const permissionService = new PermissionService();
@@ -83,7 +85,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -170,6 +172,16 @@ module.exports = {
   },
 
   /**
+   * select: {
+   *    commandType: '',
+   *    from: {
+   *      alias: '',
+   *      name: {
+   *        pureName: ''
+   *      }
+   *    }
+   * }
+   *
    * res: {
    *  msgtype: '',
    *  rows: [
@@ -183,10 +195,41 @@ module.exports = {
    *    { columnName: 'col' }
    *  ]
    * }
+   *
    * */
   sqlSelect_meta: true,
   async sqlSelect({ conid, database, select }, req) {
     // testConnectionPermission(conid, req);
+    const srcIp = getRealIp(req);
+    const main = conid.split('_');
+    try {
+      const params = {
+        userId: main[0],
+        groupId: main[1],
+        dataBaseId: main[2],
+        dbName: database,
+        srcIp: srcIp,
+        sql: `select * from ${select.from.name.pureName} limit 100`,
+      };
+      console.log('sqlSelect verifysql params: ', params);
+      const auth = req.headers['x-authorization'] || '';
+      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
+      const response = await axios.post(url, params, {
+        headers: {
+          authorization: `Bearer ${auth}`,
+          'content-type': 'application/json',
+        },
+      });
+      const respdata = response.data;
+      console.log('sqlSelect verifysql result: ', respdata);
+      if (respdata.code !== 200) {
+        throw new Error(respdata.msg);
+      }
+    } catch (err) {
+      return {
+        errorMessage: err.message,
+      };
+    }
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'sqlSelect', select });
     if (select.range && res.rows && res.rows.length !== 0) {
