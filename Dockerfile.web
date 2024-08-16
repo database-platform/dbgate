@@ -16,6 +16,9 @@ COPY . .
 
 RUN ls -la
 
+RUN ls -la node_modules
+RUN ls -la node_modules/.bin
+
 RUN yarn run prepare:docker:web
 
 FROM nginx:1.25.3-alpine3.18 as deploy

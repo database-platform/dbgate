@@ -2,7 +2,7 @@
   "name": "dbgate-web",
   "version": "5.0.0-alpha.1",
   "scripts": {
-    "build": "API_URL=/dbgatex/api node --max-old-space-size=2048 ../../node_modules/.bin/rollup -c",
+    "build": "node --max-old-space-size=2048 ../../node_modules/.bin/rollup -c",
     "dev": "cross-env API_URL=http://localhost:3000 node --max-old-space-size=4096 ../../node_modules/rollup/dist/bin/rollup -c -w",
     "start": "sirv public --port 5001 --cors",
     "validate": "svelte-check",
