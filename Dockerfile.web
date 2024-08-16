@@ -14,6 +14,8 @@ RUN yarn install --ignore-optional --ignore-scripts
 
 COPY . .
 
+RUN ls -la
+
 RUN yarn run prepare:docker:web
 
 FROM nginx:1.25.3-alpine3.18 as deploy
