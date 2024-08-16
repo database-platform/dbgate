@@ -12,12 +12,11 @@ COPY package.json yarn.lock ./
 
 ENV NODE_ENV=development
 # RUN yarn install --ignore-optional --ignore-scripts --dev
-RUN yarn install --ignore-scripts --dev
+RUN yarn --frozen-lockfile --ignore-scripts --dev install
 
 COPY . .
 RUN ls -la
 
-RUN yarn --version
 RUN ls -la node_modules/.bin
 
 RUN yarn run prepare:docker:web
