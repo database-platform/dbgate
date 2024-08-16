@@ -19,6 +19,7 @@ pipeline {
     stage('Build') {
       steps {
         sh '''
+        corepack enable
         yarn install --frozen-lockfile --ignore-scripts 
         docker build -f Dockerfile.web -t myregistry.dataleapinfo.com:5443/dbgate-web:latest -t myregistry.dataleapinfo.com:5443/dbgate-web:${commitId}-${_version} .
         echo builded.
