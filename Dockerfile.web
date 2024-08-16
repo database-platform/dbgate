@@ -10,10 +10,9 @@ RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --dev --ignore-optional --ignore-scripts
+RUN yarn install --ignore-optional --ignore-scripts --dev
 
 COPY . .
-RUN yarn cache list
 RUN ls -la
 
 RUN ls -la node_modules
