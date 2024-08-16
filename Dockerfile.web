@@ -12,7 +12,7 @@ COPY package.json yarn.lock ./
 
 ENV NODE_ENV=development
 # RUN yarn install --ignore-optional --ignore-scripts --dev
-RUN yarn --frozen-lockfile --ignore-scripts --dev install
+RUN yarn install --frozen-lockfile --ignore-scripts --production=false
 
 COPY . .
 RUN ls -la
