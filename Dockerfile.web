@@ -12,7 +12,8 @@ ENV MODE_ENV development
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --ignore-optional --ignore-scripts --dev
+# RUN yarn install --ignore-optional --ignore-scripts --dev
+RUN yarn install --ignore-scripts --dev
 
 COPY . .
 RUN ls -la
