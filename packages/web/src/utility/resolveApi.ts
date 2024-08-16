@@ -2,8 +2,9 @@ import getElectron from './getElectron';
 
 let apiUrl = null;
 try {
-  apiUrl = process.env.API_URL;
-} catch {}
+  // apiUrl = process.env.API_URL;
+  apiUrl = '/dbgatex/api';
+} catch { }
 
 export default function resolveApi() {
   if (apiUrl) {

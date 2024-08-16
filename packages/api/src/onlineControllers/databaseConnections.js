@@ -85,7 +85,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -161,7 +161,7 @@ module.exports = {
 
   queryData_meta: true,
   async queryData({ conid, database, sql }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     logger.info({ conid, database, sql }, 'Processing query');
     const opened = await this.ensureOpened(conid, database);
     // if (opened && opened.status && opened.status.name == 'error') {
@@ -200,35 +200,45 @@ module.exports = {
   sqlSelect_meta: true,
   async sqlSelect({ conid, database, select }, req) {
     // testConnectionPermission(conid, req);
-    const srcIp = getRealIp(req);
-    const main = conid.split('_');
-    try {
-      const params = {
-        userId: main[0],
-        groupId: main[1],
-        dataBaseId: main[2],
-        dbName: database,
-        srcIp: srcIp,
-        sql: `select * from ${select.from.name.pureName} limit 100`,
-      };
-      console.log('sqlSelect verifysql params: ', params);
-      const auth = req.headers['x-authorization'] || '';
-      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
-      const response = await axios.post(url, params, {
-        headers: {
-          authorization: `Bearer ${auth}`,
-          'content-type': 'application/json',
-        },
-      });
-      const respdata = response.data;
-      console.log('sqlSelect verifysql result: ', respdata);
-      if (respdata.code !== 200) {
-        throw new Error(respdata.msg);
+    if (select.commandType === 'select') {
+      let sql = '';
+      if (select.from?.alias === 'subq') {
+        sql = select.from.subQueryString;
+      } else if (select.from?.alias === 'basetbl') {
+        sql = `select * from ${select.from.name.pureName} limit 100`;
       }
-    } catch (err) {
-      return {
-        errorMessage: err.message,
-      };
+      if (sql) {
+        const srcIp = getRealIp(req);
+        const main = conid.split('_');
+        try {
+          const params = {
+            userId: main[0],
+            groupId: main[1],
+            dataBaseId: main[2],
+            dbName: database,
+            srcIp: srcIp,
+            sql,
+          };
+          console.log('sqlSelect verifysql params: ', params);
+          const auth = req.headers['x-authorization'] || '';
+          const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
+          const response = await axios.post(url, params, {
+            headers: {
+              authorization: `Bearer ${auth}`,
+              'content-type': 'application/json',
+            },
+          });
+          const respdata = response.data;
+          console.log('sqlSelect verifysql result: ', respdata);
+          if (respdata.code !== 200) {
+            throw new Error(respdata.msg);
+          }
+        } catch (err) {
+          return {
+            errorMessage: err.message,
+          };
+        }
+      }
     }
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'sqlSelect', select });
@@ -248,7 +258,7 @@ module.exports = {
 
   runScript_meta: true,
   async runScript({ conid, database, sql, useTransaction }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     logger.info({ conid, database, sql }, 'Processing script');
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'runScript', sql, useTransaction });
@@ -257,14 +267,14 @@ module.exports = {
 
   collectionData_meta: true,
   async collectionData({ conid, database, options }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'collectionData', options });
     return res.result || null;
   },
 
   async loadDataCore(msgtype, { conid, database, ...args }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype, ...args });
     if (res.errorMessage) {
@@ -438,7 +448,7 @@ module.exports = {
 
   disconnect_meta: true,
   async disconnect({ conid, database }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     await this.close(conid, database, true);
     return { status: 'ok' };
   },
@@ -456,7 +466,7 @@ module.exports = {
 
   structure_meta: true,
   async structure({ conid, database }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     if (conid == '__model') {
       const model = await importDbModel(database);
       return model;
@@ -511,7 +521,7 @@ module.exports = {
     if (!conid) {
       return null;
     }
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     if (!conid) return null;
     const opened = await this.ensureOpened(conid, database);
     return opened.serverVersion || null;
@@ -519,7 +529,7 @@ module.exports = {
 
   sqlPreview_meta: true,
   async sqlPreview({ conid, database, objects, options }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     // wait for structure
     await this.structure({ conid, database });
 
@@ -530,7 +540,7 @@ module.exports = {
 
   exportModel_meta: true,
   async exportModel({ conid, database }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     const archiveFolder = await archive.getNewArchiveFolder({ database });
     await fs.mkdir(path.join(archivedir(), archiveFolder));
     const model = await this.structure({ conid, database });
@@ -541,7 +551,7 @@ module.exports = {
 
   generateDeploySql_meta: true,
   async generateDeploySql({ conid, database, archiveFolder }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, {
       msgtype: 'generateDeploySql',

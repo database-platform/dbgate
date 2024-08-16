@@ -1,0 +1,25 @@
+FROM node:20.12.2-alpine3.19 as builder
+
+WORKDIR /home/dbgate-docker
+
+RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories \
+    && echo "http://mirrors.ustc.edu.cn/alpine/v3.19/community/" >> /etc/apk/repositories \
+    && apk --no-cache upgrade \
+    && apk add --no-cache iputils \
+    && rm -rf /var/cache/apk/*
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --ignore-optional --ignore-scripts
+
+COPY . .
+
+RUN yarn run prepare:docker:web
+
+FROM nginx:1.25.3-alpine3.18 as deploy
+
+COPY --from=builder /home/dbgate-docker/docker/public /usr/share/nginx/html/dbgatex
+
+EXPOSE 80
+
+CMD [ "nginx", "-g", "daemon off;" ]

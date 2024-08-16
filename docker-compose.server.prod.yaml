@@ -1,21 +1,20 @@
 services:
   server:
-    image: myregistry.dataleapinfo.com:5443/dbgate:latest
+    image: myregistry.dataleapinfo.com:5443/dbgate-server:latest
     init: true
     environment:
       - ENABLE_ONLINE=1
       - ONLINE_ADMIN_API=https://platform.dataleapinfo.com/dbapi
       - ONLINE_ADMIN_HOME=https://platform.dataleapinfo.com/db
-      - ONLINE_DATABASE_URL=mysql://dbsun:@Sun12345@8.134.215.8:3306/smartdata
-      # - ONLINE_DATABASE_URL=mysql://dbsun:@Sun12345@172.30.246.29:3306/smartdata
+      - ONLINE_DATABASE_URL=mysql://dbsun:@Sun12345@172.30.246.29:3306/smartdata
     networks:
       - dbserver
     deploy:
       replicas: 3
       resources:
         limits:
-          cpus: '2'
-          memory: '2g'
+          cpus: '4.0'
+          memory: '4g'
       update_config:
         order: start-first
         failure_action: rollback
@@ -31,31 +30,6 @@ services:
         - 'traefik.http.services.server.loadbalancer.sticky.cookie.name=dbgatex_cookie'
     healthcheck:
       test: ['CMD-SHELL', 'wget --spider http://localhost:3000 || exit 1']
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
-
-  web:
-    image: myregistry.dataleapinfo.com:5443/dbgate-web:latest
-    networks:
-      - dbserver
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          cpus: '1'
-          memory: '1g'
-      update_config:
-        failure_action: rollback
-      labels:
-        - 'traefik.enable=true'
-        - 'traefik.http.routers.web.rule=PathPrefix(`/dbgatex`) && !PathPrefix(`/dbgatex/api`)'
-        - 'traefik.http.routers.web.priority=1'
-        - 'traefik.http.routers.web.service=web'
-        - 'traefik.http.services.web.loadbalancer.server.port=80'
-    healthcheck:
-      test: ['CMD-SHELL', 'curl -f http://localhost || exit 1']
       interval: 30s
       timeout: 10s
       retries: 3

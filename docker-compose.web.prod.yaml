@@ -1,0 +1,29 @@
+services:
+  web:
+    image: myregistry.dataleapinfo.com:5443/dbgate-web:latest
+    networks:
+      - dbserver
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '2'
+          memory: '2g'
+      update_config:
+        failure_action: rollback
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.web.rule=PathPrefix(`/dbgatex`) && !PathPrefix(`/dbgatex/api`)'
+        - 'traefik.http.routers.web.priority=1'
+        - 'traefik.http.routers.web.service=web'
+        - 'traefik.http.services.web.loadbalancer.server.port=80'
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost || exit 1']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+networks:
+  dbserver:
+    external: true

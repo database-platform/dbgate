@@ -47,9 +47,11 @@
     "fillPackagedPlugins": "node fillPackagedPlugins",
     "resetPackagedPlugins": "node resetPackagedPlugins",
     "prettier": "prettier --write packages/api/src && prettier --write packages/datalib/src && prettier --write packages/filterparser/src && prettier --write packages/sqltree/src && prettier --write packages/tools/src && prettier --write packages/types && prettier --write packages/web/src && prettier --write app/src",
-    "copy:docker:build": "copyfiles packages/api/* docker/api && copyfiles \"packages/api/**/*\" docker/api -u 2 && copyfiles packages/web/public/* docker -u 2 && copyfiles \"packages/web/public/**/*\" docker -u 2 && copyfiles \"plugins/dist/**/*\" docker/plugins -u 2",
+    "copy:docker:build": "copyfiles packages/api/* docker/api && copyfiles \"packages/api/**/*\" docker/api -u 2 && copyfiles \"plugins/dist/**/*\" docker/plugins -u 2",
+    "copy:docker:build:web": "copyfiles packages/web/public/* docker -u 2 && copyfiles \"packages/web/public/**/*\" docker -u 2 && copyfiles \"plugins/dist/**/*\" docker/plugins -u 2",
     "install:sqlite:docker": "cd docker && yarn init --yes && yarn add better-sqlite3 && cd ..",
-    "prepare:docker": "yarn plugins:copydist && yarn build:web:docker && yarn copy:docker:build",
+    "prepare:docker": "yarn plugins:copydist && yarn copy:docker:build",
+    "prepare:docker:web": "yarn build:web:docker && yarn copy:docker:build:web",
     "start": "concurrently --kill-others-on-fail \"yarn start:api\" \"yarn start:web\"",
     "lib": "concurrently --kill-others-on-fail \"yarn start:sqltree\" \"yarn start:filterparser\" \"yarn start:datalib\" \"yarn start:tools\" \"yarn build:plugins:frontend:watch\"",
     "ts:api": "yarn workspace dbgate-api ts",
@@ -67,6 +69,9 @@
     "copyfiles": "^2.2.0",
     "prettier": "^2.2.1",
     "workspaces-run": "^1.0.1"
+  },
+  "resolutions": {
+    "fast-glob": "^3.0.3"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

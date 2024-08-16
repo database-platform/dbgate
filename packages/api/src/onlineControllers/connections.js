@@ -30,26 +30,26 @@ const logger = getLogger('connections');
 
 let volatileConnections = {};
 
-const portalConnections = null;
+// const portalConnections = null;
 
 const singleDbConnection = null;
 const singleConnection = null;
 
 module.exports = {
   datastore: null,
-  opened: [],
-  singleDbConnection,
-  singleConnection,
-  portalConnections,
+  // opened: [],
+  // singleDbConnection,
+  // singleConnection,
+  // portalConnections,
 
   async _init() {
     logger.info('Multi user connections init.');
     // const dir = datadir();
-    if (!portalConnections) {
-      // @ts-ignore
-      // this.datastore = new JsonLinesDatabase(path.join(dir, 'connections.jsonl'));
-      this.datastore = new OnlineDatabase();
-    }
+    // if (!portalConnections) {
+    // @ts-ignore
+    // this.datastore = new JsonLinesDatabase(path.join(dir, 'connections.jsonl'));
+    // }
+    this.datastore = new OnlineDatabase();
   },
   listParam_meta: true,
   async listParam(_params) {
@@ -68,12 +68,6 @@ module.exports = {
 
   list_meta: true,
   async list(_params, req) {
-    // if (portalConnections) {
-    //   if (platformInfo.allowShellConnection) return portalConnections;
-    //   return portalConnections.map(maskConnection).filter(x => connectionHasPermission(x, req));
-    // }
-    // return (await this.datastore.find()).filter(x => connectionHasPermission(x, req));
-    // const params = _params;
     let databases = [];
     try {
       let auth;
@@ -92,59 +86,6 @@ module.exports = {
       };
     }
     return databases;
-    // const params = { username: 'admin', groupId: '1' };
-    // const conns = [];
-    // if (!params?.username || !params?.groupId) {
-    //   return {
-    //     apiErrorMessage: 'The params cannot be null.',
-    //   };
-    // }
-    // try {
-    //   const auth = req.headers.authorization || '';
-    //   const url = `${process.env.ONLINE_ADMIN_API}/system/group/queryDataSource`;
-    //   const response = await axios.default.post(
-    //     url,
-    //     {
-    //       username: params?.username,
-    //       groupId: params?.groupId,
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: auth,
-    //         'Content-Type': 'application/json',
-    //       },
-    //     }
-    //   );
-    //   const respData = response.data;
-    //   if (respData.code !== 200) {
-    //     throw new Error(respData.msg);
-    //   }
-    //   console.log('response data: ', respData?.data);
-    //   for (const item of respData.data.list) {
-    //     const conn = {
-    //       server: item.dbIp,
-    //       engine: getEngine(item.dbType),
-    //       port: item.dbPort,
-    //       user: item.dbUserId,
-    //       password: item.dbPwd,
-    //       unsaved: false,
-    //       originId: item.id,
-    //       _id: generateFixedId(item.id, params.username, params.groupId),
-    //       displayName: item.dbName,
-    //       // singleDatabase: true,
-    //       // defaultDatabase: item.dbDatabaseName,
-    //     };
-    //     console.log('response conn: ', conn);
-    //     conns.push(conn);
-    //     await this.save(conn);
-    //   }
-    // } catch (err) {
-    //   logger.error({ err }, 'Error list connections.');
-    //   return {
-    //     apiErrorMessage: err.message,
-    //   };
-    // }
-    // return conns;
   },
 
   test_meta: true,
@@ -237,9 +178,9 @@ module.exports = {
 
   update_meta: true,
   async update({ _id, values }, req) {
-    testConnectionPermission(_id, req);
     const res = await this.datastore.patch(_id, values);
     return res;
+    // testConnectionPermission(_id, req);
     // if (portalConnections) return;
     // testConnectionPermission(_id, req);
     // const res = await this.datastore.patch(_id, values);
@@ -284,9 +225,9 @@ module.exports = {
 
   delete_meta: true,
   async delete(connection, req) {
-    testConnectionPermission(connection, req);
     const res = await this.datastore.remove(connection._id);
     return res;
+    // testConnectionPermission(connection, req);
     // if (portalConnections) return;
     // testConnectionPermission(connection, req);
     // const res = await this.datastore.remove(connection._id);

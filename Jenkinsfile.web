@@ -19,8 +19,7 @@ pipeline {
     stage('Build') {
       steps {
         sh '''
-        yarn run prepare:docker
-        docker build -t myregistry.dataleapinfo.com:5443/dbgate:latest -t myregistry.dataleapinfo.com:5443/dbgate:${commitId}-${_version} ./docker/Dockerfile-alpine
+        docker build -f Dockerfile.web -t myregistry.dataleapinfo.com:5443/dbgate-web:latest -t myregistry.dataleapinfo.com:5443/dbgate-web:${commitId}-${_version} .
         echo builded.
         '''
       }
@@ -28,10 +27,10 @@ pipeline {
     stage('Push image to myregistry'){
       steps{
         script{
-          sh '''docker push myregistry.dataleapinfo.com:5443/dbgate:latest
-                docker push myregistry.dataleapinfo.com:5443/dbgater:${commitId}-${_version}
-                docker rmi myregistry.dataleapinfo.com:5443/dbgate:latest
-                docker rmi myregistry.dataleapinfo.com:5443/dbgate:${commitId}-${_version}
+          sh '''docker push myregistry.dataleapinfo.com:5443/dbgate-web:latest
+                docker push myregistry.dataleapinfo.com:5443/dbgater-web:${commitId}-${_version}
+                docker rmi myregistry.dataleapinfo.com:5443/dbgate-web:latest
+                docker rmi myregistry.dataleapinfo.com:5443/dbgate-web:${commitId}-${_version}
               '''
         }
       }
@@ -40,7 +39,7 @@ pipeline {
       steps {
         sshagent(['manager']) {
           sh '''
-            ssh root@172.30.246.29 /usr/bin/docker service update --image myregistry.dataleapinfo.com:5443/dbgate:${commitId}-${_version} dbgate
+            ssh root@172.30.246.29 /usr/bin/docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:${commitId}-${_version} dbgatex-web
             '''
         }
       }

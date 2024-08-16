@@ -1,0 +1,38 @@
+services:
+  gateway:
+    image: traefik:v3.1
+    command:
+      - '--log.level=DEBUG'
+      - '--providers.swarm.exposedByDefault=false'
+      - '--providers.swarm.network=dbserver'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedByDefault=false'
+      - '--entrypoints.web.address=:8080'
+      - '--entrypoints.web.forwardedHeaders.insecure=true'
+      - '--entrypoints.web.forwardedHeaders.trustedIPs=192.168.3.0/24'
+    ports:
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    networks:
+      - dbserver
+    # healthcheck:
+    #   test: ['CMD-SHELL', 'wget -q --spider --proxy off localhost:8080/ping || exit 1']
+    #   interval: 3s
+    #   retries: 10
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2g'
+      update_config:
+        order: start-first
+        failure_action: rollback
+      placement:
+        constraints:
+          - node.role == manager
+
+networks:
+  dbserver:
+    external: true

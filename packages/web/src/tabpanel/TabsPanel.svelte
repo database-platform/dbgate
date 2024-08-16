@@ -19,7 +19,7 @@
         username = userInfo.username;
       } catch (err) {}
     }
-    const tabUsername = tab.props.conid.split('_')[0];
+    const tabUsername = tab.props?.conid?.split('_')[0];
     return username === tabUsername && tab.closedTime == null;
     // return tab.closedTime == null;
   }
