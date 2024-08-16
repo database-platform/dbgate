@@ -13,7 +13,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --dev --ignore-optional --ignore-scripts
 
 COPY . .
-
+RUN yarn cache list
 RUN ls -la
 
 RUN ls -la node_modules
