@@ -13,7 +13,8 @@
   import SqlObjectList from './SqlObjectList.svelte';
   import DbKeysTree from './DbKeysTree.svelte';
   import SingleConnectionDatabaseList from './SingleConnectionDatabaseList.svelte';
-  import _ from 'lodash';
+  import { compact } from 'lodash';
+  import { _ } from 'svelte-i18n';
 
   export let hidden = false;
   let singleDatabase = false;
@@ -39,11 +40,21 @@
 
 <WidgetColumnBar {hidden}>
   {#if $config?.singleConnection}
-    <WidgetColumnBarItem title="Databases" name="databases" height="35%" storageName="databasesWidget">
+    <WidgetColumnBarItem
+      title={$_('widgets.database.connectionTitle')}
+      name="databases"
+      height="35%"
+      storageName="databasesWidget"
+    >
       <SingleConnectionDatabaseList connection={$config?.singleConnection} />
     </WidgetColumnBarItem>
   {:else if !$config?.singleDbConnection}
-    <WidgetColumnBarItem title="数据资产" name="connections" height="35%" storageName="connectionsWidget">
+    <WidgetColumnBarItem
+      title={$_('widgets.database.connectionTitle')}
+      name="connections"
+      height="35%"
+      storageName="connectionsWidget"
+    >
       <ConnectionList />
     </WidgetColumnBarItem>
   {/if}
@@ -52,14 +63,16 @@
     name="pinned"
     height="15%"
     storageName="pinnedItemsWidget"
-    skip={!_.compact($pinnedDatabases).length &&
+    skip={!compact($pinnedDatabases).length &&
       !$pinnedTables.some(x => x && x.conid == conid && x.database == $currentDatabase?.name)}
   >
     <PinnedObjectsList />
   </WidgetColumnBarItem>
 
   <WidgetColumnBarItem
-    title={driver?.databaseEngineTypes?.includes('document') ? 'Collections' : '表，视图，函数'}
+    title={driver?.databaseEngineTypes?.includes('document')
+      ? $_('widgets.database.objectDocumentTitle')
+      : $_('widgets.database.objectTitle')}
     name="dbObjects"
     storageName="dbObjectsWidget"
     skip={!(
@@ -81,13 +94,13 @@
   </WidgetColumnBarItem>
 
   <WidgetColumnBarItem
-    title="数据资产详情"
+    title={$_('widgets.database.contentTitle')}
     name="dbObjects"
     storageName="dbObjectsWidget"
     skip={conid && (database || singleDatabase)}
   >
     <WidgetsInnerContainer>
-      <ErrorInfo message="无数据" icon="img alert" />
+      <ErrorInfo message={$_('widgets.database.contentError')} icon="img alert" />
     </WidgetsInnerContainer>
   </WidgetColumnBarItem>
 </WidgetColumnBar>

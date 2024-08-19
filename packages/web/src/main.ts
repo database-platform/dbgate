@@ -2,6 +2,7 @@ import App from './App.svelte';
 import './utility/connectionsPinger';
 import './utility/changeCurrentDbByTab';
 import './commands/stdCommands';
+import './i18n';
 import localStorageGarbageCollector from './utility/localStorageGarbageCollector';
 import { handleOauthCallback } from './clientAuth';
 import LoginPage from './LoginPage.svelte';

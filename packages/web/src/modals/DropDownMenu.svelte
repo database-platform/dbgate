@@ -36,7 +36,7 @@
   import _ from 'lodash';
   import { createEventDispatcher } from 'svelte';
   import { onMount } from 'svelte';
-  import { commandsCustomized, visibleCommandPalette } from '../stores';
+  import { commandsCustomized } from '../stores';
   import { prepareMenuItems } from '../utility/contextMenu';
   import FontIcon from '../icons/FontIcon.svelte';
   import { formatKeyText } from '../utility/common';
@@ -166,7 +166,7 @@
     cursor: default;
     white-space: nowrap;
     overflow-y: auto;
-    max-height: calc(100% - 20px)
+    max-height: calc(100% - 20px);
   }
 
   .keyText {

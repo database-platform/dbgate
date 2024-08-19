@@ -12,7 +12,7 @@
     return filterName(filter, ...databases.map(x => x.name));
   };
   export function openConnection(connection) {
-    const config = getCurrentConfig();
+    // const config = getCurrentConfig();
     if (connection.singleDatabase) {
       currentDatabase.set({ connection, name: connection.defaultDatabase });
       apiCall('database-connections/refresh', {
@@ -78,6 +78,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
+  import { _ as __ } from 'svelte-i18n';
   import AppObjectCore from './AppObjectCore.svelte';
   import {
     currentDatabase,
@@ -86,7 +87,7 @@
     getCurrentConfig,
     getCurrentDatabase,
     getCurrentSettings,
-    getOpenedConnections,
+    // getOpenedConnections,
     getOpenedTabs,
     openedConnections,
     openedSingleDatabaseConnections,
@@ -99,12 +100,12 @@
   import { getDatabaseMenuItems } from './DatabaseAppObject.svelte';
   import getElectron from '../utility/getElectron';
   import getConnectionLabel from '../utility/getConnectionLabel';
-  import { getDatabaseList, useUsedApps } from '../utility/metadataLoaders';
+  import { useUsedApps } from '../utility/metadataLoaders';
   import { getLocalStorage } from '../utility/storageCache';
   import { apiCall, removeVolatileMapping } from '../utility/api';
   import ImportDatabaseDumpModal from '../modals/ImportDatabaseDumpModal.svelte';
   import { closeMultipleTabs } from '../tabpanel/TabsPanel.svelte';
-  import AboutModal from '../modals/AboutModal.svelte';
+  // import AboutModal from '../modals/AboutModal.svelte';
   import { tick } from 'svelte';
 
   export let data;
@@ -116,7 +117,7 @@
   let engineStatusIcon = null;
   let engineStatusTitle = null;
 
-  const electron = getElectron();
+  // const electron = getElectron();
 
   const handleConnect = () => {
     openConnection(data);
@@ -186,9 +187,9 @@
     };
     const handleCreateDatabase = () => {
       showModal(InputTextModal, {
-        header: 'Create database',
+        header: $__('modal.newdb.header'),
         value: 'newdb',
-        label: 'Database name',
+        label: $__('modal.newdb.label'),
         onConfirm: name =>
           apiCall('server-connections/create-database', {
             conid: data._id,
@@ -209,7 +210,7 @@
     const handleNewQuery = () => {
       const tooltip = `${getConnectionLabel(data)}`;
       openNewTab({
-        title: 'Query #',
+        title: $__('tab.common.query'),
         icon: 'img sql-file',
         tooltip,
         tabComponent: 'QueryTab',
@@ -222,41 +223,43 @@
     return [
       config.runAsPortal == false && [
         {
-          text: $openedConnections.includes(data._id) ? 'View details' : 'Edit',
+          text: $openedConnections.includes(data._id)
+            ? $__('contextMenu.common.details')
+            : $__('contextMenu.common.edit'),
           onClick: handleOpenConnectionTab,
         },
         !$openedConnections.includes(data._id) && {
-          text: 'Delete',
+          text: $__('contextMenu.common.delete'),
           onClick: handleDelete,
         },
         {
-          text: 'Duplicate',
+          text: $__('contextMenu.common.duplicate'),
           onClick: handleDuplicate,
         },
       ],
       !data.singleDatabase && [
         !$openedConnections.includes(data._id) && {
-          text: 'Connect',
+          text: $__('contextMenu.connection.connect'),
           onClick: handleConnect,
         },
-        { onClick: handleNewQuery, text: 'New query', isNewQuery: true },
+        { onClick: handleNewQuery, text: $__('contextMenu.common.newQuery'), isNewQuery: true },
         $openedConnections.includes(data._id) &&
           data.status && {
-            text: 'Refresh',
+            text: $__('contextMenu.common.refresh'),
             onClick: handleRefresh,
           },
         $openedConnections.includes(data._id) && {
-          text: 'Disconnect',
+          text: $__('contextMenu.connection.disconnect'),
           onClick: handleDisconnect,
         },
         $openedConnections.includes(data._id) &&
           driver?.supportedCreateDatabase &&
           !data.isReadOnly && {
-            text: 'Create database',
+            text: $__('contextMenu.connection.createDatabase'),
             onClick: handleCreateDatabase,
           },
         driver?.supportsServerSummary && {
-          text: 'Server summary',
+          text: $__('contextMenu.connection.serverSummary'),
           onClick: handleServerSummary,
         },
       ],
@@ -268,11 +271,15 @@
           $extensions,
           $currentDatabase,
           $apps,
-          $openedSingleDatabaseConnections
+          $openedSingleDatabaseConnections,
+          $__
         ),
       ],
 
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleSqlRestore, text: 'Restore/import SQL dump' },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleSqlRestore,
+        text: $__('contextMenu.common.restoreSqlDump'),
+      },
     ];
   };
 

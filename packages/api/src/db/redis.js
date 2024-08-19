@@ -35,6 +35,7 @@ function getConfig() {
 let redisClient;
 if (!redisClient) {
   const options = getConfig();
+  console.log('options: ', options);
   if (options) {
     redisClient = new Redis(options);
     redisClient.on('connect', () => {

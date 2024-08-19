@@ -1,9 +1,10 @@
 <script lang="ts">
   import _ from 'lodash';
+  import { _ as __ } from 'svelte-i18n';
   import InlineButton from '../buttons/InlineButton.svelte';
   import SearchInput from '../elements/SearchInput.svelte';
   import WidgetsInnerContainer from './WidgetsInnerContainer.svelte';
-  import { useConfig, useConnectionList, useServerStatus } from '../utility/metadataLoaders';
+  import { useConnectionList, useServerStatus } from '../utility/metadataLoaders';
   import SearchBoxWrapper from '../elements/SearchBoxWrapper.svelte';
   import AppObjectList from '../appobj/AppObjectList.svelte';
   import * as connectionAppObject from '../appobj/ConnectionAppObject.svelte';
@@ -13,7 +14,7 @@
     expandedConnections,
     openedConnections,
     openedSingleDatabaseConnections,
-    openedTabs,
+    // openedTabs,
     emptyConnectionGroupNames,
     collapsedConnectionGroupNames,
   } from '../stores';
@@ -23,7 +24,7 @@
   import FontIcon from '../icons/FontIcon.svelte';
   import CloseSearchButton from '../buttons/CloseSearchButton.svelte';
   import { apiCall, getVolatileRemapping } from '../utility/api';
-  import LargeButton from '../buttons/LargeButton.svelte';
+  // import LargeButton from '../buttons/LargeButton.svelte';
   import { plusExpandIcon, chevronExpandIcon } from '../icons/expandIcons';
   import { safeJsonParse } from 'dbgate-tools';
   import { showModal } from '../modals/modalTools';
@@ -113,7 +114,7 @@
 </script>
 
 <SearchBoxWrapper>
-  <SearchInput placeholder="搜索 connection or database" bind:value={filter} />
+  <SearchInput placeholder={$__('widgets.connectionList.search')} bind:value={filter} />
   <CloseSearchButton bind:filter />
   {#if $commandsCustomized['new.connection']?.enabled}
     <InlineButton on:click={() => runCommand('new.connection')} title="Add new connection">
@@ -123,7 +124,7 @@
       <FontIcon icon="icon add-folder" />
     </InlineButton>
   {/if}
-  <InlineButton on:click={handleRefreshConnections} title="Refresh connection list">
+  <InlineButton on:click={handleRefreshConnections} title={$__('widgets.connectionList.refresh')}>
     <FontIcon icon="icon refresh" />
   </InlineButton>
 </SearchBoxWrapper>

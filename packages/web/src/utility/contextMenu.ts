@@ -18,8 +18,11 @@ export default function contextMenu(node, items: any = []) {
     await invalidateCommands();
 
     if (items) {
-      const left = e.pageX;
-      const top = e.pageY;
+      const rootStyle = window.document.documentElement.style;
+      const microLeft = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-left')) || 0;
+      const microTop = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-top')) || 0;
+      const left = e.pageX - microLeft;
+      const top = e.pageY - microTop;
       currentDropDownMenu.set({ left, top, items, targetElement: e.target });
     }
   };

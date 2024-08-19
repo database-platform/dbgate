@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   import FormProvider from '../forms/FormProvider.svelte';
@@ -28,8 +29,8 @@
     <FormTextField {label} name="value" focused />
 
     <svelte:fragment slot="footer">
-      <FormSubmit value="OK" on:click={e => handleSubmit(e.detail)} />
-      <FormStyledButton type="button" value="Cancel" on:click={closeCurrentModal} />
+      <FormSubmit value={$_('common.ok')} on:click={e => handleSubmit(e.detail)} />
+      <FormStyledButton type="button" value={$_('common.cancel')} on:click={closeCurrentModal} />
     </svelte:fragment>
   </ModalBase>
 </FormProvider>

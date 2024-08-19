@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   import FormProvider from '../forms/FormProvider.svelte';
@@ -16,13 +17,13 @@
 
     <svelte:fragment slot="footer">
       <FormSubmit
-        value="OK"
+        value={$_('common.ok')}
         on:click={() => {
           closeCurrentModal();
           onConfirm();
         }}
       />
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$_('common.close')} on:click={closeCurrentModal} />
     </svelte:fragment>
   </ModalBase>
 </FormProvider>

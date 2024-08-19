@@ -1,6 +1,6 @@
 import {
   currentDatabase,
-  currentTheme,
+  // currentTheme,
   emptyConnectionGroupNames,
   extensions,
   getExtensions,
@@ -26,6 +26,7 @@ import './recentDatabaseSwitch';
 import './changeDatabaseStatusCommand';
 import hasPermission from '../utility/hasPermission';
 import _ from 'lodash';
+import { _ as __ } from 'svelte-i18n';
 import { findEngineDriver } from 'dbgate-tools';
 import { openArchiveFolder } from '../utility/openArchiveFolder';
 import InputTextModal from '../modals/InputTextModal.svelte';
@@ -36,7 +37,7 @@ import runCommand from './runCommand';
 import { openWebLink } from '../utility/exportFileTools';
 import { getSettings } from '../utility/metadataLoaders';
 import { isMac } from '../utility/common';
-import { doLogout, internalRedirectTo } from '../clientAuth';
+import { doLogout } from '../clientAuth';
 import { disconnectServerConnection } from '../appobj/ConnectionAppObject.svelte';
 import UploadErrorModal from '../modals/UploadErrorModal.svelte';
 
@@ -104,7 +105,8 @@ registerCommand({
   category: 'New',
   toolbarOrder: 1,
   name: 'Connection',
-  testEnabled: () => !getCurrentConfig()?.runAsPortal,
+  testEnabled: () => false,
+  // testEnabled: () => !getCurrentConfig()?.runAsPortal,
   onClick: () => {
     openNewTab({
       title: 'New Connection',
@@ -122,7 +124,8 @@ registerCommand({
   category: 'New',
   toolbarOrder: 1,
   name: 'Connection',
-  testEnabled: () => !getCurrentConfig()?.runAsPortal,
+  testEnabled: () => false,
+  // testEnabled: () => !getCurrentConfig()?.runAsPortal,
   onClick: () => {
     showModal(InputTextModal, {
       value: '',
@@ -146,7 +149,7 @@ registerCommand({
   toolbar: true,
   toolbarOrder: 2,
   name: 'Query',
-  toolbarName: 'New query',
+  toolbarName: 'New query2',
   keyText: 'CtrlOrCommand+T',
   onClick: () => newQuery(),
 });

@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import {copyTextToClipboard} from "../utility/clipboard";
+  import { copyTextToClipboard } from '../utility/clipboard';
 
   export const extractKey = props => props.name;
 
@@ -38,13 +38,14 @@
     $extensions,
     $currentDatabase,
     $apps,
-    $openedSingleDatabaseConnections
+    $openedSingleDatabaseConnections,
+    $__
   ) {
     const apps = filterAppsForDatabase(connection, name, $apps);
     const handleNewQuery = () => {
       const tooltip = `${getConnectionLabel(connection)}\n${name}`;
       openNewTab({
-        title: 'Query #',
+        title: $__('tab.common.query'),
         icon: 'img sql-file',
         tooltip,
         tabComponent: 'QueryTab',
@@ -59,7 +60,7 @@
       const tooltip = `${getConnectionLabel(connection)}\n${name}`;
       openNewTab(
         {
-          title: 'Table #',
+          title: $__('tab.common.table'),
           tooltip,
           icon: 'img table-structure',
           tabComponent: 'TableStructureTab',
@@ -81,7 +82,7 @@
 
     const handleDropDatabase = () => {
       showModal(ConfirmModal, {
-        message: `Really drop database ${name}? All opened sessions with this database will be forcefully closed.`,
+        message: $__('message.dropDatabase', { values: { name } }),
         onConfirm: () =>
           apiCall('server-connections/drop-database', {
             conid: connection._id,
@@ -93,8 +94,8 @@
     const handleNewCollection = () => {
       showModal(InputTextModal, {
         value: '',
-        label: 'New collection name',
-        header: 'Create collection',
+        label: $__('modal.collection.label'),
+        header: $__('modal.collection.header'),
         onConfirm: async newCollection => {
           saveScriptToDatabase({ conid: connection._id, database: name }, `db.createCollection('${newCollection}')`);
         },
@@ -150,7 +151,7 @@
       });
       openNewTab(
         {
-          title: 'Diagram #',
+          title: $__('tab.common.diagram'),
           icon: 'img diagram',
           tabComponent: 'DiagramTab',
           props: {
@@ -173,7 +174,7 @@
 
     const handleCopyName = async () => {
       copyTextToClipboard(name);
-    }
+    };
 
     const handleDisconnect = () => {
       disconnectDatabaseConnection(connection._id, name);
@@ -187,13 +188,13 @@
       currentArchive.set(resp.archiveFolder);
       selectedWidget.set('archive');
       visibleWidgetSideBar.set(true);
-      showSnackbarSuccess(`Saved to archive ${resp.archiveFolder}`);
+      showSnackbarSuccess($__('message.archiveFolder', { values: { archiveFolder: resp.archiveFolder } }));
     };
 
     const handleCompareWithCurrentDb = () => {
       openNewTab(
         {
-          title: 'Compare',
+          title: $__('tab.common.compare'),
           icon: 'img compare',
           tabComponent: 'CompareModelTab',
         },
@@ -231,14 +232,14 @@
       }
 
       newQuery({
-        title: 'Export #',
+        title: $__('tab.common.generateScriptExport'),
         initialData: data,
       });
     };
 
     const handleQueryDesigner = () => {
       openNewTab({
-        title: 'Query #',
+        title: $__('tab.common.query'),
         icon: 'img query-design',
         tabComponent: 'QueryDesignTab',
         props: {
@@ -250,7 +251,7 @@
 
     const handleNewPerspective = () => {
       openNewTab({
-        title: 'Perspective #',
+        title: $__('tab.common.perspective'),
         icon: 'img perspective',
         tabComponent: 'PerspectiveTab',
         props: {
@@ -262,7 +263,7 @@
 
     const handleDatabaseProfiler = () => {
       openNewTab({
-        title: 'Profiler',
+        title: $__('tab.common.profiler'),
         icon: 'img profiler',
         tabComponent: 'ProfilerTab',
         props: {
@@ -282,45 +283,77 @@
 
     const isSqlOrDoc =
       driver?.databaseEngineTypes?.includes('sql') || driver?.databaseEngineTypes?.includes('document');
-
+    console.log('database app object: ', commands);
     return [
-      { onClick: handleNewQuery, text: 'New query', isNewQuery: true },
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleNewTable, text: 'New table' },
-      driver?.databaseEngineTypes?.includes('document') && { onClick: handleNewCollection, text: 'New collection' },
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleQueryDesigner, text: 'Design query' },
+      { onClick: handleNewQuery, text: $__('contextMenu.common.newQuery'), isNewQuery: true },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleNewTable,
+        text: $__('contextMenu.database.newTable'),
+      },
+      driver?.databaseEngineTypes?.includes('document') && {
+        onClick: handleNewCollection,
+        text: $__('contextMenu.database.newCollection'),
+      },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleQueryDesigner,
+        text: $__('contextMenu.database.designQuery'),
+      },
       driver?.databaseEngineTypes?.includes('sql') && {
         onClick: handleNewPerspective,
-        text: 'Design perspective query',
+        text: $__('contextMenu.database.designPerspectiveQuery'),
       },
       { divider: true },
-      isSqlOrDoc && !connection.isReadOnly && { onClick: handleImport, text: 'Import wizard' },
-      isSqlOrDoc && { onClick: handleExport, text: 'Export wizard' },
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleSqlRestore, text: 'Restore/import SQL dump' },
-      driver?.supportsDatabaseDump && { onClick: handleSqlDump, text: 'Backup/export SQL dump' },
+      isSqlOrDoc && !connection.isReadOnly && { onClick: handleImport, text: $__('contextMenu.database.importWizard') },
+      isSqlOrDoc && { onClick: handleExport, text: $__('contextMenu.database.exportWizard') },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleSqlRestore,
+        text: $__('contextMenu.common.restoreSqlDump'),
+      },
+      driver?.supportsDatabaseDump && { onClick: handleSqlDump, text: $__('contextMenu.common.backupSqlDump') },
       isSqlOrDoc &&
         !connection.isReadOnly &&
-        !connection.singleDatabase && { onClick: handleDropDatabase, text: 'Drop database' },
+        !connection.singleDatabase && { onClick: handleDropDatabase, text: $__('contextMenu.database.dropDatabase') },
       { divider: true },
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleCopyName, text: 'Copy database name' },
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleShowDiagram, text: 'Show diagram' },
-      driver?.databaseEngineTypes?.includes('sql') && { onClick: handleSqlGenerator, text: 'SQL Generator' },
-      driver?.supportsDatabaseProfiler && { onClick: handleDatabaseProfiler, text: 'Database profiler' },
-      isSqlOrDoc && { onClick: handleOpenJsonModel, text: 'Open model as JSON' },
-      isSqlOrDoc && { onClick: handleExportModel, text: 'Export DB model - experimental' },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleCopyName,
+        text: $__('contextMenu.database.copyDatabaseName'),
+      },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleShowDiagram,
+        text: $__('contextMenu.database.showDiagram'),
+      },
+      driver?.databaseEngineTypes?.includes('sql') && {
+        onClick: handleSqlGenerator,
+        text: $__('contextMenu.database.sqlGenerator'),
+      },
+      driver?.supportsDatabaseProfiler && {
+        onClick: handleDatabaseProfiler,
+        text: $__('contextMenu.database.databaseProfiler'),
+      },
+      isSqlOrDoc && { onClick: handleOpenJsonModel, text: $__('contextMenu.database.openJsonModel') },
+      isSqlOrDoc && { onClick: handleExportModel, text: $__('contextMenu.database.exportModel') },
       isSqlOrDoc &&
         _.get($currentDatabase, 'connection._id') &&
         (_.get($currentDatabase, 'connection._id') != _.get(connection, '_id') ||
           (_.get($currentDatabase, 'connection._id') == _.get(connection, '_id') &&
             _.get($currentDatabase, 'name') != _.get(connection, 'name'))) && {
           onClick: handleCompareWithCurrentDb,
-          text: `Compare with ${_.get($currentDatabase, 'name')}`,
+          text: $__('contextMenu.database.compareDatabase', {
+            values: { currentDatabaseName: _.get($currentDatabase, 'name') },
+          }),
         },
 
-      driver?.databaseEngineTypes?.includes('keyvalue') && { onClick: handleGenerateScript, text: 'Generate script' },
+      driver?.databaseEngineTypes?.includes('keyvalue') && {
+        onClick: handleGenerateScript,
+        text: $__('contextMenu.database.generateScript'),
+      },
 
       ($openedSingleDatabaseConnections.includes(connection._id) ||
         (_.get($currentDatabase, 'connection._id') == _.get(connection, '_id') &&
-          _.get($currentDatabase, 'name') == name)) && { onClick: handleDisconnect, text: 'Disconnect' },
+          _.get($currentDatabase, 'name') == name)) && {
+        onClick: handleDisconnect,
+        text: $__('contextMenu.connection.disconnect'),
+      },
 
       commands.length > 0 && [
         { divider: true },
@@ -343,7 +376,8 @@
   import getConnectionLabel from '../utility/getConnectionLabel';
   import uuidv1 from 'uuid/v1';
 
-  import _, { find } from 'lodash';
+  import _ from 'lodash';
+  import { _ as __ } from 'svelte-i18n';
   import ImportExportModal from '../modals/ImportExportModal.svelte';
   import { showModal } from '../modals/modalTools';
   import SqlGeneratorModal from '../modals/SqlGeneratorModal.svelte';
@@ -355,7 +389,7 @@
     getCurrentDatabase,
     getExtensions,
     getOpenedTabs,
-    openedConnections,
+    // openedConnections,
     openedSingleDatabaseConnections,
     pinnedDatabases,
     selectedWidget,
@@ -370,11 +404,11 @@
   import { getDatabaseInfo, useUsedApps } from '../utility/metadataLoaders';
   import { openJsonDocument } from '../tabs/JsonTab.svelte';
   import { apiCall } from '../utility/api';
-  import ErrorMessageModal from '../modals/ErrorMessageModal.svelte';
+  // import ErrorMessageModal from '../modals/ErrorMessageModal.svelte';
   import ConfirmSqlModal, { saveScriptToDatabase } from '../modals/ConfirmSqlModal.svelte';
   import { filterAppsForDatabase } from '../utility/appTools';
   import newQuery from '../query/newQuery';
-  import { exportSqlDump } from '../utility/exportFileTools';
+  // import { exportSqlDump } from '../utility/exportFileTools';
   import ImportDatabaseDumpModal from '../modals/ImportDatabaseDumpModal.svelte';
   import ExportDatabaseDumpModal from '../modals/ExportDatabaseDumpModal.svelte';
   import ConfirmModal from '../modals/ConfirmModal.svelte';
@@ -390,7 +424,8 @@
       $extensions,
       $currentDatabase,
       $apps,
-      $openedSingleDatabaseConnections
+      $openedSingleDatabaseConnections,
+      $__
     );
   }
 

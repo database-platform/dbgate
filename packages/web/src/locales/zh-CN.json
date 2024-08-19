@@ -1,0 +1,93 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "ok": "确认",
+    "cancel": "取消",
+    "close": "关闭",
+    "refresh": "刷新"
+  },
+  "contextMenu": {
+    "common": {
+      "details": "查看详情",
+      "edit": "编辑",
+      "delete": "删除",
+      "duplicate": "复制",
+      "refresh": "刷新",
+      "newQuery": "新建查询",
+      "restoreSqlDump": "恢复/导入 SQL dump",
+      "backupSqlDump": "备份/导出 SQL dump"
+    },
+    "connection": {
+      "connect": "链接",
+      "disconnect": "断开链接",
+      "createDatabase": "创建数据库",
+      "serverSummary": "服务简介"
+    },
+    "database": {
+      "newTable": "新建表",
+      "newCollection": "新建集合",
+      "designQuery": "查询设计器",
+      "designPerspectiveQuery": "查询设计器(透视)",
+      "importWizard": "导入向导",
+      "exportWizard": "导出向导",
+      "dropDatabase": "删除库",
+      "copyDatabaseName": "复制库名称",
+      "showDiagram": "显示关系图",
+      "sqlGenerator": "生成SQL语句",
+      "databaseProfiler": "数据库分析器",
+      "openJsonModel": "以JSON方式打开模型",
+      "exportModel": "导出数据模型 - beta",
+      "compareDatabase": "比较 {currentDatabaseName}",
+      "generateScript": "生成脚本"
+    }
+  },
+  "tab": {
+    "common": {
+      "query": "查询 #",
+      "table": "表 #",
+      "profiler": "分析器",
+      "perspective": "透视 #",
+      "generateScriptExport": "导出 #",
+      "compare": "比较",
+      "diagram": "关系图 #"
+    }
+  },
+  "modal": {
+    "newdb": {
+      "header": "创建数据库",
+      "label": "数据库名称"
+    },
+    "collection": {
+      "header": "新建集合",
+      "label": "集合名称"
+    }
+  },
+  "widgets": {
+    "database": {
+      "connectionTitle": "数据资产",
+      "objectTitle": "表, 视图, 函数",
+      "objectDocumentTitle": "集合",
+      "contentTitle": "数据资产详情",
+      "contentError": "数据资产没有被选择"
+    },
+    "connectionList": {
+      "search": "搜索数据资产",
+      "refresh": "刷新"
+    },
+    "sqlObjectList": {
+      "search": "搜索表, 对象...",
+      "refresh": "刷新数据库链接和对象列表",
+      "error": "数据库 {database} 是空或对象结构没有加载，请点击刷新按钮重新加载",
+      "menus": {
+        "new.table": "新建表",
+        "New view": "新建视图",
+        "New procedure": "新建存储过程",
+        "New function": "新建函数"
+      }
+    }
+  },
+  "message": {
+    "dropDatabase": "确实要删除数据库 {name} 吗？所有打开的与此数据库的会话将被强制关闭。",
+    "archiveFolder": "已保存到归档 {archiveFolder}"
+  }
+}

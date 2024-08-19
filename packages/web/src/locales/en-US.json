@@ -1,0 +1,93 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "close": "Close",
+    "refresh": "Refresh"
+  },
+  "contextMenu": {
+    "common": {
+      "details": "View details",
+      "edit": "Edit",
+      "delete": "Delete",
+      "duplicate": "Duplicate",
+      "refresh": "Refresh",
+      "newQuery": "New query",
+      "restoreSqlDump": "Restore/import SQL dump",
+      "backupSqlDump": "Backup/export SQL dump"
+    },
+    "connection": {
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "createDatabase": "Create database",
+      "serverSummary": "Server summary"
+    },
+    "database": {
+      "newTable": "New table",
+      "newCollection": "New collection",
+      "designQuery": "Design query",
+      "designPerspectiveQuery": "Design perspective query",
+      "importWizard": "Import wizard",
+      "exportWizard": "Export wizard",
+      "dropDatabase": "Drop database",
+      "copyDatabaseName": "Copy database name",
+      "showDiagram": "Show diagram",
+      "sqlGenerator": "SQL Generator",
+      "databaseProfiler": "Database profiler",
+      "openJsonModel": "Open model as JSON",
+      "exportModel": "Export DB model - experimental",
+      "compareDatabase": "Compare {currentDatabaseName}",
+      "generateScript": "Generate script"
+    }
+  },
+  "tab": {
+    "common": {
+      "query": "Query #",
+      "table": "Table #",
+      "profiler": "Profiler",
+      "perspective": "Perspective #",
+      "generateScriptExport": "Export #",
+      "compare": "Compare",
+      "diagram": "Diagram #"
+    }
+  },
+  "modal": {
+    "newdb": {
+      "header": "Create database",
+      "label": "Database name"
+    },
+    "collection": {
+      "header": "Create collection",
+      "label": "New collection name"
+    }
+  },
+  "widgets": {
+    "database": {
+      "connectionTitle": "Connections",
+      "objectTitle": "Tables, views, functions",
+      "objectDocumentTitle": "Collections",
+      "contentTitle": "Database content",
+      "contentError": "Database not selected"
+    },
+    "connectionList": {
+      "search": "search connection or database",
+      "refresh": "Refresh connection list"
+    },
+    "sqlObjectList": {
+      "search": "search tables, objects...",
+      "refresh": "Refresh database connection and object list",
+      "error": "Database {database} is empty or structure is not loaded, press Refresh button to reload structure",
+      "menus": {
+        "new.table": "New table",
+        "New view": "New view",
+        "New procedure": "New procedure",
+        "New function": "New function"
+      }
+    }
+  },
+  "message": {
+    "dropDatabase": "Really drop database {name}? All opened sessions with this database will be forcefully closed.",
+    "archiveFolder": "Saved to archive {archiveFolder}"
+  }
+}

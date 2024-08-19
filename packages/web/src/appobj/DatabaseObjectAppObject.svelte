@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import {copyTextToClipboard} from "../utility/clipboard";
+  import { copyTextToClipboard } from '../utility/clipboard';
 
   export const extractKey = ({ schemaName, pureName }) => (schemaName ? `${schemaName}.${pureName}` : pureName);
   export const createMatcher =
@@ -85,7 +85,7 @@
       {
         label: 'Copy table name',
         isCopyTableName: true,
-        requiresWriteAccess: false
+        requiresWriteAccess: false,
       },
       {
         label: 'Create table backup',
@@ -768,16 +768,16 @@
   import _ from 'lodash';
   import AppObjectCore from './AppObjectCore.svelte';
   import {
-    currentDatabase,
-    extensions,
+    // currentDatabase,
+    // extensions,
     getCurrentSettings,
     getExtensions,
-    openedConnections,
+    // openedConnections,
     pinnedTables,
   } from '../stores';
   import openNewTab from '../utility/openNewTab';
-  import { filterName, generateDbPairingId, getAlterDatabaseScript } from 'dbgate-tools';
-  import { getConnectionInfo, getDatabaseInfo } from '../utility/metadataLoaders';
+  import { filterName } from 'dbgate-tools';
+  import { getConnectionInfo } from '../utility/metadataLoaders';
   import fullDisplayName from '../utility/fullDisplayName';
   import ImportExportModal from '../modals/ImportExportModal.svelte';
   import { showModal } from '../modals/modalTools';
