@@ -4,7 +4,332 @@
     "ok": "Ok",
     "cancel": "Cancel",
     "close": "Close",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "openScript": "Open script",
+    "generateScript": "Generate script",
+    "stop": "Stop",
+    "run": "Run"
+  },
+  "command": {
+    "about": {
+      "show": "About"
+    },
+    "app": {
+      "disconnect": "Disconnect",
+      "logout": "Logout",
+      "maximize": "Maximize",
+      "minimize": "Minimize",
+      "openDocs": "Documentation",
+      "openIssue": "Report problem or feature request",
+      "openSponsoring": "Become sponsor",
+      "openWeb": "Dbmanager web",
+      "reload": "Reload",
+      "toggleDevTools": "Toggle Dev Tools",
+      "toggleFullScreen": "Toggle full screen",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "zoomReset": "Reset zoom"
+    },
+    "archiveFile": {
+      "save": "Save",
+      "saveAs": "Save as"
+    },
+    "chart": {
+      "export": "Export chart",
+      "redo": "Redo",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "undo": "Undo"
+    },
+    "collectionDataGrid": {
+      "export": "Export",
+      "openQuery": "Open query"
+    },
+    "collectionTable": {
+      "save": "Save"
+    },
+    "commandPalette": {
+      "show": "Command palette"
+    },
+    "compareModels": {
+      "deploy": "Deploy",
+      "refresh": "Refresh",
+      "reportDiff": "Report",
+      "swap": "Swap"
+    },
+    "dataDuplicator": {
+      "kill": "Kill",
+      "run": "Import into DB"
+    },
+    "dataForm": {
+      "addToFilter": "Add to filter",
+      "copyToClipboard": "Copy to clipboard",
+      "filterSelected": "Filter this value",
+      "goToFirst": "First",
+      "goToLast": "Last",
+      "goToNext": "Next",
+      "goToPrevious": "Previous",
+      "reconnect": "Reconnect",
+      "redo": "Redo",
+      "refresh": "Refresh",
+      "revertRowChanges": "Revert row changes",
+      "setNull": "Set NULL",
+      "undo": "Undo"
+    },
+    "dataGrid": {
+      "appendSelectedCellsIntoMirror": "Append selected cells",
+      "appendSelectedRowsIntoMirror": "Append selected rows",
+      "clearFilter": "Clear filter",
+      "cloneRows": "Clone rows",
+      "copyToClipboard": "Copy to clipboard",
+      "deepRefresh": "Refresh with structure",
+      "deleteSelectedRows": "Delete row(s)",
+      "editCellValue": "Edit cell value",
+      "editJsonDocument": "Edit row as JSON document",
+      "filterSelected": "Filter selected value",
+      "findColumn": "Find column",
+      "generateSqlFromData": "Generate SQL",
+      "hideColumn": "Hide column",
+      "insertNewRow": "Insert new row",
+      "loadCellFromFile": "Load cell from file",
+      "mergeSelectedCellsIntoMirror": "Merge selected cells",
+      "mergeSelectedRowsIntoMirror": "Merge selected rows",
+      "newJson": "Add JSON document",
+      "openChartFromSelection": "Open chart from selection",
+      "openFreeTable": "Edit selection as table",
+      "openJsonArrayInSheet": "Open array as table",
+      "openSelectionInMap": "Open selection in map",
+      "reconnect": "Reconnect",
+      "redo": "Redo",
+      "refresh": "Refresh",
+      "replaceSelectedCellsIntoMirror": "Replace with selected cells",
+      "replaceSelectedRowsIntoMirror": "Replace with selected rows",
+      "revertAllChanges": "Revert all",
+      "revertRowChanges": "Revert row changes",
+      "saveCellToFile": "Save cell to file",
+      "setNull": "Set NULL",
+      "switchToForm": "Switch to form",
+      "switchToJson": "Switch to JSON",
+      "switchToTable": "Switch to table",
+      "toggleLeftPanel": "Toggle left panel",
+      "undo": "Undo",
+      "viewJsonDocument": "View row as JSON document",
+      "viewJsonValue": "View cell as JSON document"
+    },
+    "database": {
+      "changeState": "Change status",
+      "search": "Database search",
+      "switch": "Change to recent"
+    },
+    "designer": {
+      "arrange": "Arrange",
+      "execute": "Execute",
+      "kill": "Kill",
+      "openSql": "Open SQL",
+      "redo": "Redo",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "undo": "Undo"
+    },
+    "diagram": {
+      "export": "Export diagram",
+      "redo": "Redo",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "undo": "Undo"
+    },
+    "edit": {
+      "copy": "Copy",
+      "cut": "Cut",
+      "paste": "Paste",
+      "redo": "Redo",
+      "selectAll": "Select All",
+      "undo": "Undo"
+    },
+    "favoriteJsonEditor": {
+      "find": "Find",
+      "preview": "Preview",
+      "replace": "Replace",
+      "save": "Save"
+    },
+    "file": {
+      "exit": "Quit",
+      "import": "Import data",
+      "open": "Open",
+      "openArchive": "Open DB Model/Archive"
+    },
+    "folder": {
+      "showData": "Open data folder",
+      "showLogs": "Open logs"
+    },
+    "group": {
+      "redo": "Redo",
+      "save": "Save",
+      "saveAs": "Save As",
+      "undo": "Undo"
+    },
+    "jslTableGrid": {
+      "export": "Export"
+    },
+    "json": {
+      "find": "Redo",
+      "replace": "Replace",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "toggleComment": "Toggle comment"
+    },
+    "jsonl": {
+      "closePreview": "Close preview",
+      "find": "Find",
+      "preview": "Preview",
+      "previewNewTab": "Preview in new tab",
+      "replace": "Replace",
+      "save": "Save"
+    },
+    "markdown": {
+      "preview": "Preview",
+      "replace": "Replace",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "toggleComment": "Toggle comment"
+    },
+    "new": {
+      "application": "Application",
+      "archiveFolder": "Archive folder",
+      "collection": "Collection",
+      "connection": "Connection",
+      "connection.folder": "Add connection folder",
+      "diagram": "ER Diagram",
+      "gist": "Upload error to gist",
+      "jsonl": "JSON Lines",
+      "markdown": "Markdown page",
+      "modelCompare": "Compare DB",
+      "perspective": "Perspective",
+      "query": "New query2",
+      "queryDesign": "Query design",
+      "shell": "JavaScript Shell",
+      "sqliteDatabase": "SQLite database",
+      "table": "New table"
+    },
+    "perspective": {
+      "customJoin": "Custom join",
+      "openJson": "Open JSON",
+      "redo": "Redo",
+      "refresh": "Refresh",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "undo": "Undo"
+    },
+    "profiler": {
+      "save": "Save",
+      "start": "Start",
+      "stop": "Stop"
+    },
+    "query": {
+      "copy": "Copy",
+      "execute": "Execute",
+      "executeCurrent": "Execute current",
+      "find": "Find",
+      "formatCode": "Format code",
+      "insertSqlJoin": "Insert SQL Join",
+      "kill": "Kill",
+      "paste": "Paste",
+      "replace": "Replace",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "toggleComment": "Toggle comment",
+      "toggleVisibleResultTabs": "Toggle visible result tabs"
+    },
+    "queryData": {
+      "stopLoading": "Stop loading"
+    },
+    "serverSummary": {
+      "refresh": "Refresh"
+    },
+    "settings": {
+      "commands": "Keyboard shortcuts",
+      "show": "Settings"
+    },
+    "shell": {
+      "copyNodeScript": "Copy nodejs script",
+      "execute": "Execute",
+      "find": "Find",
+      "kill": "Kill",
+      "openWizard": "Open wizard",
+      "replace": "Replace",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "toggleComment": "Toggle comment"
+    },
+    "sql": {
+      "generator": "SQL Generator"
+    },
+    "sqlDataGrid": {
+      "export": "Export",
+      "openActiveChart": "Open active chart",
+      "openQuery": "Open query"
+    },
+    "tableData": {
+      "save": "Save",
+      "setAutoRefresh.1": "Refresh every 1 second",
+      "setAutoRefresh.5": "Refresh every 5 second",
+      "setAutoRefresh.10": "Refresh every 10 second",
+      "setAutoRefresh.15": "Refresh every 15 second",
+      "setAutoRefresh.30": "Refresh every 30 second",
+      "setAutoRefresh.60": "Refresh every 60 second",
+      "startAutoRefresh": "Start auto refresh",
+      "stopAutoRefresh": "Stop auto refresh"
+    },
+    "tableEditor": {
+      "addColumn": "Add column",
+      "addForeignKey": "Add foreign key",
+      "addIndex": "Add index",
+      "addPrimaryKey": "Add primary key",
+      "addUnique": "Add unique"
+    },
+    "tableStructure": {
+      "reset": "Reset changes",
+      "save": "Save"
+    },
+    "tabs": {
+      "addToFavorites": "Add current tab to favorites",
+      "changelog": "Changelog",
+      "closeAll": "Close all tabs",
+      "closeTab": "Close tab",
+      "closeTabsButCurrentDb": "Close tabs but current DB",
+      "closeTabsWithCurrentDb": "Close tabs with current DB",
+      "nextTab": "Next tab",
+      "previousTab": "Previous tab"
+    },
+    "theme": {
+      "changeTheme": "Change"
+    },
+    "toggle": {
+      "sidebar": "Toggle sidebar"
+    },
+    "toolbar": {
+      "hide": "Hide",
+      "show": "Show"
+    },
+    "view": {
+      "reset": "Reset view"
+    },
+    "yaml": {
+      "find": "Redo",
+      "replace": "Replace",
+      "save": "Save",
+      "saveAs": "Save As",
+      "saveToDisk": "Save to disk",
+      "toggleComment": "Toggle comment"
+    }
   },
   "contextMenu": {
     "common": {
@@ -15,7 +340,10 @@
       "refresh": "Refresh",
       "newQuery": "New query",
       "restoreSqlDump": "Restore/import SQL dump",
-      "backupSqlDump": "Backup/export SQL dump"
+      "backupSqlDump": "Backup/export SQL dump",
+      "export": "Export",
+      "import": "Import",
+      "more": "More..."
     },
     "connection": {
       "connect": "Connect",
@@ -39,6 +367,28 @@
       "exportModel": "Export DB model - experimental",
       "compareDatabase": "Compare {currentDatabaseName}",
       "generateScript": "Generate script"
+    },
+    "dbobject": {
+      "openData": "Open data",
+      "openForm": "Open form",
+      "openStructure": "Open structure",
+      "designQuery": "Design query",
+      "designPerspectiveQuery": "Design perspective query",
+      "dropTable": "Drop table",
+      "renameTable": "Rename table",
+      "truncateTable": "Truncate table",
+      "copyTableName": "Copy table name",
+      "createTableBackup": "Create table backup",
+      "showDiagram": "Show diagram",
+      "openActiveChart": "Open active chart",
+      "dropView": "Drop view",
+      "queryDesigner": "Query designer",
+      "dropProcedure": "Drop procedure",
+      "dropFunction": "Drop function",
+      "openJSON": "Open JSON",
+      "dropCollection": "Drop collection",
+      "renameCollection": "Rename collection",
+      "createCollectionBackup": "Create collection backup"
     }
   },
   "tab": {
@@ -59,6 +409,7 @@
     },
     "collection": {
       "header": "Create collection",
+      "renameHeader": "Rename collection",
       "label": "New collection name"
     }
   },
@@ -88,6 +439,8 @@
   },
   "message": {
     "dropDatabase": "Really drop database {name}? All opened sessions with this database will be forcefully closed.",
-    "archiveFolder": "Saved to archive {archiveFolder}"
+    "archiveFolder": "Saved to archive {archiveFolder}",
+    "dropCollection": "Really drop collection {pureName}?",
+    "createCopyCollection": "Really create collection copy named {newName}"
   }
 }

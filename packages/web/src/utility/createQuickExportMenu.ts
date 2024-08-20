@@ -1,5 +1,5 @@
 import type { QuickExportDefinition } from 'dbgate-types';
-import { currentArchive, getCurrentArchive, getExtensions } from '../stores';
+import { getCurrentArchive, getExtensions } from '../stores';
 
 export function createQuickExportMenuItems(handler: (fmt: QuickExportDefinition) => Function, advancedExportMenuItem) {
   const extensions = getExtensions();
@@ -26,7 +26,7 @@ export function createQuickExportMenuItems(handler: (fmt: QuickExportDefinition)
     },
     { divider: true },
     {
-      text: 'More...',
+      text: '__contextMenu.common.more',
       ...advancedExportMenuItem,
     },
   ];
@@ -37,7 +37,7 @@ export default function createQuickExportMenu(
   advancedExportMenuItem
 ) {
   return {
-    text: 'Export',
+    text: '__contextMenu.common.export',
     submenu: createQuickExportMenuItems(handler, advancedExportMenuItem),
   };
 }

@@ -9,6 +9,7 @@
 </script>
 
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import { commandsCustomized } from '../stores';
   import { formatKeyText } from '../utility/common';
   import ToolStripButton from './ToolStripButton.svelte';
@@ -17,6 +18,14 @@
   export let component = ToolStripButton;
   export let hideDisabled = false;
   export let buttonLabel = null;
+
+  const getI18n = (id, text) => {
+    console.log(id, text);
+    if (id) {
+      return $t(`command.${id}`);
+    }
+    return text;
+  };
 
   $: cmd = Object.values($commandsCustomized).find((x: any) => x.id == command) as any;
 </script>
@@ -30,6 +39,6 @@
     disabled={!cmd.enabled}
     {...$$restProps}
   >
-    {buttonLabel || cmd.toolbarName || cmd.name}
+    {buttonLabel || getI18n(cmd.id, cmd.toolbarName || cmd.name)}
   </svelte:component>
 {/if}

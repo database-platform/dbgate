@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   import { copyTextToClipboard } from '../utility/clipboard';
+  import { translate } from '../i18nConfig';
 
   export const extractKey = ({ schemaName, pureName }) => (schemaName ? `${schemaName}.${pureName}` : pureName);
   export const createMatcher =
@@ -34,12 +35,12 @@
   const menus = {
     tables: [
       {
-        label: 'Open data',
+        label: '__contextMenu.dbobject.openData',
         tab: 'TableDataTab',
         forceNewTab: true,
       },
       {
-        label: 'Open form',
+        label: '__contextMenu.dbobject.openForm',
         tab: 'TableDataTab',
         forceNewTab: true,
         initialData: {
@@ -49,17 +50,17 @@
         },
       },
       {
-        label: 'Open structure',
+        label: '__contextMenu.dbobject.openStructure',
         tab: 'TableStructureTab',
         icon: 'img table-structure',
       },
       {
-        label: 'Design query',
+        label: '__contextMenu.dbobject.designQuery',
         isQueryDesigner: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Design perspective query',
+        label: '__contextMenu.dbobject.designPerspectiveQuery',
         tab: 'PerspectiveTab',
         forceNewTab: true,
         icon: 'img perspective',
@@ -68,49 +69,49 @@
         divider: true,
       },
       {
-        label: 'Drop table',
+        label: '__contextMenu.dbobject.dropTable',
         isDrop: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Rename table',
+        label: '__contextMenu.dbobject.renameTable',
         isRename: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Truncate table',
+        label: '__contextMenu.dbobject.truncateTable',
         isTruncate: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Copy table name',
+        label: '__contextMenu.dbobject.copyTableName',
         isCopyTableName: true,
         requiresWriteAccess: false,
       },
       {
-        label: 'Create table backup',
+        label: '__contextMenu.dbobject.createTableBackup',
         isDuplicateTable: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Show diagram',
+        label: '__contextMenu.dbobject.showDiagram',
         isDiagram: true,
       },
       {
         divider: true,
       },
       {
-        label: 'Export',
+        label: '__contextMenu.common.export',
         functionName: 'tableReader',
         isExport: true,
       },
       {
-        label: 'Import',
+        label: '__contextMenu.common.import',
         isImport: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Open active chart',
+        label: '__contextMenu.dbobject.openActiveChart',
         isActiveChart: true,
       },
       {
@@ -148,39 +149,39 @@
     ],
     views: [
       {
-        label: 'Open data',
+        label: '__contextMenu.dbobject.openData',
         tab: 'ViewDataTab',
         forceNewTab: true,
       },
       {
-        label: 'Open structure',
+        label: '__contextMenu.dbobject.openStructure',
         tab: 'TableStructureTab',
         icon: 'img view-structure',
       },
       {
-        label: 'Design query',
+        label: '__contextMenu.dbobject.designQuery',
         isQueryDesigner: true,
       },
       {
-        label: 'Design perspective query',
+        label: '__contextMenu.dbobject.designPerspectiveQuery',
         tab: 'PerspectiveTab',
         forceNewTab: true,
         icon: 'img perspective',
       },
       {
-        label: 'Drop view',
+        label: '__contextMenu.dbobject.dropView',
         isDrop: true,
       },
       {
         divider: true,
       },
       {
-        label: 'Export',
+        label: '__contextMenu.common.export',
         isExport: true,
         functionName: 'tableReader',
       },
       {
-        label: 'Open active chart',
+        label: '__contextMenu.dbobject.openActiveChart',
         isActiveChart: true,
       },
       {
@@ -217,32 +218,32 @@
     ],
     matviews: [
       {
-        label: 'Open data',
+        label: '__contextMenu.dbobject.openData',
         tab: 'ViewDataTab',
         forceNewTab: true,
       },
       {
-        label: 'Open structure',
+        label: '__contextMenu.dbobject.openStructure',
         tab: 'TableStructureTab',
       },
       {
-        label: 'Drop view',
+        label: '__contextMenu.dbobject.dropView',
         isDrop: true,
       },
       {
-        label: 'Query designer',
+        label: '__contextMenu.dbobject.queryDesigner',
         isQueryDesigner: true,
       },
       {
         divider: true,
       },
       {
-        label: 'Export',
+        label: '__contextMenu.common.export',
         isExport: true,
         functionName: 'tableReader',
       },
       {
-        label: 'Open active chart',
+        label: '__contextMenu.dbobject.openActiveChart',
         isActiveChart: true,
       },
       {
@@ -279,14 +280,14 @@
     ],
     queries: [
       {
-        label: 'Open data',
+        label: '__contextMenu.dbobject.openData',
         tab: 'QueryDataTab',
         forceNewTab: true,
       },
     ],
     procedures: [
       {
-        label: 'Drop procedure',
+        label: '__contextMenu.dbobject.dropProcedure',
         isDrop: true,
       },
       {
@@ -316,7 +317,7 @@
     ],
     functions: [
       {
-        label: 'Drop function',
+        label: '__contextMenu.dbobject.dropFunction',
         isDrop: true,
       },
       {
@@ -342,12 +343,12 @@
     ],
     collections: [
       {
-        label: 'Open data',
+        label: '__contextMenu.dbobject.openData',
         tab: 'CollectionDataTab',
         forceNewTab: true,
       },
       {
-        label: 'Open JSON',
+        label: '__contextMenu.dbobject.openJSON',
         tab: 'CollectionDataTab',
         forceNewTab: true,
         initialData: {
@@ -357,28 +358,28 @@
         },
       },
       {
-        label: 'Design perspective query',
+        label: '__contextMenu.dbobject.designPerspectiveQuery',
         tab: 'PerspectiveTab',
         forceNewTab: true,
         icon: 'img perspective',
       },
       {
-        label: 'Export',
+        label: '__contextMenu.common.export',
         isExport: true,
         functionName: 'tableReader',
       },
       {
-        label: 'Drop collection',
+        label: '__contextMenu.dbobject.dropCollection',
         isDropCollection: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Rename collection',
+        label: '__contextMenu.dbobject.renameCollection',
         isRenameCollection: true,
         requiresWriteAccess: true,
       },
       {
-        label: 'Create collection backup',
+        label: '__contextMenu.dbobject.createCollectionBackup',
         isDuplicateCollection: true,
         requiresWriteAccess: true,
       },
@@ -428,7 +429,7 @@
     } else if (menu.isQueryDesigner) {
       openNewTab(
         {
-          title: 'Query #',
+          title: translate('tab.common.query'),
           icon: 'img query-design',
           tabComponent: 'QueryDesignTab',
           props: {
@@ -452,7 +453,7 @@
     } else if (menu.isDiagram) {
       openNewTab(
         {
-          title: 'Diagram #',
+          title: translate('tab.common.diagram'),
           icon: 'img diagram',
           tabComponent: 'DiagramTab',
           props: {
@@ -512,7 +513,7 @@
       });
     } else if (menu.isDropCollection) {
       showModal(ConfirmModal, {
-        message: `Really drop collection ${data.pureName}?`,
+        message: translate('message.dropCollection', { values: { name: data.pureName } }),
         onConfirm: async () => {
           const dbid = _.pick(data, ['conid', 'database']);
           saveScriptToDatabase(dbid, `db.dropCollection('${data.pureName}')`);
@@ -522,8 +523,8 @@
       copyTextToClipboard(data.pureName);
     } else if (menu.isRenameCollection) {
       showModal(InputTextModal, {
-        label: 'New collection name',
-        header: 'Rename collection',
+        label: translate('modal.collection.label'),
+        header: translate('modal.collection.renameHeader'),
         value: data.pureName,
         onConfirm: async newName => {
           const dbid = _.pick(data, ['conid', 'database']);
@@ -538,7 +539,7 @@
       const newName = `_${data.pureName}_${dateFormat(new Date(), 'yyyy-MM-dd-hh-mm-ss')}`;
 
       showModal(ConfirmModal, {
-        message: `Really create collection copy named ${newName}?`,
+        message: translate(`message.createCopyCollection`, { values: { name: newName } }),
         onConfirm: async () => {
           const dbid = _.pick(data, ['conid', 'database']);
           saveScriptToDatabase(dbid, `db.collection('${data.pureName}').aggregate([{$out: '${newName}'}]).toArray()`);
@@ -629,7 +630,7 @@
 
     openNewTab(
       {
-        title: scriptTemplate ? 'Query #' : getObjectTitle(connection, schemaName, pureName),
+        title: scriptTemplate ? translate('tab.common.query') : getObjectTitle(connection, schemaName, pureName),
         tooltip,
         icon: icon || (scriptTemplate ? 'img sql-file' : databaseObjectIcons[objectTypeField]),
         tabComponent: scriptTemplate ? 'QueryTab' : tabComponent,

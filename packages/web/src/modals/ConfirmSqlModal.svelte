@@ -18,6 +18,7 @@
 
 <script>
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import { writable } from 'svelte/store';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import FormCheckboxField from '../forms/FormCheckboxField.svelte';
@@ -140,17 +141,17 @@
 
     <div slot="footer">
       <FormSubmit
-        value="OK"
+        value={$t('common.ok')}
         disabled={isRecreated && !$values.allowRecreate}
         on:click={e => {
           closeCurrentModal();
           onConfirm(currentScript);
         }}
       />
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
       <FormStyledButton
         type="button"
-        value="Open script"
+        value={$t('common.openScript')}
         on:click={() => {
           newQuery({
             initialData: currentScript,

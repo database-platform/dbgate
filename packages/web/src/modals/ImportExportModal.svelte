@@ -1,10 +1,11 @@
 <script lang="ts">
   import moment from 'moment';
   import { writable } from 'svelte/store';
+  import { t } from 'svelte-i18n';
   import HorizontalSplitter from '../elements/HorizontalSplitter.svelte';
   import LargeButton from '../buttons/LargeButton.svelte';
   import LoadingInfo from '../elements/LoadingInfo.svelte';
-  import VerticalSplitter from '../elements/VerticalSplitter.svelte';
+  // import VerticalSplitter from '../elements/VerticalSplitter.svelte';
 
   import FormProvider from '../forms/FormProvider.svelte';
   import FormTextField from '../forms/FormTextField.svelte';
@@ -180,13 +181,15 @@
     <svelte:fragment slot="footer">
       <div class="flex m-2">
         {#if busy}
-          <LargeButton icon="icon stop" on:click={handleCancel}>Stop</LargeButton>
+          <LargeButton icon="icon stop" on:click={handleCancel}>{$t('common.stop')}</LargeButton>
         {:else}
-          <LargeFormButton on:click={handleExecute} icon="icon run">Run</LargeFormButton>
+          <LargeFormButton on:click={handleExecute} icon="icon run">{$t('common.run')}</LargeFormButton>
         {/if}
-        <LargeFormButton icon="img sql-file" on:click={handleGenerateScript}>Generate script</LargeFormButton>
+        <LargeFormButton icon="img sql-file" on:click={handleGenerateScript}
+          >{$t('common.generateScript')}</LargeFormButton
+        >
 
-        <LargeButton on:click={closeCurrentModal} icon="icon close">Close</LargeButton>
+        <LargeButton on:click={closeCurrentModal} icon="icon close">{$t('common.close')}</LargeButton>
       </div>
     </svelte:fragment>
   </ModalBase>

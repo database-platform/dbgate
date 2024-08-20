@@ -4,7 +4,332 @@
     "ok": "确认",
     "cancel": "取消",
     "close": "关闭",
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "openScript": "打开脚本",
+    "generateScript": "生成脚本",
+    "stop": "停止",
+    "run": "开始"
+  },
+  "command": {
+    "about": {
+      "show": "关于"
+    },
+    "app": {
+      "disconnect": "断开链接",
+      "logout": "登出",
+      "maximize": "最大化",
+      "minimize": "最小化",
+      "openDocs": "文档",
+      "openIssue": "报告问题或是功能特性",
+      "openSponsoring": "Become sponsor",
+      "openWeb": "打开网站",
+      "reload": "重新载入",
+      "toggleDevTools": "切换开发工具",
+      "toggleFullScreen": "切换全屏",
+      "zoomIn": "缩小",
+      "zoomOut": "放大",
+      "zoomReset": "重置缩放"
+    },
+    "archiveFile": {
+      "save": "保存",
+      "saveAs": "另存为"
+    },
+    "chart": {
+      "export": "导出图表",
+      "redo": "重做",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "undo": "撤销"
+    },
+    "collectionDataGrid": {
+      "export": "导出",
+      "openQuery": "打开查询"
+    },
+    "collectionTable": {
+      "save": "保存"
+    },
+    "commandPalette": {
+      "show": "命令面板"
+    },
+    "compareModels": {
+      "deploy": "部署",
+      "refresh": "刷新",
+      "reportDiff": "报告",
+      "swap": "交换"
+    },
+    "dataDuplicator": {
+      "kill": "终止",
+      "run": "导入到 DB"
+    },
+    "dataForm": {
+      "addToFilter": "添加到过滤器",
+      "copyToClipboard": "复制到剪贴板",
+      "filterSelected": "过滤该值",
+      "goToFirst": "首页",
+      "goToLast": "尾页",
+      "goToNext": "下一页",
+      "goToPrevious": "上一个",
+      "reconnect": "重连",
+      "redo": "重做",
+      "refresh": "刷新",
+      "revertRowChanges": "恢复行更改",
+      "setNull": "设置为 NULL",
+      "undo": "撤销"
+    },
+    "dataGrid": {
+      "appendSelectedCellsIntoMirror": "追加选定的单元格",
+      "appendSelectedRowsIntoMirror": "追加选定的行",
+      "clearFilter": "清除过滤",
+      "cloneRows": "克隆行",
+      "copyToClipboard": "复制到剪贴板",
+      "deepRefresh": "重新加载",
+      "deleteSelectedRows": "删除行",
+      "editCellValue": "编辑单元格",
+      "editJsonDocument": "编辑行为 JSON 文档",
+      "filterSelected": "过滤该值",
+      "findColumn": "查找字段",
+      "generateSqlFromData": "生成 SQL",
+      "hideColumn": "隐藏字段",
+      "insertNewRow": "插入行",
+      "loadCellFromFile": "从文件载入",
+      "mergeSelectedCellsIntoMirror": "合并选中的单元格",
+      "mergeSelectedRowsIntoMirror": "合并选中的行",
+      "newJson": "添加JSON文档",
+      "openChartFromSelection": "从选择的数据打开图表",
+      "openFreeTable": "Edit selection as table",
+      "openJsonArrayInSheet": "Open array as table",
+      "openSelectionInMap": "Open selection in map",
+      "reconnect": "重连",
+      "redo": "重做",
+      "refresh": "刷新",
+      "replaceSelectedCellsIntoMirror": "替换为选定的单元格",
+      "replaceSelectedRowsIntoMirror": "替换为选定的行",
+      "revertAllChanges": "恢复所有",
+      "revertRowChanges": "恢复改变的行",
+      "saveCellToFile": "从文件载入保存",
+      "setNull": "设置为 NULL",
+      "switchToForm": "切换为表单",
+      "switchToJson": "切换为JSON",
+      "switchToTable": "切换为表格",
+      "toggleLeftPanel": "切换到左侧面板",
+      "undo": "撤销",
+      "viewJsonDocument": "查看行(JSON)",
+      "viewJsonValue": "查看单元格(JSON)"
+    },
+    "database": {
+      "changeState": "更新状态",
+      "search": "搜索",
+      "switch": "更新最近的"
+    },
+    "designer": {
+      "arrange": "排列",
+      "execute": "执行",
+      "kill": "终止",
+      "openSql": "打开 SQL",
+      "redo": "重做",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "undo": "撤销"
+    },
+    "diagram": {
+      "export": "导出关系图",
+      "redo": "重做",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "undo": "撤销"
+    },
+    "edit": {
+      "copy": "复制",
+      "cut": "剪贴",
+      "paste": "粘贴",
+      "redo": "重做",
+      "selectAll": "选择所有",
+      "undo": "撤销"
+    },
+    "favoriteJsonEditor": {
+      "find": "查找",
+      "preview": "预览",
+      "replace": "替换",
+      "save": "保存"
+    },
+    "file": {
+      "exit": "退出",
+      "import": "导入数据",
+      "open": "打开",
+      "openArchive": "打开数据模型"
+    },
+    "folder": {
+      "showData": "打开文件夹",
+      "showLogs": "打开日志"
+    },
+    "group": {
+      "redo": "重做",
+      "save": "保存",
+      "saveAs": "另存为",
+      "undo": "撤销"
+    },
+    "jslTableGrid": {
+      "export": "导出"
+    },
+    "json": {
+      "find": "查找",
+      "replace": "替换",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "toggleComment": "切换注释"
+    },
+    "jsonl": {
+      "closePreview": "关闭预览",
+      "find": "查找",
+      "preview": "预览",
+      "previewNewTab": "在新的标签中预览",
+      "replace": "替换",
+      "save": "保存"
+    },
+    "markdown": {
+      "preview": "预览",
+      "replace": "替换",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "toggleComment": "切换注释"
+    },
+    "new": {
+      "application": "应用",
+      "archiveFolder": "归档文件夹",
+      "collection": "集合",
+      "connection": "链接",
+      "connection.folder": "添加链接文件夹",
+      "diagram": "ER关系图",
+      "gist": "上传失败",
+      "jsonl": "JSON 行",
+      "markdown": "Markdown 页面",
+      "modelCompare": "对比 DB",
+      "perspective": "视角",
+      "query": "新查询",
+      "queryDesign": "查询设计",
+      "shell": "JavaScript Shell",
+      "sqliteDatabase": "SQLite database",
+      "table": "新建表"
+    },
+    "perspective": {
+      "customJoin": "自定义关联",
+      "openJson": "打开 JSON",
+      "redo": "重做",
+      "refresh": "刷新",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "undo": "撤销"
+    },
+    "profiler": {
+      "save": "保存",
+      "start": "开始",
+      "stop": "停止"
+    },
+    "query": {
+      "copy": "复制",
+      "execute": "执行",
+      "executeCurrent": "执行当前",
+      "find": "查找",
+      "formatCode": "格式化代码",
+      "insertSqlJoin": "插入SQL Join",
+      "kill": "终止",
+      "paste": "粘贴",
+      "replace": "替换",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "toggleComment": "切换注释",
+      "toggleVisibleResultTabs": "切换显示结果选项卡"
+    },
+    "queryData": {
+      "stopLoading": "停止加载"
+    },
+    "serverSummary": {
+      "refresh": "刷新"
+    },
+    "settings": {
+      "commands": "快捷键",
+      "show": "设置"
+    },
+    "shell": {
+      "copyNodeScript": "Copy nodejs script",
+      "execute": "执行",
+      "find": "查找",
+      "kill": "终止",
+      "openWizard": "打开向导",
+      "replace": "替换",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "toggleComment": "切换注释"
+    },
+    "sql": {
+      "generator": "SQL 生成"
+    },
+    "sqlDataGrid": {
+      "export": "导出",
+      "openActiveChart": "打开图表",
+      "openQuery": "打开查询"
+    },
+    "tableData": {
+      "save": "保存",
+      "setAutoRefresh.1": "每1秒刷新",
+      "setAutoRefresh.5": "每5秒刷新",
+      "setAutoRefresh.10": "每10秒刷新",
+      "setAutoRefresh.15": "每15秒刷新",
+      "setAutoRefresh.30": "每30秒刷新",
+      "setAutoRefresh.60": "每60秒刷新",
+      "startAutoRefresh": "开始自动刷新",
+      "stopAutoRefresh": "停止自动刷新"
+    },
+    "tableEditor": {
+      "addColumn": "添加列",
+      "addForeignKey": "添加外键",
+      "addIndex": "添加索引",
+      "addPrimaryKey": "添加主键",
+      "addUnique": "添加唯一"
+    },
+    "tableStructure": {
+      "reset": "重置更新",
+      "save": "保存"
+    },
+    "tabs": {
+      "addToFavorites": "添加当前选项卡到我的",
+      "changelog": "更新日志",
+      "closeAll": "关闭所有选项卡",
+      "closeTab": "关闭选项卡",
+      "closeTabsButCurrentDb": "Close tabs but current DB",
+      "closeTabsWithCurrentDb": "关闭当前数据库选项卡",
+      "nextTab": "下一个选项卡",
+      "previousTab": "上一个选项卡"
+    },
+    "theme": {
+      "changeTheme": "更新"
+    },
+    "toggle": {
+      "sidebar": "切换侧边栏"
+    },
+    "toolbar": {
+      "hide": "隐藏",
+      "show": "显示"
+    },
+    "view": {
+      "reset": "重置视图"
+    },
+    "yaml": {
+      "find": "查找",
+      "replace": "替换",
+      "save": "保存",
+      "saveAs": "另存为",
+      "saveToDisk": "保存到本地",
+      "toggleComment": "切换注释"
+    }
   },
   "contextMenu": {
     "common": {
@@ -15,7 +340,10 @@
       "refresh": "刷新",
       "newQuery": "新建查询",
       "restoreSqlDump": "恢复/导入 SQL dump",
-      "backupSqlDump": "备份/导出 SQL dump"
+      "backupSqlDump": "备份/导出 SQL dump",
+      "export": "导出",
+      "import": "导入",
+      "more": "更多..."
     },
     "connection": {
       "connect": "链接",
@@ -26,8 +354,8 @@
     "database": {
       "newTable": "新建表",
       "newCollection": "新建集合",
-      "designQuery": "查询设计器",
-      "designPerspectiveQuery": "查询设计器(透视)",
+      "designQuery": "设计查询",
+      "designPerspectiveQuery": "设计视角查询",
       "importWizard": "导入向导",
       "exportWizard": "导出向导",
       "dropDatabase": "删除库",
@@ -39,6 +367,28 @@
       "exportModel": "导出数据模型 - beta",
       "compareDatabase": "比较 {currentDatabaseName}",
       "generateScript": "生成脚本"
+    },
+    "dbobject": {
+      "openData": "查看数据",
+      "openForm": "查看数据(表单)",
+      "openStructure": "查看结构",
+      "designQuery": "设计查询",
+      "designPerspectiveQuery": "设计视角查询",
+      "dropTable": "删除表",
+      "renameTable": "重命名表",
+      "truncateTable": "清空表",
+      "copyTableName": "复制表名",
+      "createTableBackup": "创建表备份",
+      "showDiagram": "显示关系图",
+      "openActiveChart": "打开图表",
+      "dropView": "删除视图",
+      "queryDesigner": "查询设计器",
+      "dropProcedure": "删除存储过程",
+      "dropFunction": "删除函数",
+      "openJSON": "查看数据(JSON)",
+      "dropCollection": "删除集合",
+      "renameCollection": "重命名集合",
+      "createCollectionBackup": "创建集合备份"
     }
   },
   "tab": {
@@ -59,6 +409,7 @@
     },
     "collection": {
       "header": "新建集合",
+      "renameHeader": "重命名集合",
       "label": "集合名称"
     }
   },
@@ -88,6 +439,8 @@
   },
   "message": {
     "dropDatabase": "确实要删除数据库 {name} 吗？所有打开的与此数据库的会话将被强制关闭。",
-    "archiveFolder": "已保存到归档 {archiveFolder}"
+    "archiveFolder": "已保存到归档 {archiveFolder}",
+    "dropCollection": "确实要删除集合 {pureName} 吗?",
+    "createCopyCollection": "确认要创建集合副本名称为 {newName}吗?"
   }
 }

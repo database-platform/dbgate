@@ -7,6 +7,7 @@ import { getSettings, useConfig, useSettings } from './utility/metadataLoaders';
 import _ from 'lodash';
 import { safeJsonParse } from 'dbgate-tools';
 import { apiCall } from './utility/api';
+import { translate } from './i18nConfig';
 
 export interface TabDefinition {
   title: string;
@@ -132,7 +133,7 @@ export const currentDropDownMenu = writable(null);
 export const openedModals = writable([]);
 export const draggedPinnedObject = writable(null);
 export const openedSnackbars = writable([]);
-export const nullStore = readable(null, () => {});
+export const nullStore = readable(null, () => { });
 export const currentArchive = writableWithStorage('default', 'currentArchive');
 export const currentApplication = writableWithStorage(null, 'currentApplication');
 export const isFileDragActive = writable(false);
@@ -209,7 +210,6 @@ export const getOpenedTabs = () => openedTabsValue;
 let commandsValue = null;
 commands.subscribe(value => {
   commandsValue = value;
-
   const electron = getElectron();
   if (electron) {
     electron.send('update-commands', JSON.stringify(value));

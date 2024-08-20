@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   const getCurrentEditor = () => getActiveComponent('TableDataTab');
+
   const INTERVALS = [5, 10, 15, 13, 60];
 
   registerCommand({
@@ -62,7 +63,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
-  import App from '../App.svelte';
+  // import App from '../App.svelte';
   import TableDataGrid from '../datagrid/TableDataGrid.svelte';
   import useGridConfig from '../utility/useGridConfig';
   import {
@@ -70,10 +71,10 @@
     changeSetToSql,
     createChangeSet,
     createGridCache,
-    createGridConfig,
+    // createGridConfig,
     getDeleteCascades,
-    TableFormViewDisplay,
-    TableGridDisplay,
+    // TableFormViewDisplay,
+    // TableGridDisplay,
   } from 'dbgate-datalib';
   import { findEngineDriver } from 'dbgate-tools';
   import { reloadDataCacheFunc } from 'dbgate-datalib';
@@ -90,7 +91,7 @@
   import registerCommand from '../commands/registerCommand';
   import { registerMenu } from '../utility/contextMenu';
   import { showSnackbarSuccess } from '../utility/snackbar';
-  import StatusBarTabItem from '../widgets/StatusBarTabItem.svelte';
+  // import StatusBarTabItem from '../widgets/StatusBarTabItem.svelte';
   import openNewTab from '../utility/openNewTab';
   import { onDestroy, setContext } from 'svelte';
   import { apiCall } from '../utility/api';
@@ -122,7 +123,7 @@
 
   $: connection = useConnectionInfo({ conid });
 
-  const { editorState, editorValue, setEditorData } = useEditorData({
+  const { setEditorData } = useEditorData({
     tabid,
     onInitialData: value => {
       dispatchChangeSet({ type: 'reset', value });

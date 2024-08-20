@@ -28,7 +28,6 @@ export default function contextMenu(node, items: any = []) {
   };
 
   if (items == '__no_menu') return;
-
   node.addEventListener('contextmenu', handleContextMenu);
 
   return {

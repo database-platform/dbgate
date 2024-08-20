@@ -52,7 +52,6 @@ export default async function openNewTab(newTab, initialData = undefined, option
     openedTabs.update(tabs => setSelectedTabFunc(tabs, existing.tabid));
     return;
   }
-
   // new tab will be created
   if (newTab.title.endsWith('#')) {
     const numbers = oldTabs

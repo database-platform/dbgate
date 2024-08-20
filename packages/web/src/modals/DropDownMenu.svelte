@@ -2,8 +2,12 @@
   function getElementOffset(element, side = null) {
     var de = document.documentElement;
     var box = element.getBoundingClientRect();
-    var top = box.top + window.pageYOffset - de.clientTop;
-    var left = box.left + window.pageXOffset - de.clientLeft;
+    const rootStyle = window.document.documentElement.style;
+    const microLeft = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-left')) || 0;
+    const microTop = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-top')) || 0;
+    var top = box.top + window.pageYOffset - de.clientTop - microTop;
+    var left = box.left + window.pageXOffset - de.clientLeft - microLeft;
+
     if (side == 'right') return { top: top, left: left + box.width };
     return { top: top, left: left };
   }
@@ -34,6 +38,7 @@
 
 <script>
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import { createEventDispatcher } from 'svelte';
   import { onMount } from 'svelte';
   import { commandsCustomized } from '../stores';
@@ -103,6 +108,13 @@
     dispatchClose();
   };
 
+  const getI18n = text => {
+    if (text && text.indexOf('__') !== -1) {
+      return $t(text.split('__')[1]);
+    }
+    return text;
+  };
+
   onMount(() => {
     document.addEventListener('mousedown', handleClickOutside, true);
     return () => {
@@ -124,7 +136,7 @@
         }}
       >
         <a on:click={e => handleClick(e, item)} class:disabled={item.disabled}>
-          {item.text || item.label}
+          {getI18n(item.text || item.label)}
           {#if item.keyText}
             <span class="keyText">{formatKeyText(item.keyText)}</span>
           {/if}
