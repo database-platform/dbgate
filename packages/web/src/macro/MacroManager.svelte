@@ -1,6 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
-
+  import { t } from 'svelte-i18n';
   import AppObjectList from '../appobj/AppObjectList.svelte';
   import * as macroAppObject from '../appobj/MacroAppObject.svelte';
 
@@ -16,7 +16,7 @@
 
 <ManagerInnerContainer width={managerSize}>
   <SearchBoxWrapper>
-    <SearchInput placeholder="Search macros" bind:value={filter} />
+    <SearchInput placeholder={$t('widgets.macros.search')} bind:value={filter} />
   </SearchBoxWrapper>
   <AppObjectList
     list={_.sortBy(macros, 'title').filter(x => (macroCondition ? macroCondition(x) : true))}

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import _, { add, indexOf, range } from 'lodash';
-  import { ChangeSet, DisplayColumn, GridDisplay } from 'dbgate-datalib';
+  import _ from 'lodash';
+  import { t } from 'svelte-i18n';
+  import { ChangeSet, GridDisplay } from 'dbgate-datalib';
   import { filterName } from 'dbgate-tools';
   import CloseSearchButton from '../buttons/CloseSearchButton.svelte';
 
@@ -171,7 +172,7 @@
   </div>
 {/if}
 <SearchBoxWrapper>
-  <SearchInput placeholder="Search columns" bind:value={filter} />
+  <SearchInput placeholder={$t('widgets.column.search')} bind:value={filter} />
   <CloseSearchButton bind:filter />
   {#if isDynamicStructure && !isJsonView}
     <InlineButton
@@ -184,14 +185,14 @@
             display.addDynamicColumn(name);
           },
         });
-      }}>Add</InlineButton
+      }}>{$t('button.add.add')}</InlineButton
     >
   {/if}
   {#if allowChangeChangeSetStructure && !isDynamicStructure}
-    <InlineButton on:click={handleAddColumn}>Add</InlineButton>
+    <InlineButton on:click={handleAddColumn}>{$t('button.add.add')}</InlineButton>
   {/if}
-  <InlineButton on:click={() => display.hideAllColumns()}>Hide</InlineButton>
-  <InlineButton on:click={() => display.showAllColumns()}>Show</InlineButton>
+  <InlineButton on:click={() => display.hideAllColumns()}>{$t('button.hide')}</InlineButton>
+  <InlineButton on:click={() => display.showAllColumns()}>{$t('button.show')}</InlineButton>
 </SearchBoxWrapper>
 <ManagerInnerContainer width={managerSize}>
   <input

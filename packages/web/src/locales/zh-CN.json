@@ -4,11 +4,29 @@
     "ok": "确认",
     "cancel": "取消",
     "close": "关闭",
+    "closeTabs": "关闭选项卡",
     "refresh": "刷新",
     "openScript": "打开脚本",
     "generateScript": "生成脚本",
     "stop": "停止",
-    "run": "开始"
+    "run": "开始",
+    "export": "导出",
+    "execute": "执行"
+  },
+  "button": {
+    "reset": {
+      "filter": "重置过滤",
+      "view": "重置视图"
+    },
+    "add": {
+      "add": "Add",
+      "document": "打开文档"
+    },
+    "open": {
+      "query": "打开查询"
+    },
+    "hide": "隐藏",
+    "show": "显示"
   },
   "command": {
     "about": {
@@ -69,7 +87,7 @@
       "goToFirst": "首页",
       "goToLast": "尾页",
       "goToNext": "下一页",
-      "goToPrevious": "上一个",
+      "goToPrevious": "上一页",
       "reconnect": "重连",
       "redo": "重做",
       "refresh": "刷新",
@@ -86,7 +104,7 @@
       "deepRefresh": "重新加载",
       "deleteSelectedRows": "删除行",
       "editCellValue": "编辑单元格",
-      "editJsonDocument": "编辑行为 JSON 文档",
+      "editJsonDocument": "编辑行(JSON)",
       "filterSelected": "过滤该值",
       "findColumn": "查找字段",
       "generateSqlFromData": "生成 SQL",
@@ -95,7 +113,7 @@
       "loadCellFromFile": "从文件载入",
       "mergeSelectedCellsIntoMirror": "合并选中的单元格",
       "mergeSelectedRowsIntoMirror": "合并选中的行",
-      "newJson": "添加JSON文档",
+      "newJson": "添加行(JSON)",
       "openChartFromSelection": "从选择的数据打开图表",
       "openFreeTable": "Edit selection as table",
       "openJsonArrayInSheet": "Open array as table",
@@ -329,6 +347,64 @@
       "saveAs": "另存为",
       "saveToDisk": "保存到本地",
       "toggleComment": "切换注释"
+    },
+    "filter": {
+      "clear": "清除过滤",
+      "multipleValues": "过滤多个值",
+      "equals": "=",
+      "notEquals": "<>",
+      "isNull": "是 Null",
+      "isNotNull": "不是 Null",
+      "greaterThan": ">",
+      "greaterThanOrEqual": ">=",
+      "lessThan": "<",
+      "lessThanOrEqual": "<=",
+      "sql": "SQL 条件",
+      "sqlRight": "SQL 条件 - 仅右侧",
+      "isTrue": "是 True",
+      "isFalse": "是 False",
+      "isTrueOrNull": "是 True 或 NULL",
+      "isFalseOrNull": "是 False 或 NULL",
+      "before": "之前",
+      "after": "之后",
+      "between": "区间",
+      "tomorrow": "明天",
+      "today": "今天",
+      "yesterday": "昨天",
+      "nextWeek": "下周",
+      "thisWeek": "本周",
+      "LastWeek": "上周",
+      "nextMonth": "下个月",
+      "thisMonth": "本月",
+      "lastMonth": "上个月",
+      "nextYear": "明年",
+      "thisYear": "今年",
+      "lastYear": "去年",
+      "isEmptyOrNull": "是 Empty 或 Null",
+      "notEmptyNotNull": "不是 Empty 和 Null",
+      "contains": "包含",
+      "notContain": "不包含",
+      "beginsWith": "以...开始",
+      "notBeginWith": "不以...开始",
+      "endsWith": "以...结束",
+      "notEndWith": "不以...结束",
+      "fieldExists": "字段存在",
+      "notExists": "字段不存在",
+      "notEmptyArray": "不是空数组",
+      "emptyArray": "空数组",
+      "isOneOfLine": "符合行列表中的某一项",
+      "isNotOneOfLine": "不符合列表中的任何一项"
+    },
+    "copy": {
+      "withHeaders": "复制带表头",
+      "withOutHeaders": "复制不带表头",
+      "csv": "复制CSV",
+      "json": "复制JSON",
+      "jsonLines": "复制JSON lines/NDJSON",
+      "yaml": "复制YAML",
+      "sqlInserts": "复制SQL INSERTs",
+      "sqlUpdates": "复制SQL UPDATEs",
+      "mongoInserts": "复制Mongo INSERTs"
     }
   },
   "contextMenu": {
@@ -400,6 +476,10 @@
       "generateScriptExport": "导出 #",
       "compare": "比较",
       "diagram": "关系图 #"
+    },
+    "tableData": {
+      "openStructure": "查看结构",
+      "viewColumns": "切换列"
     }
   },
   "modal": {
@@ -411,6 +491,17 @@
       "header": "新建集合",
       "renameHeader": "重命名集合",
       "label": "集合名称"
+    },
+    "setFilter": {
+      "header": "设置过滤",
+      "tip": "where条件"
+    },
+    "filterMultipleValues": {
+      "header": "过滤多个值"
+    },
+    "closeTabs": {
+      "header": "确认关闭选项卡",
+      "tip": "以下文件修改后，真的关闭选项卡吗?关闭后，你可以在历史中重新打开它们"
     }
   },
   "widgets": {
@@ -435,12 +526,43 @@
         "New procedure": "新建存储过程",
         "New function": "新建函数"
       }
+    },
+    "dataGrid": {
+      "filters": "过滤",
+      "columns": "列",
+      "macros": "宏命令"
+    },
+    "column": {
+      "search": "搜索列"
+    },
+    "formView": {
+      "nameFilter": "列名过滤",
+      "multiFilter": "多列过滤"
+    },
+    "macro": {
+      "search": "搜索宏命令",
+      "tab": {
+        "macro": "宏详情"
+      },
+      "info": {
+        "execute": "执行",
+        "parameters": "参数",
+        "parametersDescription": "该宏命令没有参数",
+        "description": "描述"
+      }
     }
   },
   "message": {
+    "loading": "加载中...",
     "dropDatabase": "确实要删除数据库 {name} 吗？所有打开的与此数据库的会话将被强制关闭。",
     "archiveFolder": "已保存到归档 {archiveFolder}",
     "dropCollection": "确实要删除集合 {pureName} 吗?",
-    "createCopyCollection": "确认要创建集合副本名称为 {newName}吗?"
+    "createCopyCollection": "确认要创建集合副本名称为 {newName}吗?",
+    "dataGridCore": {
+      "structure": "等待结构信息",
+      "structureError": "没有加载结构，可能是因为表在当前数据库中不存在。",
+      "rowEditableError": "没有加载行，检查过滤器或添加新文档。您可以使用“高级复制”/“复制为 JSON”命令从其他集合/表复制文档。",
+      "rowError": "没有加载数据!"
+    }
   }
 }

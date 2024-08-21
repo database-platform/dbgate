@@ -345,7 +345,8 @@
   import { GridDisplay } from 'dbgate-datalib';
   import { driverBase, parseCellValue } from 'dbgate-tools';
   import { getContext, onDestroy } from 'svelte';
-  import _, { map } from 'lodash';
+  import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import registerCommand from '../commands/registerCommand';
   import ColumnHeaderControl from './ColumnHeaderControl.svelte';
   import DataGridRow from './DataGridRow.svelte';
@@ -373,8 +374,8 @@
   import {
     copyRowsFormatDefs,
     copyRowsToClipboard,
-    copyTextToClipboard,
-    extractRowCopiedValue,
+    // copyTextToClipboard,
+    // extractRowCopiedValue,
   } from '../utility/clipboard';
   import invalidateCommands from '../commands/invalidateCommands';
   import createRef from '../utility/createRef';
@@ -389,7 +390,7 @@
   import GenerateSqlFromDataModal from '../modals/GenerateSqlFromDataModal.svelte';
   import { showModal } from '../modals/modalTools';
   import StatusBarTabItem from '../widgets/StatusBarTabItem.svelte';
-  import { findCommand } from '../commands/runCommand';
+  // import { findCommand } from '../commands/runCommand';
   import { openJsonDocument } from '../tabs/JsonTab.svelte';
   import EditJsonModal from '../modals/EditJsonModal.svelte';
   import { apiCall } from '../utility/api';
@@ -459,7 +460,7 @@
   let autofillSelectedCells = emptyCellArray;
   const domFilterControlsRef = createRef({});
 
-  const tabid = getContext('tabid');
+  // const tabid = getContext('tabid');
 
   let unsubscribeDbRefresh;
 
@@ -1046,7 +1047,7 @@
   }
 
   $: {
-    const _unused = selectedCells;
+    // const _unused = selectedCells;
     if (onReferenceSourceChanged && (grider.rowCount > 0 || isLoadedAll)) {
       onReferenceSourceChanged(getSelectedRowData(), loadedTime);
     }
@@ -1721,6 +1722,7 @@
     return [
       menu,
       {
+        id: copyRowsFormatDefs[$copyRowsFormat].id,
         text: copyRowsFormatDefs[$copyRowsFormat].label,
         onClick: () => copyToClipboardCore($copyRowsFormat),
         keyText: 'CtrlOrCommand+C',
@@ -1742,35 +1744,33 @@
 
 {#if !display || (!isDynamicStructure && (!columns || columns.length == 0))}
   {#if $databaseStatus?.name == 'pending' || $databaseStatus?.name == 'checkStructure' || $databaseStatus?.name == 'loadStructure'}
-    <LoadingInfo wrapper message="Waiting for structure" />
+    <LoadingInfo wrapper message={$t('message.dataGridCore.structure')} />
   {:else}
-    <ErrorInfo alignTop message="No structure was loaded, probably table doesn't exist in current database" />
+    <ErrorInfo alignTop message={$t('message.dataGridCore.structureError')} />
   {/if}
 {:else if errorMessage}
   <div>
     <ErrorInfo message={errorMessage} alignTop />
-    <FormStyledButton value="Reset filter" on:click={() => display.clearFilters()} />
-    <FormStyledButton value="Reset view" on:click={() => display.resetConfig()} />
+    <FormStyledButton value={$t('button.reset.filter')} on:click={() => display.clearFilters()} />
+    <FormStyledButton value={$t('button.reset.view')} on:click={() => display.resetConfig()} />
     {#if onOpenQuery}
-      <FormStyledButton value="Open Query" on:click={onOpenQuery} />
+      <FormStyledButton value={$t('button.open.query')} on:click={onOpenQuery} />
     {/if}
   </div>
 {:else if isDynamicStructure && isLoadedAll && grider?.rowCount == 0}
   <div>
     <ErrorInfo
       alignTop
-      message={grider.editable
-        ? 'No rows loaded, check filter or add new documents. You could copy documents from ohter collections/tables with Copy advanved/Copy as JSON command.'
-        : 'No rows loaded'}
+      message={grider.editable ? $t('message.dataGridCore.rowEditableError') : $t('message.dataGridCore.rowError')}
     />
     {#if display.filterCount > 0}
-      <FormStyledButton value="Reset filter" on:click={() => display.clearFilters()} />
+      <FormStyledButton value={$t('button.reset.filter')} on:click={() => display.clearFilters()} />
     {/if}
     {#if grider.editable}
-      <FormStyledButton value="Add document" on:click={addJsonDocument} />
+      <FormStyledButton value={$t('button.add.document')} on:click={addJsonDocument} />
     {/if}
     {#if onOpenQuery}
-      <FormStyledButton value="Open Query" on:click={onOpenQuery} />
+      <FormStyledButton value={$t('button.open.query')} on:click={onOpenQuery} />
     {/if}
   </div>
 {:else if grider.errors && grider.errors.length > 0}
@@ -1946,7 +1946,7 @@
     {/if}
 
     {#if isLoading}
-      <LoadingInfo wrapper message="Loading data" />
+      <LoadingInfo wrapper message={$t('message.loading')} />
     {/if}
 
     {#if !tabControlHiddenTab && !multipleGridsOnTab && allRowCount != null}

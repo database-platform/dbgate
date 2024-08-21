@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getContext } from 'svelte';
-
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   import WidgetTitle from '../widgets/WidgetTitle.svelte';
@@ -13,23 +13,23 @@
 
 <div class="wrapper">
   <div class="section">
-    <WidgetTitle>Execute</WidgetTitle>
-    <FormStyledButton value="Execute" on:click={onExecute} />
+    <WidgetTitle>{$t('widgets.macro.info.execute')}</WidgetTitle>
+    <FormStyledButton value={$t('widgets.macro.info.execute')} on:click={onExecute} />
   </div>
 
   <div class="section">
-    <WidgetTitle>Parameters</WidgetTitle>
+    <WidgetTitle>{$t('widgets.macro.info.parameters')}</WidgetTitle>
     {#if $selectedMacro?.args && $selectedMacro?.args?.length > 0}
       {#key $selectedMacro?.name}
-        <MacroParameters args={$selectedMacro?.args||[]} namePrefix={`${$selectedMacro?.name}#`} />
+        <MacroParameters args={$selectedMacro?.args || []} namePrefix={`${$selectedMacro?.name}#`} />
       {/key}
     {:else}
-      <div class="m-1">This macro has no parameters</div>
+      <div class="m-1">{$t('widgets.macro.info.parametersDescription')}</div>
     {/if}
   </div>
 
   <div class="section">
-    <WidgetTitle>Description</WidgetTitle>
+    <WidgetTitle>{$t('widgets.macro.info.description')}</WidgetTitle>
     <div class="m-1">{$selectedMacro?.description}</div>
   </div>
 </div>

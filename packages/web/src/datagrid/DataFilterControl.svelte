@@ -63,156 +63,184 @@
     switch (filterType) {
       case 'number':
         return [
-          { onClick: () => setFilter(''), text: 'Clear Filter' },
-          { onClick: () => filterMultipleValues(), text: 'Filter multiple values' },
-          { onClick: () => openFilterWindow('='), text: 'Equals...' },
-          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...' },
-          { onClick: () => setFilter('NULL'), text: 'Is Null' },
-          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null' },
-          { onClick: () => openFilterWindow('>'), text: 'Greater Than...' },
-          { onClick: () => openFilterWindow('>='), text: 'Greater Than Or Equal To...' },
-          { onClick: () => openFilterWindow('<'), text: 'Less Than...' },
-          { onClick: () => openFilterWindow('<='), text: 'Less Than Or Equal To...' },
+          { onClick: () => setFilter(''), text: 'Clear Filter', id: 'filter.clearFilter' },
+          { onClick: () => filterMultipleValues(), text: 'Filter multiple values', id: 'filter.multipleValues' },
+          { onClick: () => openFilterWindow('='), text: 'Equals...', id: 'filter.equals' },
+          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...', id: 'filter.notEquals' },
+          { onClick: () => setFilter('NULL'), text: 'Is Null', id: 'filter.isNull' },
+          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null', id: 'filter.isNotNull' },
+          { onClick: () => openFilterWindow('>'), text: 'Greater Than...', id: 'filter.greaterThan' },
+          {
+            onClick: () => openFilterWindow('>='),
+            text: 'Greater Than Or Equal To...',
+            id: 'filter.greaterThanOrEqual',
+          },
+          { onClick: () => openFilterWindow('<'), text: 'Less Than...', id: 'filter.lessThan' },
+          { onClick: () => openFilterWindow('<='), text: 'Less Than Or Equal To...', id: 'filter.lessThanOrEqual' },
 
           { divider: true },
 
-          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...' },
-          { onClick: () => openFilterWindow('sqlRight'), text: 'SQL condition - right side ...' },
+          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...', id: 'filter.sql' },
+          {
+            onClick: () => openFilterWindow('sqlRight'),
+            text: 'SQL condition - right side ...',
+            id: 'filter.sqlRight',
+          },
         ];
       case 'logical':
         return [
-          { onClick: () => setFilter(''), text: 'Clear Filter' },
-          { onClick: () => filterMultipleValues(), text: 'Filter multiple values' },
-          { onClick: () => setFilter('NULL'), text: 'Is Null' },
-          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null' },
-          { onClick: () => setFilter('TRUE'), text: 'Is True' },
-          { onClick: () => setFilter('FALSE'), text: 'Is False' },
-          { onClick: () => setFilter('TRUE, NULL'), text: 'Is True or NULL' },
-          { onClick: () => setFilter('FALSE, NULL'), text: 'Is False or NULL' },
+          { onClick: () => setFilter(''), text: 'Clear Filter', id: 'filter.clear' },
+          { onClick: () => filterMultipleValues(), text: 'Filter multiple values', id: 'filter.multipleValues' },
+          { onClick: () => setFilter('NULL'), text: 'Is Null', id: 'filter.isNull' },
+          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null', id: 'filter.isNotNull' },
+          { onClick: () => setFilter('TRUE'), text: 'Is True', id: 'filter.isTrue' },
+          { onClick: () => setFilter('FALSE'), text: 'Is False', id: 'filter.isFalse' },
+          { onClick: () => setFilter('TRUE, NULL'), text: 'Is True or NULL', id: 'filter.isTrueOrNull' },
+          { onClick: () => setFilter('FALSE, NULL'), text: 'Is False or NULL', id: 'filter.isFalseOrNull' },
 
           { divider: true },
 
-          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...' },
-          { onClick: () => openFilterWindow('sqlRight'), text: 'SQL condition - right side ...' },
+          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...', id: 'filter.sql' },
+          {
+            onClick: () => openFilterWindow('sqlRight'),
+            text: 'SQL condition - right side ...',
+            id: 'filter.sqlRight',
+          },
         ];
       case 'datetime':
         return [
-          { onClick: () => setFilter(''), text: 'Clear Filter' },
-          { onClick: () => filterMultipleValues(), text: 'Filter multiple values' },
-          { onClick: () => setFilter('NULL'), text: 'Is Null' },
-          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null' },
+          { onClick: () => setFilter(''), text: 'Clear Filter', id: 'filter.clear' },
+          { onClick: () => filterMultipleValues(), text: 'Filter multiple values', id: 'filter.multipleValues' },
+          { onClick: () => setFilter('NULL'), text: 'Is Null', id: 'filter.isNull' },
+          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null', id: 'filter.isNotNull' },
 
           { divider: true },
 
-          { onClick: () => openFilterWindow('<='), text: 'Before...' },
-          { onClick: () => openFilterWindow('>='), text: 'After...' },
-          { onClick: () => openFilterWindow('>=;<='), text: 'Between...' },
+          { onClick: () => openFilterWindow('<='), text: 'Before...', id: 'filter.before' },
+          { onClick: () => openFilterWindow('>='), text: 'After...', id: 'filter.after' },
+          { onClick: () => openFilterWindow('>=;<='), text: 'Between...', id: 'filter.between' },
 
           { divider: true },
 
-          { onClick: () => setFilter('TOMORROW'), text: 'Tomorrow' },
-          { onClick: () => setFilter('TODAY'), text: 'Today' },
-          { onClick: () => setFilter('YESTERDAY'), text: 'Yesterday' },
+          { onClick: () => setFilter('TOMORROW'), text: 'Tomorrow', id: 'filter.tomorrow' },
+          { onClick: () => setFilter('TODAY'), text: 'Today', id: 'filter.today' },
+          { onClick: () => setFilter('YESTERDAY'), text: 'Yesterday', id: 'filter.yesterday' },
 
           { divider: true },
 
-          { onClick: () => setFilter('NEXT WEEK'), text: 'Next Week' },
-          { onClick: () => setFilter('THIS WEEK'), text: 'This Week' },
-          { onClick: () => setFilter('LAST WEEK'), text: 'Last Week' },
+          { onClick: () => setFilter('NEXT WEEK'), text: 'Next Week', id: 'filter.nextWeek' },
+          { onClick: () => setFilter('THIS WEEK'), text: 'This Week', id: 'filter.thisWeek' },
+          { onClick: () => setFilter('LAST WEEK'), text: 'Last Week', id: 'filter.lastWeek' },
 
           { divider: true },
 
-          { onClick: () => setFilter('NEXT MONTH'), text: 'Next Month' },
-          { onClick: () => setFilter('THIS MONTH'), text: 'This Month' },
-          { onClick: () => setFilter('LAST MONTH'), text: 'Last Month' },
+          { onClick: () => setFilter('NEXT MONTH'), text: 'Next Month', id: 'filter.nextMonth' },
+          { onClick: () => setFilter('THIS MONTH'), text: 'This Month', id: 'filter.thisMonth' },
+          { onClick: () => setFilter('LAST MONTH'), text: 'Last Month', id: 'filter.lastMonth' },
 
           { divider: true },
 
-          { onClick: () => setFilter('NEXT YEAR'), text: 'Next Year' },
-          { onClick: () => setFilter('THIS YEAR'), text: 'This Year' },
-          { onClick: () => setFilter('LAST YEAR'), text: 'Last Year' },
+          { onClick: () => setFilter('NEXT YEAR'), text: 'Next Year', id: 'filter.nextYear' },
+          { onClick: () => setFilter('THIS YEAR'), text: 'This Year', id: 'filter.thisYear' },
+          { onClick: () => setFilter('LAST YEAR'), text: 'Last Year', id: 'filter.lastYear' },
 
           { divider: true },
 
-          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...' },
-          { onClick: () => openFilterWindow('sqlRight'), text: 'SQL condition - right side ...' },
+          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...', id: 'filter.sql' },
+          {
+            onClick: () => openFilterWindow('sqlRight'),
+            text: 'SQL condition - right side ...',
+            id: 'filter.sqlRight',
+          },
         ];
       case 'string':
         return [
-          { onClick: () => setFilter(''), text: 'Clear Filter' },
-          { onClick: () => filterMultipleValues(), text: 'Filter multiple values' },
+          { onClick: () => setFilter(''), text: 'Clear Filter', id: 'filter.clearFilter', id: 'filter.clear' },
+          { onClick: () => filterMultipleValues(), text: 'Filter multiple values', id: 'filter.multipleValues' },
 
-          { onClick: () => openFilterWindow('='), text: 'Equals...' },
-          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...' },
-          { onClick: () => setFilter('NULL'), text: 'Is Null' },
-          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null' },
-          { onClick: () => setFilter('EMPTY, NULL'), text: 'Is Empty Or Null' },
-          { onClick: () => setFilter('NOT EMPTY NOT NULL'), text: 'Has Not Empty Value' },
-
-          { divider: true },
-
-          { onClick: () => openFilterWindow('+'), text: 'Contains...' },
-          { onClick: () => openFilterWindow('~'), text: 'Does Not Contain...' },
-          { onClick: () => openFilterWindow('^'), text: 'Begins With...' },
-          { onClick: () => openFilterWindow('!^'), text: 'Does Not Begin With...' },
-          { onClick: () => openFilterWindow('$'), text: 'Ends With...' },
-          { onClick: () => openFilterWindow('!$'), text: 'Does Not End With...' },
+          { onClick: () => openFilterWindow('='), text: 'Equals...', id: 'filter.equals' },
+          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...', id: 'filter.notEquals' },
+          { onClick: () => setFilter('NULL'), text: 'Is Null', id: 'filter.isNull' },
+          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null', id: 'filter.isNotNull' },
+          { onClick: () => setFilter('EMPTY, NULL'), text: 'Is Empty Or Null', id: 'filter.isEmptyOrNull' },
+          { onClick: () => setFilter('NOT EMPTY NOT NULL'), text: 'Has Not Empty Value', id: 'filter.notEmptyNotNull' },
 
           { divider: true },
 
-          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...' },
-          { onClick: () => openFilterWindow('sqlRight'), text: 'SQL condition - right side ...' },
+          { onClick: () => openFilterWindow('+'), text: 'Contains...', id: 'filter.contains' },
+          { onClick: () => openFilterWindow('~'), text: 'Does Not Contain...', id: 'filter.notContain' },
+          { onClick: () => openFilterWindow('^'), text: 'Begins With...', id: 'filter.beginsWith' },
+          { onClick: () => openFilterWindow('!^'), text: 'Does Not Begin With...', id: 'filter.notBeginWith' },
+          { onClick: () => openFilterWindow('$'), text: 'Ends With...', id: 'filter.endsWith' },
+          { onClick: () => openFilterWindow('!$'), text: 'Does Not End With...', id: 'filter.notEndWith' },
+
+          { divider: true },
+
+          { onClick: () => openFilterWindow('sql'), text: 'SQL condition ...', id: 'filter.sql' },
+          {
+            onClick: () => openFilterWindow('sqlRight'),
+            text: 'SQL condition - right side ...',
+            id: 'filter.sqlRight',
+          },
         ];
       case 'mongo':
         return [
-          { onClick: () => setFilter(''), text: 'Clear Filter' },
-          { onClick: () => filterMultipleValues(), text: 'Filter multiple values' },
-          { onClick: () => openFilterWindow('='), text: 'Equals...' },
-          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...' },
-          { onClick: () => setFilter('EXISTS'), text: 'Field exists' },
-          { onClick: () => setFilter('NOT EXISTS'), text: 'Field does not exist' },
-          { onClick: () => setFilter('NOT EMPTY ARRAY'), text: 'Array is not empty' },
-          { onClick: () => setFilter('EMPTY ARRAY'), text: 'Array is empty' },
-          { onClick: () => openFilterWindow('>'), text: 'Greater Than...' },
-          { onClick: () => openFilterWindow('>='), text: 'Greater Than Or Equal To...' },
-          { onClick: () => openFilterWindow('<'), text: 'Less Than...' },
-          { onClick: () => openFilterWindow('<='), text: 'Less Than Or Equal To...' },
+          { onClick: () => setFilter(''), text: 'Clear Filter', id: 'filter.clear' },
+          { onClick: () => filterMultipleValues(), text: 'Filter multiple values', id: 'filter.multipleValues' },
+          { onClick: () => openFilterWindow('='), text: 'Equals...', id: 'filter.equals' },
+          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...', id: 'filter.notEquals' },
+          { onClick: () => setFilter('EXISTS'), text: 'Field exists', id: 'filter.fieldExists' },
+          { onClick: () => setFilter('NOT EXISTS'), text: 'Field does not exist', id: 'filter.notExists' },
+          { onClick: () => setFilter('NOT EMPTY ARRAY'), text: 'Array is not empty', id: 'filter.notEmptyArray' },
+          { onClick: () => setFilter('EMPTY ARRAY'), text: 'Array is empty', id: 'filter.emptyArray' },
+          { onClick: () => openFilterWindow('>'), text: 'Greater Than...', id: 'filter.greaterThan' },
+          {
+            onClick: () => openFilterWindow('>='),
+            text: 'Greater Than Or Equal To...',
+            id: 'filter.greaterThanOrEqual',
+          },
+          { onClick: () => openFilterWindow('<'), text: 'Less Than...', id: 'filter.lessThan' },
+          { onClick: () => openFilterWindow('<='), text: 'Less Than Or Equal To...', id: 'filter.lessThanOrEqual' },
           { divider: true },
-          { onClick: () => openFilterWindow('+'), text: 'Contains...' },
-          { onClick: () => openFilterWindow('~'), text: 'Does Not Contain...' },
-          { onClick: () => openFilterWindow('^'), text: 'Begins With...' },
-          { onClick: () => openFilterWindow('!^'), text: 'Does Not Begin With...' },
-          { onClick: () => openFilterWindow('$'), text: 'Ends With...' },
-          { onClick: () => openFilterWindow('!$'), text: 'Does Not End With...' },
+          { onClick: () => openFilterWindow('+'), text: 'Contains...', id: 'filter.contains' },
+          { onClick: () => openFilterWindow('~'), text: 'Does Not Contain...', id: 'filter.notContain' },
+          { onClick: () => openFilterWindow('^'), text: 'Begins With...', id: 'filter.beginsWith' },
+          { onClick: () => openFilterWindow('!^'), text: 'Does Not Begin With...', id: 'filter.notBeginWith' },
+          { onClick: () => openFilterWindow('$'), text: 'Ends With...', id: 'filter.endsWith' },
+          { onClick: () => openFilterWindow('!$'), text: 'Does Not End With...', id: 'filter.notEndWith' },
           { divider: true },
-          { onClick: () => setFilter('TRUE'), text: 'Is True' },
-          { onClick: () => setFilter('FALSE'), text: 'Is False' },
+          { onClick: () => setFilter('TRUE'), text: 'Is True', id: 'filter.isTrue' },
+          { onClick: () => setFilter('FALSE'), text: 'Is False', id: 'filter.isFalse' },
         ];
       case 'eval':
         return [
-          { onClick: () => setFilter(''), text: 'Clear Filter' },
-          { onClick: () => filterMultipleValues(), text: 'Filter multiple values' },
+          { onClick: () => setFilter(''), text: 'Clear Filter', id: 'filter.clear' },
+          { onClick: () => filterMultipleValues(), text: 'Filter multiple values', id: 'filter.multipleValues' },
 
-          { onClick: () => openFilterWindow('='), text: 'Equals...' },
-          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...' },
-          { onClick: () => setFilter('NULL'), text: 'Is Null' },
-          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null' },
-
-          { divider: true },
-
-          { onClick: () => openFilterWindow('>'), text: 'Greater Than...' },
-          { onClick: () => openFilterWindow('>='), text: 'Greater Than Or Equal To...' },
-          { onClick: () => openFilterWindow('<'), text: 'Less Than...' },
-          { onClick: () => openFilterWindow('<='), text: 'Less Than Or Equal To...' },
+          { onClick: () => openFilterWindow('='), text: 'Equals...', id: 'filter.equals' },
+          { onClick: () => openFilterWindow('<>'), text: 'Does Not Equal...', id: 'filter.notEquals' },
+          { onClick: () => setFilter('NULL'), text: 'Is Null', id: 'filter.isNull' },
+          { onClick: () => setFilter('NOT NULL'), text: 'Is Not Null', id: 'filter.isNotNull' },
 
           { divider: true },
 
-          { onClick: () => openFilterWindow('+'), text: 'Contains...' },
-          { onClick: () => openFilterWindow('~'), text: 'Does Not Contain...' },
-          { onClick: () => openFilterWindow('^'), text: 'Begins With...' },
-          { onClick: () => openFilterWindow('!^'), text: 'Does Not Begin With...' },
-          { onClick: () => openFilterWindow('$'), text: 'Ends With...' },
-          { onClick: () => openFilterWindow('!$'), text: 'Does Not End With...' },
+          { onClick: () => openFilterWindow('>'), text: 'Greater Than...', id: 'filter.greaterThan' },
+          {
+            onClick: () => openFilterWindow('>='),
+            text: 'Greater Than Or Equal To...',
+            id: 'filter.greaterThanOrEqual',
+          },
+          { onClick: () => openFilterWindow('<'), text: 'Less Than...', id: 'filter.lessThan' },
+          { onClick: () => openFilterWindow('<='), text: 'Less Than Or Equal To...', id: 'filter.lessThanOrEqual' },
+
+          { divider: true },
+
+          { onClick: () => openFilterWindow('+'), text: 'Contains...', id: 'filter.contains' },
+          { onClick: () => openFilterWindow('~'), text: 'Does Not Contain...', id: 'filter.notContain' },
+          { onClick: () => openFilterWindow('^'), text: 'Begins With...', id: 'filter.beginsWith' },
+          { onClick: () => openFilterWindow('!^'), text: 'Does Not Begin With...', id: 'filter.notBeginWith' },
+          { onClick: () => openFilterWindow('$'), text: 'Ends With...', id: 'filter.endsWith' },
+          { onClick: () => openFilterWindow('!$'), text: 'Does Not End With...', id: 'filter.notEndWith' },
         ];
     }
 

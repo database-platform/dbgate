@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormButton from '../forms/FormButton.svelte';
 
   import FormProvider from '../forms/FormProvider.svelte';
@@ -42,10 +43,10 @@
 
 <FormProvider initialValues={{ condition1, condition2: '=', joinOperator: ' ' }} template={FormFieldTemplateLarge}>
   <ModalBase {...$$restProps}>
-    <div slot="header">Set filter</div>
+    <div slot="header">{$t('modal.setFilter.header')}</div>
 
     <div class="largeFormMarker">
-      <div class="row">Show rows where</div>
+      <div class="row">{$t('modal.setFilter.tip')}</div>
       <div class="row">
         <div class="col-6 mr-1">
           <SetFilterModal_Select {filterType} name="condition1" />
@@ -79,8 +80,8 @@
     </div>
 
     <div slot="footer">
-      <FormSubmit value="OK" on:click={handleOk} />
-      <FormButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormSubmit value={$t('common.ok')} on:click={handleOk} />
+      <FormButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
     </div>
   </ModalBase>
 </FormProvider>

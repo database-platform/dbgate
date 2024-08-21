@@ -85,7 +85,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -149,6 +149,7 @@ module.exports = {
     const msgid = crypto.randomUUID();
     const promise = new Promise((resolve, reject) => {
       this.requests[msgid] = [resolve, reject];
+      console.log('sendRequest: ', this.requests);
       try {
         conn.subprocess.send({ msgid, ...message });
       } catch (err) {
@@ -241,6 +242,8 @@ module.exports = {
       }
     }
     const opened = await this.ensureOpened(conid, database);
+    // console.log('sqlSelect opened: ', opened);
+    console.log('sqlSelect closed: ', this.closed);
     const res = await this.sendRequest(opened, { msgtype: 'sqlSelect', select });
     if (select.range && res.rows && res.rows.length !== 0) {
       const tname = select.from.name.pureName;

@@ -4,11 +4,29 @@
     "ok": "Ok",
     "cancel": "Cancel",
     "close": "Close",
+    "closeTabs": "Close tabs",
     "refresh": "Refresh",
     "openScript": "Open script",
     "generateScript": "Generate script",
     "stop": "Stop",
-    "run": "Run"
+    "run": "Run",
+    "export": "Export",
+    "execute": "Execute"
+  },
+  "button": {
+    "reset": {
+      "filter": "Reset filter",
+      "view": "Reset view"
+    },
+    "add": {
+      "document": "Add document",
+      "add": "Add"
+    },
+    "open": {
+      "query": "Open query"
+    },
+    "hide": "Hide",
+    "show": "Show"
   },
   "command": {
     "about": {
@@ -329,6 +347,64 @@
       "saveAs": "Save As",
       "saveToDisk": "Save to disk",
       "toggleComment": "Toggle comment"
+    },
+    "filter": {
+      "clear": "Clear filter",
+      "multipleValues": "Filter multiple values",
+      "equals": "=",
+      "notEquals": "<>",
+      "isNull": "Is Null",
+      "isNotNull": "Is Not Null",
+      "greaterThan": ">",
+      "greaterThanOrEqual": ">=",
+      "lessThan": "<",
+      "lessThanOrEqual": "<=",
+      "sql": "SQL condition",
+      "sqlRight": "SQL condition - right side",
+      "isTrue": "Is True",
+      "isFalse": "Is False",
+      "isTrueOrNull": "Is True or NULL",
+      "isFalseOrNull": "Is False or NULL",
+      "before": "Before",
+      "after": "After",
+      "between": "Between",
+      "tomorrow": "Tomorrow",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "nextWeek": "Next Week",
+      "thisWeek": "This Week",
+      "LastWeek": "Last Week",
+      "nextMonth": "Next Month",
+      "thisMonth": "This Month",
+      "lastMonth": "Last Month",
+      "nextYear": "Next Year",
+      "thisYear": "This Year",
+      "lastYear": "Last Year",
+      "isEmptyOrNull": "Is Empty Or Null",
+      "notEmptyNotNull": "Has Not Empty Value",
+      "contains": "Contains",
+      "notContain": "Does Not Contain",
+      "beginsWith": "Begins With",
+      "notBeginWith": "Does Not Begin With",
+      "endsWith": "Ends With",
+      "notEndWith": "Does Not End With",
+      "fieldExists": "Field exists",
+      "notExists": "Field does not exist",
+      "notEmptyArray": "Array is not empty",
+      "emptyArray": "Array is empty",
+      "isOneOfLine": "Is one of line",
+      "isNotOneOfLine": "Is not one of line"
+    },
+    "copy": {
+      "withHeaders": "Copy with headers",
+      "withOutHeaders": "Copy without headers",
+      "csv": "Copy as CSV",
+      "json": "Copy as JSON",
+      "jsonLines": "Copy as JSON lines/NDJSON",
+      "yaml": "Copy as YAML",
+      "sqlInserts": "Copy as SQL INSERTs",
+      "sqlUpdates": "Copy as SQL UPDATEs",
+      "mongoInserts": "Copy as Mongo INSERTs"
     }
   },
   "contextMenu": {
@@ -400,6 +476,10 @@
       "generateScriptExport": "Export #",
       "compare": "Compare",
       "diagram": "Diagram #"
+    },
+    "tableData": {
+      "openStructure": "Open structure",
+      "viewColumns": "View columns"
     }
   },
   "modal": {
@@ -411,6 +491,17 @@
       "header": "Create collection",
       "renameHeader": "Rename collection",
       "label": "New collection name"
+    },
+    "setFilter": {
+      "header": "Set filter",
+      "tip": "Show rows where"
+    },
+    "filterMultipleValues": {
+      "header": "Filter multiple values"
+    },
+    "closeTabs": {
+      "header": "Confirm close tabs",
+      "tip": "Following files are modified, really close tabs? After closing, you could reopen them in history"
     }
   },
   "widgets": {
@@ -435,12 +526,43 @@
         "New procedure": "New procedure",
         "New function": "New function"
       }
+    },
+    "dataGrid": {
+      "filters": "Filters",
+      "columns": "Columns",
+      "macros": "Macros"
+    },
+    "column": {
+      "search": "Search columns"
+    },
+    "formView": {
+      "nameFilter": "Column name filter",
+      "multiFilter": "Multi column filter"
+    },
+    "macro": {
+      "search": "Search macros",
+      "tab": {
+        "macro": "Macros detail"
+      },
+      "info": {
+        "execute": "Execute",
+        "parameters": "Parameters",
+        "parametersDescription": "This macro has no parameters",
+        "description": "Description"
+      }
     }
   },
   "message": {
+    "loading": "Loading...",
     "dropDatabase": "Really drop database {name}? All opened sessions with this database will be forcefully closed.",
     "archiveFolder": "Saved to archive {archiveFolder}",
     "dropCollection": "Really drop collection {pureName}?",
-    "createCopyCollection": "Really create collection copy named {newName}"
+    "createCopyCollection": "Really create collection copy named {newName}",
+    "dataGridCore": {
+      "structure": "Waiting for structure",
+      "structureError": "No structure was loaded, probably table doesn't exist in current database",
+      "rowEditableError": "No rows loaded, check filter or add new documents. You could copy documents from ohter collections/tables with Copy advanved/Copy as JSON command.",
+      "rowError": "No rows loaded!"
+    }
   }
 }

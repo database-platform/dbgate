@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import { getContext } from 'svelte';
   import FontIcon from '../icons/FontIcon.svelte';
   import ToolbarButton from '../buttons/ToolbarButton.svelte';
@@ -16,8 +17,8 @@
     </div>
   </div>
   <div class="buttons">
-    <ToolbarButton icon="icon run" on:click={onExecute}>Execute</ToolbarButton>
-    <ToolbarButton icon="icon close" on:click={() => ($selectedMacro = null)}>Close</ToolbarButton>
+    <ToolbarButton icon="icon run" on:click={onExecute}>{$t('common.execute')}</ToolbarButton>
+    <ToolbarButton icon="icon close" on:click={() => ($selectedMacro = null)}>{$t('common.close')}</ToolbarButton>
   </div>
 </div>
 

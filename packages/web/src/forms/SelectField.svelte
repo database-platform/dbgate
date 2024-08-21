@@ -1,5 +1,5 @@
 <script lang="ts">
-  import _, { map } from 'lodash';
+  import _ from 'lodash';
   import SvelteSelect from 'svelte-select';
   import { createEventDispatcher } from 'svelte';
 

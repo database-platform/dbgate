@@ -19,13 +19,13 @@
 </script>
 
 <script lang="ts">
-  import getElectron from '../utility/getElectron';
+  // import getElectron from '../utility/getElectron';
   import ToolStripCommandButton from './ToolStripCommandButton.svelte';
   import ToolStripDropDownButton from './ToolStripDropDownButton.svelte';
 
   export let quickExportHandlerRef = null;
   export let command = 'sqlDataGrid.export';
-  export let label = 'Export';
+  export let label = 'common.export';
 
   function getExportMenu() {
     return [

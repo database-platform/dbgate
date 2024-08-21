@@ -2,7 +2,7 @@
   import { getIntSettingsValue } from '../settings/settingsTools';
 
   import createRef from '../utility/createRef';
-  import { useSettings } from '../utility/metadataLoaders';
+  // import { useSettings } from '../utility/metadataLoaders';
 
   import DataGridCore from './DataGridCore.svelte';
 
@@ -77,7 +77,8 @@
         isLoadedAll = false;
       }
 
-      console.log(`loadedRows: ${loadedRows.length}, nextRows: ${nextRows.length} `);
+      // console.log(`loadedRows: ${loadedRows.length}, nextRows: ${nextRows.length} `);
+
       //   const loadedInfo = {
       //     loadedRows: [...loadedRows, ...nextRows],
       //     loadedTime,

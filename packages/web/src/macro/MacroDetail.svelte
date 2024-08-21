@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import { getContext } from 'svelte';
 
   import TabControl from '../elements/TabControl.svelte';
@@ -17,7 +18,7 @@
   <TabControl
     tabs={[
       {
-        label: 'Macro detail',
+        label: $t('widgets.macro.tab.macro'),
         component: MacroInfoTab,
         props: {
           onExecute,

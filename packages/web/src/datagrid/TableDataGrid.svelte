@@ -19,7 +19,7 @@
     useConnectionList,
     useDatabaseInfo,
     useDatabaseServerVersion,
-    useServerVersion,
+    // useServerVersion,
     useUsedApps,
   } from '../utility/metadataLoaders';
 

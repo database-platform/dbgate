@@ -18,11 +18,11 @@ export default function contextMenu(node, items: any = []) {
     await invalidateCommands();
 
     if (items) {
-      const rootStyle = window.document.documentElement.style;
-      const microLeft = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-left')) || 0;
-      const microTop = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-top')) || 0;
-      const left = e.pageX - microLeft;
-      const top = e.pageY - microTop;
+      // const rootStyle = window.document.documentElement.style;
+      // const microLeft = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-left')) || 0;
+      // const microTop = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-top')) || 0;
+      const left = e.pageX;
+      const top = e.pageY;
       currentDropDownMenu.set({ left, top, items, targetElement: e.target });
     }
   };
@@ -98,6 +98,7 @@ function mapItem(item, commands) {
     const command = commands[item.command];
     if (command) {
       return {
+        id: command.id,
         text: item.text || command.menuName || command.toolbarName || command.name,
         keyText: command.keyText || command.keyTextFromGroup || command.disableHandleKeyText,
         onClick: () => {

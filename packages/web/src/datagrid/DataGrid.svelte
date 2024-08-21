@@ -65,6 +65,7 @@
   import ReferenceManager from './ReferenceManager.svelte';
   import createActivator, { getActiveComponent } from '../utility/createActivator';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import registerCommand from '../commands/registerCommand';
   import { registerMenu } from '../utility/contextMenu';
   import { getLocalStorage, setLocalStorage } from '../utility/storageCache';
@@ -90,7 +91,7 @@
   export let hasMultiColumnFilter = false;
   export let setLoadedRows = null;
 
-  let loadedRows;
+  // let loadedRows;
 
   export const activator = createActivator('DataGrid', false);
 
@@ -166,12 +167,12 @@
 >
   <div class="left" slot="1">
     <WidgetColumnBar>
-      <WidgetColumnBarItem title="Columns" name="columns" height="45%" skip={isFormView}>
+      <WidgetColumnBarItem title={$t('widgets.dataGrid.columns')} name="columns" height="45%" skip={isFormView}>
         <ColumnManager {...$$props} {managerSize} {isJsonView} {isDynamicStructure} bind:this={domColumnManager} />
       </WidgetColumnBarItem>
 
       <WidgetColumnBarItem
-        title="Filters"
+        title={$t('widgets.dataGrid.filters')}
         name="filters"
         height={showReferences && display?.hasReferences && !isFormView ? '15%' : '30%'}
         skip={!display?.filterable}
@@ -198,7 +199,12 @@
         <ReferenceManager {...$$props} {managerSize} />
       </WidgetColumnBarItem>
 
-      <WidgetColumnBarItem title="Macros" name="macros" skip={!showMacros} collapsed={!expandMacros}>
+      <WidgetColumnBarItem
+        title={$t('widgets.dataGrid.macros')}
+        name="macros"
+        skip={!showMacros}
+        collapsed={!expandMacros}
+      >
         <MacroManager {...$$props} {managerSize} />
       </WidgetColumnBarItem>
     </WidgetColumnBar>

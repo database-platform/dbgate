@@ -172,46 +172,55 @@ export function copyRowsToClipboard(format, columns, rows, options) {
 
 export const copyRowsFormatDefs = {
   textWithHeaders: {
+    id: 'copy.withHeaders',
     label: 'Copy with headers',
     name: 'With headers',
     formatter: clipboardTextFormatter('\t', true),
   },
   textWithoutHeaders: {
+    id: 'copy.withOutHeaders',
     label: 'Copy without headers',
     name: 'Without headers',
     formatter: clipboardTextFormatter('\t', false),
   },
   csv: {
+    id: 'copy.csv',
     label: 'Copy as CSV',
     name: 'CSV',
     formatter: clipboardTextFormatter(',', true),
   },
   json: {
+    id: 'copy.json',
     label: 'Copy as JSON',
     name: 'JSON',
     formatter: clipboardJsonFormatter(),
   },
   jsonLines: {
+    id: 'copy.jsonLines',
     label: 'Copy as JSON lines/NDJSON',
     name: 'JSON lines/NDJSON',
     formatter: clipboardJsonLinesFormatter(),
   },
   yaml: {
+    id: 'copy.yaml',
     label: 'Copy as YAML',
     name: 'YAML',
     formatter: clipboardYamlFormatter(),
   },
   inserts: {
+    id: 'copy.sqlInserts',
     label: 'Copy as SQL INSERTs',
     name: 'SQL INSERTs',
     formatter: clipboardInsertsFormatter(),
   },
   updates: {
+    id: 'copy.sqlUpdates',
     label: 'Copy as SQL UPDATEs',
     name: 'SQL UPDATEs',
     formatter: clipboardUpdatesFormatter(),
   },
   mongoInsert: {
+    id: 'copy.mongoInserts',
     label: 'Copy as Mongo INSERTs',
     name: 'Mongo INSERTs',
     formatter: clipboardMongoInsertFormatter(),

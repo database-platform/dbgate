@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   import FormProvider from '../forms/FormProvider.svelte';
@@ -14,10 +15,10 @@
 
 <FormProvider>
   <ModalBase {...$$restProps}>
-    <svelte:fragment slot="header">Confirm close tabs</svelte:fragment>
+    <svelte:fragment slot="header">{$t('modal.closeTabs.header')}</svelte:fragment>
 
     <div>
-      Following files are modified, really close tabs? After closing, you could reopen them in history
+      {$t('modal.closeTabs.tip')}
       <FontIcon icon="icon history" />
       widget
     </div>
@@ -28,7 +29,7 @@
 
     <svelte:fragment slot="footer">
       <FormSubmit
-        value="Close tabs"
+        value={$t('common.closeTabs')}
         on:click={() => {
           closeCurrentModal();
           onConfirm();
@@ -36,7 +37,7 @@
       />
       <FormStyledButton
         type="button"
-        value="Cancel"
+        value={$t('common.cancel')}
         on:click={() => {
           closeCurrentModal();
           onCancel();

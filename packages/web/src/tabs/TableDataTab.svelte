@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   const getCurrentEditor = () => getActiveComponent('TableDataTab');
 
-  const INTERVALS = [5, 10, 15, 13, 60];
+  const INTERVALS = [5, 10, 15, 30, 60];
 
   registerCommand({
     id: 'tableData.save',
@@ -63,6 +63,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   // import App from '../App.svelte';
   import TableDataGrid from '../datagrid/TableDataGrid.svelte';
   import useGridConfig from '../utility/useGridConfig';
@@ -301,12 +302,12 @@
             objectTypeField: 'tables',
           },
         });
-      }}>Open structure</ToolStripButton
+      }}>{$t('tab.tableData.openStructure')}</ToolStripButton
     >
 
     <ToolStripButton
       icon={$collapsedLeftColumnStore ? 'icon columns-outline' : 'icon columns'}
-      on:click={() => collapsedLeftColumnStore.update(x => !x)}>View columns</ToolStripButton
+      on:click={() => collapsedLeftColumnStore.update(x => !x)}>{$t('tab.tableData.viewColumns')}</ToolStripButton
     >
   </svelte:fragment>
 </ToolStripContainer>

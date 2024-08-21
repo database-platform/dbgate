@@ -5,8 +5,8 @@
     const rootStyle = window.document.documentElement.style;
     const microLeft = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-left')) || 0;
     const microTop = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-top')) || 0;
-    var top = box.top + window.pageYOffset - de.clientTop - microTop;
-    var left = box.left + window.pageXOffset - de.clientLeft - microLeft;
+    var top = box.top + window.scrollY - de.clientTop - microTop;
+    var left = box.left + window.scrollX - de.clientLeft - microLeft;
 
     if (side == 'right') return { top: top, left: left + box.width };
     return { top: top, left: left };
@@ -108,7 +108,10 @@
     dispatchClose();
   };
 
-  const getI18n = text => {
+  const getI18n = (text, item) => {
+    if (item.id) {
+      return $t(`command.${item.id}`);
+    }
     if (text && text.indexOf('__') !== -1) {
       return $t(text.split('__')[1]);
     }
@@ -136,7 +139,7 @@
         }}
       >
         <a on:click={e => handleClick(e, item)} class:disabled={item.disabled}>
-          {getI18n(item.text || item.label)}
+          {getI18n(item.text || item.label, item)}
           {#if item.keyText}
             <span class="keyText">{formatKeyText(item.keyText)}</span>
           {/if}

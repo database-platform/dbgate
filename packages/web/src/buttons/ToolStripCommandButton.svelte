@@ -20,7 +20,6 @@
   export let buttonLabel = null;
 
   const getI18n = (id, text) => {
-    console.log(id, text);
     if (id) {
       return $t(`command.${id}`);
     }

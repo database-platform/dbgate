@@ -1,5 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import InlineButton from '../buttons/InlineButton.svelte';
   import DataFilterControl from '../datagrid/DataFilterControl.svelte';
 
@@ -25,7 +26,7 @@
 
   export let hasMultiColumnFilter;
 
-  $: baseTable = display?.baseTable;
+  // $: baseTable = display?.baseTable;
   $: formFilterColumns = display?.config?.formFilterColumns;
   $: filters = display?.config?.filters;
   $: multiColumnFilter = display?.config?.multiColumnFilter;
@@ -35,7 +36,7 @@
 
 {#if isFormView}
   <div class="m-1">
-    <div>Column name filter</div>
+    <div>{$t('widgets.formView.nameFilter')}</div>
     <div class="flex">
       <input
         type="text"
@@ -62,7 +63,7 @@
 {#if hasMultiColumnFilter}
   <div class="m-1">
     <div class="space-between">
-      <span>Multi column filter</span>
+      <span>{$t('widgets.formView.multiFilter')}</span>
       {#if multiColumnFilter}
         <InlineButton
           square
