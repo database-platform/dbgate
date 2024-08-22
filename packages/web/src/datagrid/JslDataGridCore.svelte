@@ -47,7 +47,7 @@
   import registerCommand from '../commands/registerCommand';
   import ImportExportModal from '../modals/ImportExportModal.svelte';
   import { showModal } from '../modals/modalTools';
-  import { extensions } from '../stores';
+  // import { extensions } from '../stores';
   import { apiCall, apiOff, apiOn } from '../utility/api';
 
   import { registerMenu } from '../utility/contextMenu';
@@ -58,7 +58,7 @@
   import ChangeSetGrider from './ChangeSetGrider';
 
   import LoadingDataGridCore from './LoadingDataGridCore.svelte';
-  import RowsArrayGrider from './RowsArrayGrider';
+  // import RowsArrayGrider from './RowsArrayGrider';
 
   export let jslid;
   export let display;

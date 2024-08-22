@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormDropDownTextField from '../forms/FormDropDownTextField.svelte';
   import { getFormContext } from '../forms/FormProviderCore.svelte';
 
-  const { values, setFieldValue } = getFormContext();
+  const { setFieldValue } = getFormContext();
 
   $: dataTypes = dialect?.predefinedDataTypes || ['int', 'varchar(250)', 'datetime', 'numeric(10,2)', 'float'];
 
@@ -16,4 +17,4 @@
   export let dialect;
 </script>
 
-<FormDropDownTextField name="dataType" label="Data type" menu={createDataTypesMenu} />
+<FormDropDownTextField name="dataType" label={$t('tab.tableStructure.columns.dataType')} menu={createDataTypesMenu} />

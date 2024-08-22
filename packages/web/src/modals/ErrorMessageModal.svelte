@@ -1,5 +1,6 @@
 <script>
-  import FormStyledButton from '../buttons/FormStyledButton.svelte';
+  // import FormStyledButton from '../buttons/FormStyledButton.svelte';
+  import { t } from 'svelte-i18n';
   import FormProvider from '../forms/FormProvider.svelte';
   import FormSubmit from '../forms/FormSubmit.svelte';
   import FontIcon from '../icons/FontIcon.svelte';
@@ -30,7 +31,7 @@
     {/if}
 
     <div slot="footer">
-      <FormSubmit value="Close" on:click={closeCurrentModal} />
+      <FormSubmit value={$t('common.close')} on:click={closeCurrentModal} />
     </div>
   </ModalBase>
 </FormProvider>

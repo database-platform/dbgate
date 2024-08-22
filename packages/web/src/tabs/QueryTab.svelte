@@ -58,7 +58,7 @@
 <script lang="ts">
   import { getContext, onDestroy, onMount } from 'svelte';
   import sqlFormatter from 'sql-formatter';
-
+  import { t } from 'svelte-i18n';
   import VerticalSplitter from '../elements/VerticalSplitter.svelte';
   import SqlEditor from '../query/SqlEditor.svelte';
   import useEditorData from '../query/useEditorData';
@@ -397,7 +397,7 @@
       {/if}
     </svelte:fragment>
     <svelte:fragment slot="2">
-      <ResultTabs tabs={[{ label: 'Messages', slot: 0 }]} {sessionId} {executeNumber} bind:resultCount>
+      <ResultTabs tabs={[{ label: $t('common.messages'), slot: 0 }]} {sessionId} {executeNumber} bind:resultCount>
         <svelte:fragment slot="0">
           <SocketMessageView
             eventName={sessionId ? `session-info-${sessionId}` : null}
@@ -418,7 +418,7 @@
     <ToolStripSaveButton idPrefix="query" />
     <ToolStripCommandButton command="query.formatCode" />
     {#if resultCount == 1}
-      <ToolStripExportButton command="jslTableGrid.export" {quickExportHandlerRef} label="Export result" />
+      <ToolStripExportButton command="jslTableGrid.export" {quickExportHandlerRef} label={$t('common.exportResult')} />
     {/if}
   </svelte:fragment>
 </ToolStripContainer>

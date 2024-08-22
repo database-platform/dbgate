@@ -1,5 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import FontIcon from '../icons/FontIcon.svelte';
   import Link from './Link.svelte';
   import TableControl from './TableControl.svelte';
@@ -19,7 +20,7 @@
     <div class="header">
       <span class="title mr-1">{title}</span>
       {#if onAddNew}
-        <Link onClick={onAddNew}><FontIcon icon="icon add" /> Add new</Link>
+        <Link onClick={onAddNew}><FontIcon icon="icon add" />{$t('common.addNew')}</Link>
       {/if}
     </div>
     {#if (collection?.length || 0) == 0 && emptyMessage}
@@ -34,7 +35,7 @@
           columns={_.compact([
             !hideDisplayName && {
               fieldName: 'displayName',
-              header: 'Name',
+              header: $t('common.name'),
               slot: -1,
             },
             ...columns,

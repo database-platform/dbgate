@@ -1,14 +1,15 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import CheckableColumnList from '../elements/CheckableColumnList.svelte';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import TableControl from '../elements/TableControl.svelte';
   import FormProvider from '../forms/FormProvider.svelte';
   import FormSubmit from '../forms/FormSubmit.svelte';
-  import TextField from '../forms/TextField.svelte';
-  import analyseQuerySources from '../query/analyseQuerySources';
+  // import TextField from '../forms/TextField.svelte';
+  // import analyseQuerySources from '../query/analyseQuerySources';
   import newQuery from '../query/newQuery';
   import SqlEditor from '../query/SqlEditor.svelte';
-  import keycodes from '../utility/keycodes';
+  // import keycodes from '../utility/keycodes';
 
   import ModalBase from './ModalBase.svelte';
   import { closeCurrentModal } from './modalTools';
@@ -77,11 +78,11 @@
 
 <FormProvider>
   <ModalBase {...$$restProps}>
-    <svelte:fragment slot="header">Generate SQL from data</svelte:fragment>
+    <svelte:fragment slot="header">{$t('modal.generateSql.header')}</svelte:fragment>
 
     <div class="flex mb-3">
       <div class="m-1 col-4">
-        <div class="m-1">Choose query type</div>
+        <div class="m-1">{$t('modal.generateSql.choose')}</div>
 
         <TableControl
           rows={QUERY_TYPES.map(name => ({ name }))}
@@ -94,7 +95,7 @@
       </div>
 
       <div class="m-1 col-4">
-        <div class="m-1">Value columns</div>
+        <div class="m-1">{$t('modal.generateSql.value')}</div>
 
         <CheckableColumnList
           {allColumns}
@@ -104,7 +105,7 @@
       </div>
 
       <div class="m-1 col-4">
-        <div class="m-1">WHERE columns</div>
+        <div class="m-1">{$t('modal.generateSql.where')}</div>
 
         <CheckableColumnList
           {allColumns}
@@ -120,13 +121,13 @@
 
     <svelte:fragment slot="footer">
       <FormSubmit
-        value="OK"
+        value={$t('common.ok')}
         on:click={() => {
           newQuery({ initialData: sqlPreview });
           closeCurrentModal();
         }}
       />
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
     </svelte:fragment>
   </ModalBase>
 </FormProvider>

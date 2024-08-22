@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createGridCache, createGridConfig, JslGridDisplay, runMacro, runMacroOnChangeSet } from 'dbgate-datalib';
+  import { createGridCache, createGridConfig, JslGridDisplay, runMacroOnChangeSet } from 'dbgate-datalib';
   import { generateTablePairingId, processJsonDataUpdateCommands } from 'dbgate-tools';
   import { writable } from 'svelte/store';
   import JslFormView from '../formview/JslFormView.svelte';

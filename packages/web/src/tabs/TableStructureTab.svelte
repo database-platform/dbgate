@@ -37,11 +37,12 @@
   } from 'dbgate-tools';
 
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import registerCommand from '../commands/registerCommand';
 
-  import ColumnLabel from '../elements/ColumnLabel.svelte';
-  import ConstraintLabel from '../elements/ConstraintLabel.svelte';
-  import ForeignKeyObjectListControl from '../elements/ForeignKeyObjectListControl.svelte';
+  // import ColumnLabel from '../elements/ColumnLabel.svelte';
+  // import ConstraintLabel from '../elements/ConstraintLabel.svelte';
+  // import ForeignKeyObjectListControl from '../elements/ForeignKeyObjectListControl.svelte';
 
   import { extensions } from '../stores';
   import useEditorData from '../query/useEditorData';
@@ -55,7 +56,7 @@
   import { showSnackbarSuccess } from '../utility/snackbar';
   import InputTextModal from '../modals/InputTextModal.svelte';
   import { changeTab } from '../utility/common';
-  import StatusBarTabItem from '../widgets/StatusBarTabItem.svelte';
+  // import StatusBarTabItem from '../widgets/StatusBarTabItem.svelte';
   import openNewTab from '../utility/openNewTab';
   import { apiCall } from '../utility/api';
   import ToolStripContainer from '../buttons/ToolStripContainer.svelte';
@@ -80,7 +81,7 @@
   $: connection = useConnectionInfo({ conid });
   $: driver = findEngineDriver($connection, $extensions);
 
-  const { editorState, editorValue, setEditorData, clearEditorData } = useEditorData({ tabid });
+  const { editorValue, setEditorData, clearEditorData } = useEditorData({ tabid });
 
   $: showTable = $editorValue ? $editorValue.current : tableInfoWithPairingId;
 
@@ -93,9 +94,9 @@
       doSave(null);
     } else {
       showModal(InputTextModal, {
-        header: 'Set table name',
+        header: $t('tab.tableStructure.inputModal.header'),
         value: savedName || 'newTable',
-        label: 'Table name',
+        label: $t('tab.tableStructure.inputModal.label'),
         onConfirm: name => {
           savedName = name;
           setEditorData(tbl => ({
@@ -208,7 +209,7 @@
               objectTypeField: 'tables',
             },
           });
-        }}>Open data</ToolStripButton
+        }}>{$t('tab.tableStructure.btn.openData')}</ToolStripButton
       >
     {/if}
   </svelte:fragment>

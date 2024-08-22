@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   import FormTextField from '../forms/FormTextField.svelte';
@@ -24,36 +25,38 @@
 <FormProvider initialValues={fillEditorColumnInfo(columnInfo || {}, tableInfo)}>
   <ModalBase {...$$restProps}>
     <svelte:fragment slot="header"
-      >{columnInfo ? 'Edit column' : `Add column ${(tableInfo?.columns || []).length + 1}`}</svelte:fragment
+      >{columnInfo
+        ? $t('tab.tableStructure.modal.editColumn')
+        : `${$t('tab.tableStructure.modal.addColumn')} ${(tableInfo?.columns || []).length + 1}`}</svelte:fragment
     >
 
-    <FormTextField name="columnName" label="Column name" focused />
+    <FormTextField name="columnName" label={$t('tab.tableStructure.columns.name')} focused />
     <DataTypeEditor dialect={driver?.dialect} />
 
-    <FormCheckboxField name="notNull" label="NOT NULL" />
-    <FormCheckboxField name="isPrimaryKey" label="Is Primary Key" />
-    <FormCheckboxField name="autoIncrement" label="Is Autoincrement" />
+    <FormCheckboxField name="notNull" label={$t('tab.tableStructure.columns.notNull')} />
+    <FormCheckboxField name="isPrimaryKey" label={$t('tab.tableStructure.columns.isPrimaryKey')} />
+    <FormCheckboxField name="autoIncrement" label={$t('tab.tableStructure.columns.isAutoincrement')} />
     <FormTextField
       name="defaultValue"
       label="Default value. Please use valid SQL expression, eg. 'Hello World' for string value, '' for empty string"
     />
-    <FormTextField name="computedExpression" label="Computed expression" />
+    <FormTextField name="computedExpression" label={$t('tab.tableStructure.columns.computedExpression')} />
     {#if driver?.dialect?.columnProperties?.isUnsigned}
-      <FormCheckboxField name="isUnsigned" label="Unsigned" />
+      <FormCheckboxField name="isUnsigned" label={$t('tab.tableStructure.columns.unsigned')} />
     {/if}
     {#if driver?.dialect?.columnProperties?.isZerofill}
-      <FormCheckboxField name="isZerofill" label="Zero fill" />
+      <FormCheckboxField name="isZerofill" label={$t('tab.tableStructure.columns.zeroFill')} />
     {/if}
     {#if driver?.dialect?.columnProperties?.columnComment}
-      <FormTextField name="columnComment" label="Comment" />
+      <FormTextField name="columnComment" label={$t('tab.tableStructure.columns.comment')} />
     {/if}
     {#if driver?.dialect?.columnProperties?.isSparse}
-      <FormCheckboxField name="isSparse" label="Sparse" />
+      <FormCheckboxField name="isSparse" label={$t('tab.tableStructure.columns.isSparse')} />
     {/if}
 
     <svelte:fragment slot="footer">
       <FormSubmit
-        value={columnInfo ? 'Save' : 'Save and next'}
+        value={columnInfo ? $t('common.save') : $t('common.saveAndNext')}
         on:click={e => {
           closeCurrentModal();
           if (columnInfo) {
@@ -67,7 +70,7 @@
       {#if !columnInfo}
         <FormButton
           type="button"
-          value="Save"
+          value={$t('common.save')}
           on:click={e => {
             closeCurrentModal();
             setTableInfo(tbl => editorAddColumn(tbl, e.detail, addDataCommand));
@@ -75,11 +78,11 @@
         />
       {/if}
 
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
       {#if columnInfo}
         <FormStyledButton
           type="button"
-          value="Remove"
+          value={$t('common.close')}
           on:click={() => {
             closeCurrentModal();
             setTableInfo(tbl => editorDeleteColumn(tbl, columnInfo, addDataCommand));

@@ -9,7 +9,7 @@ services:
       - '--providers.docker.exposedByDefault=false'
       - '--entrypoints.web.address=:8080'
       - '--entrypoints.web.forwardedHeaders.insecure=true'
-      - '--entrypoints.web.forwardedHeaders.trustedIPs=192.168.3.0/24'
+      - '--entrypoints.web.forwardedHeaders.trustedIPs=172.30.246.0/24'
     ports:
       - '3030:8080'
     volumes:

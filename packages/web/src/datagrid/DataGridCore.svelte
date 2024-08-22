@@ -1652,15 +1652,17 @@
     { command: 'dataGrid.refresh' },
     { placeTag: 'copy' },
     {
+      id: 'copy.advanced',
       text: 'Copy advanced',
       submenu: [
         _.keys(copyRowsFormatDefs).map(format => ({
+          id: copyRowsFormatDefs[format].id,
           text: copyRowsFormatDefs[format].label,
           onClick: () => copyToClipboardCore(format),
         })),
         { divider: true },
         _.keys(copyRowsFormatDefs).map(format => ({
-          text: `Set format: ${copyRowsFormatDefs[format].name}`,
+          text: `${$t('common.format')}: ${copyRowsFormatDefs[format].name}`,
           onClick: () => ($copyRowsFormat = format),
         })),
 
@@ -1699,6 +1701,7 @@
     { divider: true },
     { placeTag: 'export' },
     {
+      id: 'dataGrid.saveToArchive',
       label: 'Save to current archive',
       submenu: [
         { command: 'dataGrid.mergeSelectedCellsIntoMirror' },

@@ -1,6 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
-
+  import { t } from 'svelte-i18n';
   import { onMount, tick } from 'svelte';
 
   import JslDataGrid from '../datagrid/JslDataGrid.svelte';
@@ -42,7 +42,7 @@
     ...(oneTab && resultInfos.length > 0
       ? [
           {
-            label: 'Results',
+            label: $t('common.results'),
             isResult: true,
             component: AllResultsTab,
             props: {
@@ -51,7 +51,7 @@
           },
         ]
       : resultInfos.map((info, index) => ({
-          label: `Result ${index + 1}`,
+          label: `${$t('common.results')} ${index + 1}`,
           isResult: true,
           component: JslDataGrid,
           props: { jslid: info.jslid },
@@ -90,8 +90,8 @@
   tabs={allTabs}
   menu={resultInfos.length > 0 && [
     oneTab
-      ? { text: 'Every result in single tab', onClick: () => setOneTabValue(false) }
-      : { text: 'All results in one tab', onClick: () => setOneTabValue(true) },
+      ? { text: $t('widgets.query.resultTab.single'), onClick: () => setOneTabValue(false) }
+      : { text: $t('widgets.query.resultTab.one'), onClick: () => setOneTabValue(true) },
   ]}
 >
   <slot name="0" slot="0" />

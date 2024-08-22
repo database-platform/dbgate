@@ -61,7 +61,8 @@
   import { editorDeleteColumn, editorDeleteConstraint } from 'dbgate-tools';
 
   import _ from 'lodash';
-  import { onMount, tick } from 'svelte';
+  import { t } from 'svelte-i18n';
+  import { tick } from 'svelte';
   import invalidateCommands from '../commands/invalidateCommands';
   import registerCommand from '../commands/registerCommand';
 
@@ -72,10 +73,10 @@
 
   import ObjectListControl from '../elements/ObjectListControl.svelte';
   import { showModal } from '../modals/modalTools';
-  import useEditorData from '../query/useEditorData';
+  // import useEditorData from '../query/useEditorData';
   import createActivator, { getActiveComponent } from '../utility/createActivator';
 
-  import { useDbCore } from '../utility/metadataLoaders';
+  // import { useDbCore } from '../utility/metadataLoaders';
   import ColumnEditorModal from './ColumnEditorModal.svelte';
   import ForeignKeyEditorModal from './ForeignKeyEditorModal.svelte';
   import IndexEditorModal from './IndexEditorModal.svelte';
@@ -156,60 +157,60 @@
 <div class="wrapper">
   <ObjectListControl
     collection={columns?.map((x, index) => ({ ...x, ordinal: index + 1 }))}
-    title={`Columns (${columns?.length || 0})`}
-    emptyMessage="No columns defined"
+    title={`${$t('tab.tableStructure.title.columns')} (${columns?.length || 0})`}
+    emptyMessage={$t('tab.tableStructure.empty.columns')}
     clickable={writable()}
     on:clickrow={e => showModal(ColumnEditorModal, { columnInfo: e.detail, tableInfo, setTableInfo, driver })}
     onAddNew={writable() ? addColumn : null}
     columns={[
       {
         fieldName: 'notNull',
-        header: 'Nullability',
+        header: $t('tab.tableStructure.columns.nullability'),
         sortable: true,
         slot: 0,
       },
       {
         fieldName: 'dataType',
-        header: 'Data Type',
+        header: $t('tab.tableStructure.columns.dataType'),
         sortable: true,
       },
       {
         fieldName: 'defaultValue',
-        header: 'Default value',
+        header: $t('tab.tableStructure.columns.defaultValue'),
         sortable: true,
       },
       driver?.dialect?.columnProperties?.isSparse && {
         fieldName: 'isSparse',
-        header: 'Is Sparse',
+        header: $t('tab.tableStructure.columns.isSparse'),
         sortable: true,
         slot: 1,
       },
       {
         fieldName: 'computedExpression',
-        header: 'Computed Expression',
+        header: $t('tab.tableStructure.columns.computedExpression'),
         sortable: true,
       },
       driver?.dialect?.columnProperties?.isPersisted && {
         fieldName: 'isPersisted',
-        header: 'Is Persisted',
+        header: $t('tab.tableStructure.columns.isPersisted'),
         sortable: true,
         slot: 2,
       },
       driver?.dialect?.columnProperties?.isUnsigned && {
         fieldName: 'isUnsigned',
-        header: 'Unsigned',
+        header: $t('tab.tableStructure.columns.unsigned'),
         sortable: true,
         slot: 4,
       },
       driver?.dialect?.columnProperties?.isZerofill && {
         fieldName: 'isZerofill',
-        header: 'Zero fill',
+        header: $t('tab.tableStructure.columns.zeroFill'),
         sortable: true,
         slot: 5,
       },
       driver?.dialect?.columnProperties?.columnComment && {
         fieldName: 'columnComment',
-        header: 'Comment',
+        header: $t('tab.tableStructure.columns.comment'),
         sortable: true,
       },
       writable()
@@ -229,7 +230,7 @@
         onClick={e => {
           e.stopPropagation();
           setTableInfo(tbl => editorDeleteColumn(tbl, row));
-        }}>Remove</Link
+        }}>{$t('common.remove')}</Link
       ></svelte:fragment
     >
     <svelte:fragment slot="4" let:row>{row?.isUnsigned ? 'YES' : 'NO'}</svelte:fragment>
@@ -239,15 +240,15 @@
 
   <ObjectListControl
     collection={_.compact([primaryKey])}
-    title="Primary key"
-    emptyMessage={writable() ? 'No primary key defined' : null}
+    title={$t('tab.tableStructure.title.primaryKey')}
+    emptyMessage={writable() ? $t('tab.tableStructure.empty.primaryKey') : null}
     onAddNew={writable() && !primaryKey && columns?.length > 0 ? addPrimaryKey : null}
     clickable={writable()}
     on:clickrow={e => showModal(PrimaryKeyEditorModal, { constraintInfo: e.detail, tableInfo, setTableInfo })}
     columns={[
       {
         fieldName: 'columns',
-        header: 'Columns',
+        header: $t('tab.tableStructure.columns.columns'),
         slot: 0,
       },
       writable()
@@ -266,7 +267,7 @@
         onClick={e => {
           e.stopPropagation();
           setTableInfo(tbl => editorDeleteConstraint(tbl, row));
-        }}>Remove</Link
+        }}>{$t('common.remove')}</Link
       ></svelte:fragment
     >
   </ObjectListControl>
@@ -274,19 +275,19 @@
   <ObjectListControl
     collection={indexes}
     onAddNew={writable() && columns?.length > 0 ? addIndex : null}
-    title={`Indexes (${indexes?.length || 0})`}
-    emptyMessage={writable() ? 'No index defined' : null}
+    title={`${$t('tab.tableStructure.title.indexes')} (${indexes?.length || 0})`}
+    emptyMessage={writable() ? $t('tab.tableStructure.empty.indexes') : null}
     clickable={writable()}
     on:clickrow={e => showModal(IndexEditorModal, { constraintInfo: e.detail, tableInfo, setTableInfo })}
     columns={[
       {
         fieldName: 'columns',
-        header: 'Columns',
+        header: $t('tab.tableStructure.columns.columns'),
         slot: 0,
       },
       {
         fieldName: 'unique',
-        header: 'Unique',
+        header: $t('tab.tableStructure.columns.unique'),
         slot: 1,
       },
       writable()
@@ -306,7 +307,7 @@
         onClick={e => {
           e.stopPropagation();
           setTableInfo(tbl => editorDeleteConstraint(tbl, row));
-        }}>Remove</Link
+        }}>{$t('common.remove')}</Link
       ></svelte:fragment
     >
   </ObjectListControl>
@@ -314,14 +315,14 @@
   <ObjectListControl
     collection={uniques}
     onAddNew={writable() && columns?.length > 0 ? addUnique : null}
-    title={`Unique constraints (${uniques?.length || 0})`}
-    emptyMessage={writable() ? 'No unique defined' : null}
+    title={`${$t('tab.tableStructure.title.uniqueConstraints')} (${uniques?.length || 0})`}
+    emptyMessage={writable() ? $t('tab.tableStructure.empty.uniqueConstraints') : null}
     clickable={writable()}
     on:clickrow={e => showModal(UniqueEditorModal, { constraintInfo: e.detail, tableInfo, setTableInfo })}
     columns={[
       {
         fieldName: 'columns',
-        header: 'Columns',
+        header: $t('tab.tableStructure.columns.columns'),
         slot: 0,
       },
       writable()
@@ -340,7 +341,7 @@
         onClick={e => {
           e.stopPropagation();
           setTableInfo(tbl => editorDeleteConstraint(tbl, row));
-        }}>Remove</Link
+        }}>{$t('common.remove')}</Link
       ></svelte:fragment
     >
   </ObjectListControl>
@@ -348,8 +349,8 @@
   <ForeignKeyObjectListControl
     collection={foreignKeys}
     onAddNew={writable() && columns?.length > 0 ? addForeignKey : null}
-    title={`Foreign keys (${foreignKeys?.length || 0})`}
-    emptyMessage={writable() ? 'No foreign key defined' : null}
+    title={`${$t('tab.tableStructure.title.foreignKeys')} (${foreignKeys?.length || 0})`}
+    emptyMessage={writable() ? $t('tab.tableStructure.empty.foreignKeys') : null}
     clickable={writable()}
     onRemove={row => setTableInfo(tbl => editorDeleteConstraint(tbl, row))}
     on:clickrow={e => showModal(ForeignKeyEditorModal, { constraintInfo: e.detail, tableInfo, setTableInfo, dbInfo })}

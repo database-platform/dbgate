@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   export let selectedColumns;
@@ -12,8 +13,8 @@
 </script>
 
 <div>
-  <FormStyledButton value="All" on:click={() => (selectedColumns = allColumns)} {disabled} />
-  <FormStyledButton value="None" on:click={() => (selectedColumns = [])} {disabled} />
+  <FormStyledButton value={$t('common.all')} on:click={() => (selectedColumns = allColumns)} {disabled} />
+  <FormStyledButton value={$t('common.none')} on:click={() => (selectedColumns = [])} {disabled} />
 </div>
 <div class="list">
   {#each allColumns as column}

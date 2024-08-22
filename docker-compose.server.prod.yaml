@@ -7,6 +7,17 @@ services:
       - ONLINE_ADMIN_API=https://platform.dataleapinfo.com/dbapi
       - ONLINE_ADMIN_HOME=https://platform.dataleapinfo.com/db
       - ONLINE_DATABASE_URL=mysql://dbsun:@Sun12345@172.30.246.29:3306/smartdata
+      # redis sentinel
+      # - REDIS_TYPE=sentinel
+      # - REDIS_NAME=mymaster
+      # - REDIS_SENTINELS=[{"host":"192.168.3.7","port":27001},{"host":"192.168.3.7","port":27002},{"host":"192.168.3.7","port":27003}]
+      # - REDIS_PASSWORD=redis-123456
+      # - REDIS_DB=0
+      # redis single
+      - REDIS_TYPE=single
+      - REDIS_PORT=6379
+      - REDIS_HOST=127.0.0.1
+      - REDIS_PASSWORD=redis-123456
     networks:
       - dbserver
     deploy:

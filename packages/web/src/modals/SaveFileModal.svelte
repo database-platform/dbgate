@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
 
   import FormProvider from '../forms/FormProvider.svelte';
@@ -9,6 +10,7 @@
   import getElectron from '../utility/getElectron';
   import ModalBase from './ModalBase.svelte';
   import { closeCurrentModal } from './modalTools';
+  import { saveDbToApp } from '../utility/appTools';
 
   export let data;
   export let name;
@@ -53,10 +55,10 @@
 
 <FormProvider initialValues={{ name }}>
   <ModalBase {...$$restProps}>
-    <svelte:fragment slot="header">Save file</svelte:fragment>
-    <FormTextField label="File name" name="name" focused />
+    <svelte:fragment slot="header">{$t('modal.saveFile.header')}</svelte:fragment>
+    <FormTextField label={$t('modal.saveFile.name')} name="name" focused />
     <svelte:fragment slot="footer">
-      <FormSubmit value="Save" on:click={handleSubmit} />
+      <FormSubmit value={$t('common.save')} on:click={handleSubmit} />
       {#if electron}
         <FormStyledButton
           type="button"

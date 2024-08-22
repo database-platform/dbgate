@@ -2,6 +2,8 @@
   "common": {
     "loading": "Loading...",
     "ok": "Ok",
+    "save": "Save",
+    "saveAndNext": "Save and next",
     "cancel": "Cancel",
     "close": "Close",
     "closeTabs": "Close tabs",
@@ -11,7 +13,16 @@
     "stop": "Stop",
     "run": "Run",
     "export": "Export",
-    "execute": "Execute"
+    "exportResult": "Export result",
+    "execute": "Execute",
+    "format": "Set format",
+    "all": "All",
+    "none": "None",
+    "messages": "Messages",
+    "results": "Results",
+    "remove": "Remove",
+    "addNew": "Add new",
+    "name": "Name"
   },
   "button": {
     "reset": {
@@ -133,7 +144,8 @@
       "toggleLeftPanel": "Toggle left panel",
       "undo": "Undo",
       "viewJsonDocument": "View row as JSON document",
-      "viewJsonValue": "View cell as JSON document"
+      "viewJsonValue": "View cell as JSON document",
+      "saveToArchive": "Save to current archive"
     },
     "database": {
       "changeState": "Change status",
@@ -404,7 +416,32 @@
       "yaml": "Copy as YAML",
       "sqlInserts": "Copy as SQL INSERTs",
       "sqlUpdates": "Copy as SQL UPDATEs",
-      "mongoInserts": "Copy as Mongo INSERTs"
+      "mongoInserts": "Copy as Mongo INSERTs",
+      "advanced": "Copy advanced"
+    },
+    "column": {
+      "rename": "Rename column",
+      "drop": "Drop column",
+      "copy": "Copy name"
+    },
+    "columnHeader": {
+      "asc": "sort ascending",
+      "desc": "sort descending",
+      "addAscending": "add to sort - ascending",
+      "addDescending": "add to sort - descending",
+      "clear": "clear sort",
+      "copy": "copy column name",
+      "group": "group by",
+      "max": "max",
+      "min": "min",
+      "sum": "sum",
+      "avg": "avg",
+      "count": "count",
+      "countDistinct": "count distinct",
+      "groupYear": "group by year",
+      "groupMonth": "group by month",
+      "groupDay": "group by day",
+      "define": "define virtual foreign key"
     }
   },
   "contextMenu": {
@@ -480,6 +517,53 @@
     "tableData": {
       "openStructure": "Open structure",
       "viewColumns": "View columns"
+    },
+    "tableStructure": {
+      "btn": {
+        "openData": "Open data"
+      },
+      "inputModal": {
+        "header": "Set table name",
+        "label": "Table name"
+      },
+      "title": {
+        "columns": "Columns",
+        "primaryKey": "Primary key",
+        "indexes": "Indexes",
+        "uniqueConstraints": "Unique constraints",
+        "foreignKeys": "Foreign keys"
+      },
+      "empty": {
+        "columns": "No column defined",
+        "primaryKey": "No primary key defined",
+        "indexes": "No index defined",
+        "uniqueConstraints": "No unique defined",
+        "foreignKeys": "No foreign key defined"
+      },
+      "columns": {
+        "nullability": "Nullability",
+        "notNull": "NOT NULL",
+        "dataType": "Data Type",
+        "defaultValue": "Default value",
+        "isSparse": "Is Sparse",
+        "isPrimaryKey": "Is Primary Key",
+        "isAutoincrement": "Is autoincrement",
+        "computedExpression": "Computed Expression",
+        "isPersisted": "Is Persisted",
+        "unsigned": "Unsigned",
+        "zeroFill": "Zero fill",
+        "comment": "Comment",
+        "name": "Column name",
+        "columns": "Columns",
+        "unique": "Unique",
+        "baseColumns": "Base columns",
+        "referencedTable": "Referenced table",
+        "referencedColumns": "Referenced columns"
+      },
+      "modal": {
+        "addColumn": "Add column",
+        "editColumn": "Edit column"
+      }
     }
   },
   "modal": {
@@ -502,6 +586,20 @@
     "closeTabs": {
       "header": "Confirm close tabs",
       "tip": "Following files are modified, really close tabs? After closing, you could reopen them in history"
+    },
+    "editJson": {
+      "header": "Edit JSON value",
+      "tip": "Edit JSON object or array.  You can paste JSON array or object directly into data grid, new row(s) will be added to recordset."
+    },
+    "generateSql": {
+      "header": "Generate SQL from data",
+      "choose": "Choose query type",
+      "value": "Value columns",
+      "where": "WHERE columns"
+    },
+    "saveFile": {
+      "header": "Save file",
+      "name": "File name"
     }
   },
   "widgets": {
@@ -549,6 +647,24 @@
         "parameters": "Parameters",
         "parametersDescription": "This macro has no parameters",
         "description": "Description"
+      }
+    },
+    "query": {
+      "message": {
+        "error": "No messages",
+        "table": {
+          "number": "Number",
+          "message": "Message",
+          "time": "Time",
+          "delta": "Delta",
+          "duration": "Duration",
+          "procedure": "Procedure",
+          "line": "Line"
+        }
+      },
+      "resultTab": {
+        "single": "Every result in single tab",
+        "one": "All results in one tab"
       }
     }
   },

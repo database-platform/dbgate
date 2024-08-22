@@ -29,9 +29,9 @@
 
   function createMenu() {
     return [
-      { text: 'Rename column', onClick: handleRenameColumn },
-      { text: 'Drop column', onClick: handleDropColumn },
-      { text: 'Copy name', onClick: () => navigator.clipboard.writeText(data.columnName)},
+      { id: 'column.rename', text: 'Rename column', onClick: handleRenameColumn },
+      { id: 'column.drop', text: 'Drop column', onClick: handleDropColumn },
+      { id: 'column.copy', text: 'Copy name', onClick: () => navigator.clipboard.writeText(data.columnName) },
     ];
   }
 

@@ -46,35 +46,47 @@
 
   function getMenu() {
     return [
-      setSort && { onClick: () => setSort('ASC'), text: 'Sort ascending' },
-      setSort && { onClick: () => setSort('DESC'), text: 'Sort descending' },
-      isSortDefined && addToSort && !order && { onClick: () => addToSort('ASC'), text: 'Add to sort - ascending' },
-      isSortDefined && addToSort && !order && { onClick: () => addToSort('DESC'), text: 'Add to sort - descending' },
-      order && clearSort && { onClick: () => clearSort(), text: 'Clear sort criteria' },
-      { onClick: () => copyTextToClipboard(column.columnName), text: 'Copy column name' },
+      setSort && { onClick: () => setSort('ASC'), text: 'Sort ascending', id: 'columnHeader.asc' },
+      setSort && { onClick: () => setSort('DESC'), text: 'Sort descending', id: 'columnHeader.desc' },
+      isSortDefined &&
+        addToSort &&
+        !order && { onClick: () => addToSort('ASC'), text: 'Add to sort - ascending', id: 'columnHeader.addAscending' },
+      isSortDefined &&
+        addToSort &&
+        !order && {
+          onClick: () => addToSort('DESC'),
+          text: 'Add to sort - descending',
+          id: 'columnHeader.addDescending',
+        },
+      order && clearSort && { onClick: () => clearSort(), text: 'Clear sort criteria', id: 'columnHeader.clear' },
+      { onClick: () => copyTextToClipboard(column.columnName), text: 'Copy column name', id: 'columnHeader.copy' },
 
       column.foreignKey && [{ divider: true }, { onClick: openReferencedTable, text: column.foreignKey.refTableName }],
 
       setGrouping && { divider: true },
-      setGrouping && { onClick: () => setGrouping('GROUP'), text: 'Group by' },
-      setGrouping && { onClick: () => setGrouping('MAX'), text: 'MAX' },
-      setGrouping && { onClick: () => setGrouping('MIN'), text: 'MIN' },
-      setGrouping && { onClick: () => setGrouping('SUM'), text: 'SUM' },
-      setGrouping && { onClick: () => setGrouping('AVG'), text: 'AVG' },
-      setGrouping && { onClick: () => setGrouping('COUNT'), text: 'COUNT' },
-      setGrouping && { onClick: () => setGrouping('COUNT DISTINCT'), text: 'COUNT DISTINCT' },
+      setGrouping && { onClick: () => setGrouping('GROUP'), text: 'Group by', id: 'columnHeader.group' },
+      setGrouping && { onClick: () => setGrouping('MAX'), text: 'MAX', id: 'columnHeader.max' },
+      setGrouping && { onClick: () => setGrouping('MIN'), text: 'MIN', id: 'columnHeader.min' },
+      setGrouping && { onClick: () => setGrouping('SUM'), text: 'SUM', id: 'columnHeader.sum' },
+      setGrouping && { onClick: () => setGrouping('AVG'), text: 'AVG', id: 'columnHeader.avg' },
+      setGrouping && { onClick: () => setGrouping('COUNT'), text: 'COUNT', id: 'columnHeader.count' },
+      setGrouping && {
+        onClick: () => setGrouping('COUNT DISTINCT'),
+        text: 'COUNT DISTINCT',
+        id: 'columnHeader.countDistinct',
+      },
 
       isTypeDateTime(column.dataType) && [
         { divider: true },
-        { onClick: () => setGrouping('GROUP:YEAR'), text: 'Group by YEAR' },
-        { onClick: () => setGrouping('GROUP:MONTH'), text: 'Group by MONTH' },
-        { onClick: () => setGrouping('GROUP:DAY'), text: 'Group by DAY' },
+        { onClick: () => setGrouping('GROUP:YEAR'), text: 'Group by YEAR', id: 'columnHeader.groupYear' },
+        { onClick: () => setGrouping('GROUP:MONTH'), text: 'Group by MONTH', id: 'columnHeader.groupMonth' },
+        { onClick: () => setGrouping('GROUP:DAY'), text: 'Group by DAY', id: 'columnHeader.groupDay' },
       ],
 
-      allowDefineVirtualReferences && [
-        { divider: true },
-        { onClick: handleDefineVirtualForeignKey, text: 'Define virtual foreign key' },
-      ],
+      // allowDefineVirtualReferences && [
+      //   { divider: true },
+      //   { onClick: handleDefineVirtualForeignKey, text: 'Define virtual foreign key', id: 'columnHeader.define' },
+      // ],
     ];
   }
 </script>

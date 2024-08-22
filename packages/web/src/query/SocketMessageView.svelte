@@ -1,5 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import ErrorInfo from '../elements/ErrorInfo.svelte';
   import { apiOff, apiOn } from '../utility/api';
   import createRef from '../utility/createRef';
@@ -66,7 +67,7 @@
 </script>
 
 {#if showNoMessagesAlert && (!displayedMessages || displayedMessages.length == 0)}
-  <ErrorInfo message="No messages" icon="img alert" />
+  <ErrorInfo message={$t('widgets.query.message.error')} icon="img alert" />
 {:else}
   <MessageView items={displayedMessages} on:messageclick {eventName} {showProcedure} {showLine} {startLine} />
 {/if}

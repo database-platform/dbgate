@@ -13,6 +13,7 @@
 
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { t } from 'svelte-i18n';
   import moment from 'moment';
   import { apiCall } from '../utility/api';
   import localforage from 'localforage';
@@ -51,16 +52,16 @@
 <div class="main">
   <table>
     <tr>
-      <td class="header">Number</td>
-      <td class="header">Message</td>
-      <td class="header">Time</td>
-      <td class="header">Delta</td>
-      <td class="header">Duration</td>
+      <td class="header">{$t('widgets.query.message.table.number')}</td>
+      <td class="header">{$t('widgets.query.message.table.message')}</td>
+      <td class="header">{$t('widgets.query.message.table.time')}</td>
+      <td class="header">{$t('widgets.query.message.table.delta')}</td>
+      <td class="header">{$t('widgets.query.message.table.duration')}</td>
       {#if showProcedure}
-        <td class="header">Procedure</td>
+        <td class="header">{$t('widgets.query.message.table.procedure')}</td>
       {/if}
       {#if showLine}
-        <td class="header">Line</td>
+        <td class="header">{$t('widgets.query.message.table.line')}</td>
       {/if}
     </tr>
     {#each items as row, index}

@@ -1,9 +1,9 @@
 <script>
   import { onMount } from 'svelte';
-
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import FormProvider from '../forms/FormProvider.svelte';
-  import FormSubmit from '../forms/FormSubmit.svelte';
+  // import FormSubmit from '../forms/FormSubmit.svelte';
   import AceEditor from '../query/AceEditor.svelte';
   import ErrorMessageModal from './ErrorMessageModal.svelte';
 
@@ -29,11 +29,10 @@
 
 <FormProvider>
   <ModalBase {...$$restProps}>
-    <div slot="header">Edit JSON value</div>
+    <div slot="header">{$t('modal.editJson.header')}</div>
     {#if showPasteInfo}
       <div class="m-2">
-        Edit JSON object or array. You can paste JSON array or object directly into data grid, new row(s) will be added
-        to recordset.
+        {$t('modal.editJson.tip')}
       </div>
     {/if}
 
@@ -43,7 +42,7 @@
 
     <div slot="footer">
       <FormStyledButton
-        value="Save"
+        value={$t('common.save')}
         on:click={() => {
           try {
             const parsed = JSON.parse(value);
@@ -56,7 +55,7 @@
           }
         }}
       />
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
     </div>
   </ModalBase>
 </FormProvider>
@@ -66,5 +65,6 @@
     position: relative;
     height: 30vh;
     width: 40vw;
+    margin-top: 8px;
   }
 </style>

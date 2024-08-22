@@ -1,3 +1,9 @@
+## 部署
+
+docker stack deploy -c docker-compose.traefik.prod.yaml traefik -d
+docker stack deploy -c docker-compose.web.prod.yaml dbgatex-web -d
+docker stack deploy -c docker-compose.server.prod.yaml dbgatex-server -d
+
 [![NPM version](https://img.shields.io/npm/v/dbgate-serve.svg)](https://www.npmjs.com/package/dbgate-serve)
 ![GitHub All Releases](https://img.shields.io/github/downloads/dbgate/dbgate/total)
 [![dbgate](https://snapcraft.io/dbgate/badge.svg)](https://snapcraft.io/dbgate)

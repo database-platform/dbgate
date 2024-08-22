@@ -109,6 +109,7 @@
   };
 
   const getI18n = (text, item) => {
+    // console.log('dropdownmenu: ', text, item);
     if (item.id) {
       return $t(`command.${item.id}`);
     }
