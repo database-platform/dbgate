@@ -30,7 +30,9 @@
     "description": "描述",
     "customize": "定制",
     "checkAll": "全选",
-    "unCheckAll": "取消"
+    "unCheckAll": "取消",
+    "splitWindow": "分割窗口",
+    "newQuery": "新建查询"
   },
   "foreign": {
     "rule": {
@@ -58,6 +60,18 @@
   "command": {
     "about": {
       "show": "关于"
+    },
+    "tab": {
+      "closeTabs": "关闭选项卡 DB",
+      "closeOtherTabs": "关闭选项卡 非DB"
+    },
+    "close": {
+      "close": "关闭",
+      "closeAll": "关闭所有",
+      "closeOthers": "关闭其他",
+      "duplicate": "复制",
+      "addToFavorites": "添加到我的",
+      "switch": "切换数据库"
     },
     "app": {
       "disconnect": "断开链接",

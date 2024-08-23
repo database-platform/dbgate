@@ -267,6 +267,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import { tick } from 'svelte';
   import registerCommand from '../commands/registerCommand';
   import FontIcon from '../icons/FontIcon.svelte';
@@ -356,18 +357,22 @@
 
     return [
       {
+        id: 'close.close',
         text: 'Close',
         onClick: () => closeTab(tabid),
       },
       {
+        id: 'close.closeAll',
         text: 'Close all',
         onClick: () => closeAll(multiTabIndex),
       },
       {
+        id: 'close.closeOthers',
         text: 'Close others',
         onClick: () => closeOthersInMultiTab(multiTabIndex)(tabid),
       },
       {
+        id: 'close.duplicate',
         text: 'Duplicate',
         onClick: () => duplicateTab(tab),
       },
@@ -377,6 +382,7 @@
         tabs[tabComponent].allowAddToFavorites(props) && [
           { divider: true },
           {
+            id: 'close.addToFavorites',
             text: 'Add to favorites',
             onClick: () => showModal(FavoriteModal, { savingTab: tab }),
           },
@@ -387,6 +393,7 @@
         tabs[tabComponent].allowSwitchDatabase(props) && [
           { divider: true },
           {
+            id: 'close.switch',
             text: 'Switch database',
             onClick: () => showModal(SwitchDatabaseModal, { callingTab: tab }),
           },
@@ -410,11 +417,11 @@
       conid &&
         database && [
           {
-            text: `Close tabs with DB ${database}`,
+            text: `${$t('command.tab.closeTabs')} ${database}`,
             onClick: () => closeWithSameDb(tabid),
           },
           {
-            text: `Close tabs with other DB than ${database}`,
+            text: `${$t('command.tab.closeOtherTabs')} ${database}`,
             onClick: () => closeWithOtherDb(tabid),
           },
         ],
@@ -611,11 +618,11 @@
   </div>
   <div class="icons-wrapper">
     {#if allowSplitTab}
-      <div class="icon-button" on:click={() => splitTab(multiTabIndex)} title="Split window">
+      <div class="icon-button" on:click={() => splitTab(multiTabIndex)} title={$t('common.splitWindow')}>
         <FontIcon icon="icon split" />
       </div>
     {/if}
-    <div class="icon-button" on:click={() => newQuery({ multiTabIndex })} title="New query">
+    <div class="icon-button" on:click={() => newQuery({ multiTabIndex })} title={$t('common.newQuery')}>
       <FontIcon icon="icon add" />
     </div>
   </div>

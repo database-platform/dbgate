@@ -30,7 +30,9 @@
     "description": "Description",
     "customize": "Customize",
     "checkAll": "Check All",
-    "unCheckAll": "Uncheck All"
+    "unCheckAll": "Uncheck All",
+    "splitWindow": "Split window",
+    "newQuery": "New query"
   },
   "foreign": {
     "rule": {
@@ -58,6 +60,18 @@
   "command": {
     "about": {
       "show": "About"
+    },
+    "tab": {
+      "closeTabs": "Close tabs with DB",
+      "closeOtherTabs": "Close tabs with other DB than"
+    },
+    "close": {
+      "close": "Close",
+      "closeAll": "Close all",
+      "closeOthers": "Close others",
+      "duplicate": "Duplicate",
+      "addToFavorites": "Add to favorites",
+      "switch": "Switch database"
     },
     "app": {
       "disconnect": "Disconnect",

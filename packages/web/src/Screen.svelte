@@ -96,9 +96,9 @@
   {/if}
   <CurrentDropDownMenu />
   <ModalLayer />
-  {#if $isFileDragActive}
-    <DragAndDropFileTarget />
-  {/if}
+  <!-- {#if $isFileDragActive} -->
+  <!--   <DragAndDropFileTarget /> -->
+  <!-- {/if} -->
   <div class="snackbar-container">
     {#each $openedSnackbars as snackbar (snackbar.id)}
       <Snackbar {...snackbar} />
