@@ -3,16 +3,17 @@
   import FormSubmit from '../forms/FormSubmit.svelte';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import ModalBase from './ModalBase.svelte';
-  import { closeCurrentModal, showModal } from './modalTools';
-  import DefineDictionaryDescriptionModal from './DefineDictionaryDescriptionModal.svelte';
+  import { closeCurrentModal } from './modalTools';
+  // import DefineDictionaryDescriptionModal from './DefineDictionaryDescriptionModal.svelte';
   import ScrollableTableControl from '../elements/ScrollableTableControl.svelte';
-  import { getDictionaryDescription } from '../utility/dictionaryDescriptionTools';
+  // import { getDictionaryDescription } from '../utility/dictionaryDescriptionTools';
   import { onMount } from 'svelte';
-  import { dumpSqlSelect } from 'dbgate-sqltree';
+  // import { dumpSqlSelect } from 'dbgate-sqltree';
   import LoadingInfo from '../elements/LoadingInfo.svelte';
   import SearchInput from '../elements/SearchInput.svelte';
-  import FormTextField from '../forms/FormTextField.svelte';
+  // import FormTextField from '../forms/FormTextField.svelte';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import { apiCall } from '../utility/api';
   import ErrorInfo from '../elements/ErrorInfo.svelte';
 
@@ -71,15 +72,15 @@
 
 <FormProvider>
   <ModalBase {...$$restProps}>
-    <svelte:fragment slot="header">Choose value from {field}</svelte:fragment>
+    <svelte:fragment slot="header">{$t('modal.valueLookup.header')} {field}</svelte:fragment>
 
     <!-- <FormTextField name="search" label='Search' placeholder="Search" bind:value={search} /> -->
     <div class="largeFormMarker">
-      <SearchInput placeholder="Search" bind:value={search} isDebounced />
+      <SearchInput placeholder={$t('common.search')} bind:value={search} isDebounced />
     </div>
 
     {#if isLoading}
-      <LoadingInfo message="Loading data" />
+      <LoadingInfo message={$t('common.loading')} />
     {/if}
 
     {#if !isLoading && rows}
@@ -109,7 +110,7 @@
               },
               {
                 fieldName: 'value',
-                header: 'Value',
+                header: $t('common.value'),
                 formatter: row => (row.value == null ? '(NULL)' : row.value),
               },
             ]}
@@ -137,14 +138,14 @@
     <svelte:fragment slot="footer">
       {#if multiselect}
         <FormSubmit
-          value="OK"
+          value={$t('common.ok')}
           on:click={() => {
             closeCurrentModal();
             onConfirm(checkedKeys);
           }}
         />
       {/if}
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
     </svelte:fragment>
   </ModalBase>
 </FormProvider>

@@ -28,6 +28,7 @@
   import { ScriptWriter, ScriptWriterJson } from 'dbgate-tools';
 
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import ToolStripCommandButton from '../buttons/ToolStripCommandButton.svelte';
   import ToolStripContainer from '../buttons/ToolStripContainer.svelte';
   import invalidateCommands from '../commands/invalidateCommands';
@@ -52,7 +53,7 @@
   import useEffect from '../utility/useEffect';
   import useTimerLabel from '../utility/useTimerLabel';
   import appObjectTypes from '../appobj';
-  import RowHeaderCell from '../datagrid/RowHeaderCell.svelte';
+  // import RowHeaderCell from '../datagrid/RowHeaderCell.svelte';
 
   export let conid;
   export let database;
@@ -290,9 +291,9 @@
 
         <ObjectConfigurationControl title="Imported files">
           <div class="mb-2">
-            <Link onClick={changeCheckStatus(true)}>Check all</Link>
+            <Link onClick={changeCheckStatus(true)}>{$t('common.checkAll')}</Link>
             |
-            <Link onClick={changeCheckStatus(false)}>Uncheck all</Link>
+            <Link onClick={changeCheckStatus(false)}>{$t('common.unCheckAll')}</Link>
           </div>
 
           <TableControl

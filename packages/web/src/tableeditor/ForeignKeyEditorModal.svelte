@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import uuidv1 from 'uuid/v1';
 
@@ -25,7 +26,7 @@
 
   const foreignKeyActions = ['noAction', 'cascade', 'restrict', 'setNull'];
   const foreignKeyActionsOptions = foreignKeyActions.map(x => ({
-    label: _.startCase(x),
+    label: $t(`foreign.rule.${x}`),
     value: x,
   }));
 
@@ -57,18 +58,22 @@
 
 <FormProvider>
   <ModalBase {...$$restProps}>
-    <svelte:fragment slot="header">{constraintInfo ? `Edit foreign key` : `Add foreign key`}</svelte:fragment>
+    <svelte:fragment slot="header"
+      >{constraintInfo
+        ? $t('tab.tableStructure.modal.foreign.edit')
+        : $t('tab.tableStructure.modal.foreign.add')}</svelte:fragment
+    >
 
     <div class="largeFormMarker">
       <div class="row">
-        <div class="label col-3">Constraint name</div>
+        <div class="label col-3">{$t('tab.tableStructure.columns.constraintName')}</div>
         <div class="col-9">
           <TextField value={constraintName} on:input={e => (constraintName = e.target['value'])} focused />
         </div>
       </div>
 
       <div class="row">
-        <div class="label col-3">Referenced table</div>
+        <div class="label col-3">{$t('tab.tableStructure.columns.referencedTable')}</div>
         <div class="col-9">
           <SelectField
             value={fullNameToString({ pureName: refTableName, schemaName: refSchemaName })}
@@ -90,7 +95,7 @@
       </div>
 
       <div class="row">
-        <div class="label col-3">On update action</div>
+        <div class="label col-3">{$t('tab.tableStructure.columns.onUpdateAction')}</div>
         <div class="col-9">
           <SelectField
             value={updateAction}
@@ -105,7 +110,7 @@
       </div>
 
       <div class="row">
-        <div class="label col-3">On delete action</div>
+        <div class="label col-3">{$t('tab.tableStructure.columns.onDeleteAction')}</div>
         <div class="col-9">
           <SelectField
             value={deleteAction}
@@ -121,10 +126,10 @@
 
       <div class="row">
         <div class="col-5 mr-1">
-          Base column - {tableInfo.pureName}
+          {$t('tab.tableStructure.columns.baseColumns')} - {tableInfo.pureName}
         </div>
         <div class="col-5 ml-1">
-          Ref column - {refTableName || '(table not set)'}
+          {$t('tab.tableStructure.columns.referencedColumns')} - {refTableName || '(table not set)'}
         </div>
       </div>
 
@@ -168,7 +173,7 @@
           </div>
           <div class="col-2 button">
             <FormStyledButton
-              value="Delete"
+              value={$t('common.delete')}
               on:click={e => {
                 const x = [...columns];
                 x.splice(index, 1);
@@ -181,7 +186,7 @@
 
       <FormStyledButton
         type="button"
-        value="Add column"
+        value={$t('common.addColumn')}
         on:click={() => {
           columns = [...columns, {}];
         }}
@@ -190,7 +195,7 @@
 
     <svelte:fragment slot="footer">
       <FormSubmit
-        value={'Save'}
+        value={$t('common.save')}
         on:click={() => {
           closeCurrentModal();
           if (constraintInfo) {
@@ -201,11 +206,11 @@
         }}
       />
 
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
       {#if constraintInfo}
         <FormStyledButton
           type="button"
-          value="Remove"
+          value={$t('common.remove')}
           on:click={() => {
             closeCurrentModal();
             setTableInfo(tbl => editorDeleteConstraint(tbl, constraintInfo));

@@ -20,9 +20,25 @@
     "none": "None",
     "messages": "Messages",
     "results": "Results",
+    "delete": "Delete",
     "remove": "Remove",
     "addNew": "Add new",
-    "name": "Name"
+    "addColumn": "Add column",
+    "name": "Name",
+    "value": "Value",
+    "search": "Search",
+    "description": "Description",
+    "customize": "Customize",
+    "checkAll": "Check All",
+    "unCheckAll": "Uncheck All"
+  },
+  "foreign": {
+    "rule": {
+      "noAction": "No Action",
+      "cascade": "Cascade",
+      "restrict": "Restrict",
+      "setNull": "Set NULL"
+    }
   },
   "button": {
     "reset": {
@@ -385,7 +401,7 @@
       "yesterday": "Yesterday",
       "nextWeek": "Next Week",
       "thisWeek": "This Week",
-      "LastWeek": "Last Week",
+      "lastWeek": "Last Week",
       "nextMonth": "Next Month",
       "thisMonth": "This Month",
       "lastMonth": "Last Month",
@@ -545,6 +561,7 @@
         "notNull": "NOT NULL",
         "dataType": "Data Type",
         "defaultValue": "Default value",
+        "defaultValueDetail": "Default value. Please use valid SQL expression, eg. 'Hello World' for string value, '' for empty string",
         "isSparse": "Is Sparse",
         "isPrimaryKey": "Is Primary Key",
         "isAutoincrement": "Is autoincrement",
@@ -556,13 +573,39 @@
         "name": "Column name",
         "columns": "Columns",
         "unique": "Unique",
+        "constraintName": "Constraint name",
         "baseColumns": "Base columns",
         "referencedTable": "Referenced table",
-        "referencedColumns": "Referenced columns"
+        "referencedColumns": "Referenced columns",
+        "onUpdateAction": "On update action",
+        "onDeleteAction": "On delete action",
+        "onUpdate": "ON UPDATE",
+        "onDelete": "ON DELTE",
+        "isUniqueIndex": "Is unique index"
       },
       "modal": {
         "addColumn": "Add column",
-        "editColumn": "Edit column"
+        "editColumn": "Edit column",
+        "add": "Add",
+        "edit": "Edit",
+        "constraints": {
+          "addNew": "Add new column",
+          "select": "Select column",
+          "choose": "Choose column",
+          "name": "Constraint name",
+          "column": "Column"
+        },
+        "index": {
+          "title": "index",
+          "name": "Index name"
+        },
+        "unique": {
+          "title": "unique"
+        },
+        "foreign": {
+          "add": "Add foreign key",
+          "edit": "Edit foreign key"
+        }
       }
     }
   },
@@ -600,6 +643,39 @@
     "saveFile": {
       "header": "Save file",
       "name": "File name"
+    },
+    "valueLookup": {
+      "header": "Choose value form"
+    },
+    "dictionary": {
+      "header": "Lookup "
+    },
+    "confirm": {
+      "header": "Save changes",
+      "recreated": {
+        "label": "Allow recreate (don't use on production databases)",
+        "warn": "This operation is not directly supported by SQL engine. Dbmanager can emulate it, but please check the generated SQL script."
+      },
+      "again": "Don't ask again"
+    },
+    "sqlGenerator": {
+      "header": "SQL Generator",
+      "choose": "CHOOSE OBJECTs",
+      "search": "Search tables or objects",
+      "editSql": "Edit SQL",
+      "setting": "GENERATOR SETTINGS",
+      "warn": "SQL truncated, file size limit exceed",
+      "loading": "Loading SQL preview"
+    },
+    "color": {
+      "database": {
+        "header": "Choose database color",
+        "text": "This color override connection color for specific database."
+      },
+      "connection": {
+        "header": "Choose connection color",
+        "text": "This color serves as default color for all databases in this connection."
+      }
     }
   },
   "widgets": {

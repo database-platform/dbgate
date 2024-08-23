@@ -1,5 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import moment from 'moment';
   import { showModal } from '../modals/modalTools';
   import ChooseConnectionColorModal from '../modals/ChooseConnectionColorModal.svelte';
@@ -10,12 +11,12 @@
     activeTabId,
     currentArchive,
     currentDatabase,
-    currentThemeDefinition,
+    // currentThemeDefinition,
     selectedWidget,
     visibleCommandPalette,
   } from '../stores';
   import getConnectionLabel from '../utility/getConnectionLabel';
-  import { useConnectionList, useDatabaseServerVersion, useDatabaseStatus } from '../utility/metadataLoaders';
+  import { useDatabaseServerVersion, useDatabaseStatus } from '../utility/metadataLoaders';
   import { findCommand } from '../commands/runCommand';
   import { useConnectionColor } from '../utility/useConnectionColor';
   import { apiCall } from '../utility/api';
@@ -65,8 +66,8 @@
           on:click={() => {
             showModal(ChooseConnectionColorModal, {
               ...dbid,
-              header: 'Choose database color',
-              text: 'This color override connection color for specific database.',
+              header: $t('modal.color.database.header'),
+              text: $t('modal.color.database.text'),
             });
           }}
         >
@@ -88,8 +89,8 @@
           on:click={() => {
             showModal(ChooseConnectionColorModal, {
               conid: dbid.conid,
-              header: 'Choose connection color',
-              text: 'This color serves as default color for all databases in this connection.',
+              header: $t('modal.color.connection.header'),
+              text: $t('modal.color.connection.text'),
             });
           }}
         >

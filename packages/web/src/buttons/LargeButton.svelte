@@ -28,7 +28,7 @@
     color: var(--theme-font-1);
     border: 1px solid var(--theme-border);
     width: 120px;
-    height: 60px;
+    /* height: 60px; */
     background-color: var(--theme-bg-1);
   }
 

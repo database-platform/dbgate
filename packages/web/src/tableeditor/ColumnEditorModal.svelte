@@ -36,10 +36,7 @@
     <FormCheckboxField name="notNull" label={$t('tab.tableStructure.columns.notNull')} />
     <FormCheckboxField name="isPrimaryKey" label={$t('tab.tableStructure.columns.isPrimaryKey')} />
     <FormCheckboxField name="autoIncrement" label={$t('tab.tableStructure.columns.isAutoincrement')} />
-    <FormTextField
-      name="defaultValue"
-      label="Default value. Please use valid SQL expression, eg. 'Hello World' for string value, '' for empty string"
-    />
+    <FormTextField name="defaultValue" label={$t('tab.tableStructure.columns.defaultValueDetail')} />
     <FormTextField name="computedExpression" label={$t('tab.tableStructure.columns.computedExpression')} />
     {#if driver?.dialect?.columnProperties?.isUnsigned}
       <FormCheckboxField name="isUnsigned" label={$t('tab.tableStructure.columns.unsigned')} />

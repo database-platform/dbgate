@@ -34,7 +34,6 @@
       if (oldFocus) oldFocus.focus();
     };
   });
-
 </script>
 
 <!-- The Modal -->
@@ -68,8 +67,8 @@
   .bglayer {
     position: fixed;
     z-index: 1;
-    left: 0;
-    top: 0;
+    top: var(--dim-micro-app-top);
+    left: var(--dim-micro-app-left);
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -93,8 +92,8 @@
 
   .window.fullScreen {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: var(--dim-micro-app-top);
+    left: var(--dim-micro-app-left);
     right: 0;
     bottom: 0;
   }
@@ -139,8 +138,8 @@
   .content.fullScreen {
     display: flex;
     position: fixed;
-    top: 60px;
-    left: 0;
+    top: calc(var(--dim-micro-app-top) + 68px);
+    left: var(--dim-micro-app-left);
     right: 0;
     bottom: 100px;
   }
@@ -154,11 +153,10 @@
   .footer.fullScreen {
     position: fixed;
     height: 100px;
-    left: 0;
+    left: var(--dim-micro-app-left);
     right: 0;
     bottom: 0px;
     border-top: 1px solid var(--theme-border);
     background-color: var(--theme-bg-modalheader);
   }
-
 </style>

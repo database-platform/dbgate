@@ -9,11 +9,12 @@
   import { getTableInfo, useConnectionList, useUsedApps } from '../utility/metadataLoaders';
   import { getDictionaryDescription } from '../utility/dictionaryDescriptionTools';
   import { onMount } from 'svelte';
-  import { dumpSqlSelect } from 'dbgate-sqltree';
+  // import { dumpSqlSelect } from 'dbgate-sqltree';
   import LoadingInfo from '../elements/LoadingInfo.svelte';
   import SearchInput from '../elements/SearchInput.svelte';
-  import FormTextField from '../forms/FormTextField.svelte';
+  // import FormTextField from '../forms/FormTextField.svelte';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import { apiCall } from '../utility/api';
 
   export let onConfirm;
@@ -103,7 +104,7 @@
     const response = await apiCall('database-connections/sql-select', {
       conid,
       database,
-      select
+      select,
     });
 
     rows = response.rows;
@@ -124,15 +125,15 @@
 
 <FormProvider>
   <ModalBase {...$$restProps}>
-    <svelte:fragment slot="header">Lookup from {pureName}</svelte:fragment>
+    <svelte:fragment slot="header">{$t('modal.dictionary.header')}Lookup from {pureName}</svelte:fragment>
 
     <!-- <FormTextField name="search" label='Search' placeholder="Search" bind:value={search} /> -->
     <div class="largeFormMarker">
-      <SearchInput placeholder="Search" bind:value={search} isDebounced />
+      <SearchInput placeholder={$t('common.search')} bind:value={search} isDebounced />
     </div>
 
     {#if isLoading}
-      <LoadingInfo message="Loading data" />
+      <LoadingInfo message={$t('common.loading')} />
     {/if}
 
     {#if !isLoading && tableInfo && description && rows && tableInfo?.primaryKey?.columns?.length == 1}
@@ -159,13 +160,13 @@
             },
             {
               fieldName: 'value',
-              header: 'Value',
+              header: $t('common.value'),
               formatter: row => row[tableInfo.primaryKey.columns[0].columnName],
               width: '100px',
             },
             {
               fieldName: 'description',
-              header: 'Description',
+              header: $t('common.description'),
               formatter: row => description.columns.map(col => row[col]).join(description.delimiter || ' '),
             },
           ]}
@@ -192,15 +193,15 @@
     <svelte:fragment slot="footer">
       {#if multiselect}
         <FormSubmit
-          value="OK"
+          value={$t('common.ok')}
           on:click={() => {
             closeCurrentModal();
             onConfirm(checkedKeys);
           }}
         />
       {/if}
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
-      <FormStyledButton type="button" value="Customize" on:click={defineDescription} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.customize')} on:click={defineDescription} />
     </svelte:fragment>
   </ModalBase>
 </FormProvider>

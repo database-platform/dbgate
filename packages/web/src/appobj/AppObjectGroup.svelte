@@ -1,4 +1,5 @@
 <script>
+  import { t } from 'svelte-i18n';
   import Link from '../elements/Link.svelte';
 
   import { plusExpandIcon } from '../icons/expandIcons';
@@ -69,9 +70,9 @@
 {#if isExpanded}
   {#if checkedObjectsStore}
     <div class="ml-2">
-      <Link onClick={() => handleCheckAll(true)}>Check all</Link>
+      <Link onClick={() => handleCheckAll(true)}>{$t('common.checkAll')}</Link>
       |
-      <Link onClick={() => handleCheckAll(false)}>Uncheck all</Link>
+      <Link onClick={() => handleCheckAll(false)}>{$t('common.unCheckAll')}</Link>
     </div>
   {/if}
 

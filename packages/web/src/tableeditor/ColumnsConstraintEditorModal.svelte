@@ -1,7 +1,7 @@
 <script lang="ts">
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import uuidv1 from 'uuid/v1';
-
+  import { t } from 'svelte-i18n';
   import FormProvider from '../forms/FormProvider.svelte';
   import FormSubmit from '../forms/FormSubmit.svelte';
   import ModalBase from '../modals/ModalBase.svelte';
@@ -15,7 +15,7 @@
   export let tableInfo;
   export let constraintLabel;
   export let constraintType;
-  export let constraintNameLabel = 'Constraint name';
+  export let constraintNameLabel = $t('tab.tableStructure.modal.constraints.name');
   export let getExtractConstraintProps;
 
   let constraintName = constraintInfo?.constraintName;
@@ -38,7 +38,9 @@
 <FormProvider>
   <ModalBase {...$$restProps}>
     <svelte:fragment slot="header"
-      >{constraintInfo ? `Edit ${constraintLabel}` : `Add ${constraintLabel}`}</svelte:fragment
+      >{constraintInfo
+        ? `${$t('tab.tableStructure.modal.edit')} ${constraintLabel}`
+        : `${$t('tab.tableStructure.modal.add')} ${constraintLabel}`}</svelte:fragment
     >
 
     <div class="largeFormMarker">
@@ -55,7 +57,7 @@
 
       {#each columns as column, index}
         <div class="row">
-          <div class="label col-3">Column {index + 1}</div>
+          <div class="label col-3">{$t('tab.tableStructure.modal.constraints.column')} {index + 1}</div>
           <div class={$$slots.column ? 'col-3' : 'col-6'}>
             {#key column.columnName}
               <SelectField
@@ -80,7 +82,7 @@
           {/if}
           <div class="col-3 button">
             <FormStyledButton
-              value="Delete"
+              value={$t('common.delete')}
               on:click={e => {
                 const x = [...columns];
                 x.splice(index, 1);
@@ -92,11 +94,11 @@
       {/each}
 
       <div class="row">
-        <div class="label col-3">Add new column</div>
+        <div class="label col-3">{$t('tab.tableStructure.modal.constraints.addNew')}</div>
         <div class="col-9">
           {#key columns.length}
             <SelectField
-              placeholder="Select column"
+              placeholder={$t('tab.tableStructure.modal.constraints.select')}
               value={''}
               on:change={e => {
                 if (e.detail)
@@ -110,7 +112,7 @@
               isNative
               options={[
                 {
-                  label: 'Choose column',
+                  label: $t('tab.tableStructure.modal.constraints.choose'),
                   value: '',
                 },
                 ...(tableInfo?.columns?.map(col => ({
@@ -126,7 +128,7 @@
 
     <svelte:fragment slot="footer">
       <FormSubmit
-        value={'Save'}
+        value={$t('common.save')}
         on:click={() => {
           closeCurrentModal();
           if (constraintInfo) {
@@ -137,11 +139,11 @@
         }}
       />
 
-      <FormStyledButton type="button" value="Close" on:click={closeCurrentModal} />
+      <FormStyledButton type="button" value={$t('common.close')} on:click={closeCurrentModal} />
       {#if constraintInfo}
         <FormStyledButton
           type="button"
-          value="Remove"
+          value={$t('common.remove')}
           on:click={() => {
             closeCurrentModal();
             setTableInfo(tbl => editorDeleteConstraint(tbl, constraintInfo));

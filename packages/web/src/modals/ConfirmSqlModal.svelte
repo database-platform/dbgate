@@ -61,7 +61,7 @@
 
 <FormProviderCore {values}>
   <ModalBase {...$$restProps}>
-    <div slot="header">Save changes</div>
+    <div slot="header">{$t('modal.confirm.header')}</div>
 
     <div class="editor">
       <SqlEditor {engine} value={currentScript} readOnly />
@@ -114,12 +114,12 @@
     {#if isRecreated}
       <div class="form-margin">
         <div>
-          <FontIcon icon="img warn" /> This operation is not directly supported by SQL engine. DbGate can emulate it, but
-          please check the generated SQL script.
+          <FontIcon icon="img warn" />
+          {$t('modal.confirm.recreated.warn')}
         </div>
         <FormCheckboxField
           templateProps={{ noMargin: true }}
-          label="Allow recreate (don't use on production databases)"
+          label={$t('modal.confirm.recreated.label')}
           name="allowRecreate"
         />
       </div>
@@ -128,7 +128,7 @@
     {#if skipConfirmSettingKey}
       <div class="mt-2">
         <TemplatedCheckboxField
-          label="Don't ask again"
+          label={$t('modal.confirm.again')}
           templateProps={{ noMargin: true }}
           checked={dontAskAgain}
           on:change={e => {

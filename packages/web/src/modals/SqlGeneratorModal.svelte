@@ -4,7 +4,7 @@
   import AppObjectList from '../appobj/AppObjectList.svelte';
   import * as databaseObjectAppObject from '../appobj/DatabaseObjectAppObject.svelte';
   import uuidv1 from 'uuid/v1';
-
+  import { t } from 'svelte-i18n';
   import HorizontalSplitter from '../elements/HorizontalSplitter.svelte';
 
   import LargeButton from '../buttons/LargeButton.svelte';
@@ -12,7 +12,7 @@
   import SearchInput from '../elements/SearchInput.svelte';
   import FormCheckboxField from '../forms/FormCheckboxField.svelte';
   import FormFieldTemplateTiny from '../forms/FormFieldTemplateTiny.svelte';
-  import FormProvider from '../forms/FormProvider.svelte';
+  // import FormProvider from '../forms/FormProvider.svelte';
   import FormProviderCore from '../forms/FormProviderCore.svelte';
   import FormValues from '../forms/FormValues.svelte';
 
@@ -20,8 +20,8 @@
   import SqlEditor from '../query/SqlEditor.svelte';
   import createRef from '../utility/createRef';
   import { useDatabaseInfo } from '../utility/metadataLoaders';
-  import WidgetColumnBar from '../widgets/WidgetColumnBar.svelte';
-  import WidgetColumnBarItem from '../widgets/WidgetColumnBarItem.svelte';
+  // import WidgetColumnBar from '../widgets/WidgetColumnBar.svelte';
+  // import WidgetColumnBarItem from '../widgets/WidgetColumnBarItem.svelte';
   import WidgetsInnerContainer from '../widgets/WidgetsInnerContainer.svelte';
 
   import ModalBase from './ModalBase.svelte';
@@ -113,7 +113,7 @@
   function editSql() {
     openNewTab(
       {
-        title: 'Query #',
+        title: $t('tab.common.query'),
         icon: 'img sql-file',
         tabComponent: 'QueryTab',
         props: {
@@ -132,7 +132,7 @@
 <FormProviderCore values={valuesStore} template={FormFieldTemplateTiny}>
   <ModalBase {...$$restProps} fullScreen>
     <svelte:fragment slot="header">
-      SQL Generator
+      {$t('modal.sqlGenerator.header')}
       <span class="dbname">
         <FontIcon icon="icon database" />
         {database}
@@ -145,9 +145,9 @@
     <HorizontalSplitter initialValue="300px" bind:size={managerSize}>
       <svelte:fragment slot="1">
         <div class="flexcol flex1">
-          <WidgetTitle>Choose objects</WidgetTitle>
+          <WidgetTitle>{$t('modal.sqlGenerator.choose')}</WidgetTitle>
           <SearchBoxWrapper>
-            <SearchInput placeholder="Search tables or objects" bind:value={objectsFilter} />
+            <SearchInput placeholder={$t('modal.sqlGenerator.search')} bind:value={objectsFilter} />
           </SearchBoxWrapper>
 
           <WidgetsInnerContainer>
@@ -172,7 +172,7 @@
             {:else}
               <div class="flexcol flex1">
                 {#if truncated}
-                  <ErrorInfo icon="img warn" message="SQL truncated, file size limit exceed" />
+                  <ErrorInfo icon="img warn" message="" />
                 {/if}
                 <div class="relative flex1">
                   <SqlEditor readOnly value={sqlPreview} />
@@ -185,7 +185,7 @@
           </svelte:fragment>
           <svelte:fragment slot="2">
             <div class="flexcol flex1">
-              <WidgetTitle>Generator settings</WidgetTitle>
+              <WidgetTitle>{$t('modal.sqlGenerator.setting')}</WidgetTitle>
               <WidgetsInnerContainer>
                 <FormValues let:values>
                   <div class="obj-heading">Tables</div>
@@ -239,8 +239,8 @@
 
     <svelte:fragment slot="footer">
       <div class="flex m-2">
-        <LargeButton on:click={editSql} icon="icon sql-file">Edit SQL</LargeButton>
-        <LargeButton on:click={closeCurrentModal} icon="icon close">Close</LargeButton>
+        <LargeButton on:click={editSql} icon="icon sql-file">{$t('modal.sqlGenerator.editSql')}</LargeButton>
+        <LargeButton on:click={closeCurrentModal} icon="icon close">{$t('common.close')}</LargeButton>
       </div>
     </svelte:fragment>
   </ModalBase>

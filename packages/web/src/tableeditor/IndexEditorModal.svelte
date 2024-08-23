@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   import CheckboxField from '../forms/CheckboxField.svelte';
-  import FormCheckboxField from '../forms/FormCheckboxField.svelte';
+  // import FormCheckboxField from '../forms/FormCheckboxField.svelte';
   import SelectField from '../forms/SelectField.svelte';
 
   import ColumnsConstraintEditorModal from './ColumnsConstraintEditorModal.svelte';
@@ -20,9 +21,9 @@
 
 <ColumnsConstraintEditorModal
   {...$$restProps}
-  constraintLabel="index"
+  constraintLabel={$t('tab.tableStructure.modal.index.title')}
   constraintType="index"
-  constraintNameLabel="Index name"
+  constraintNameLabel={$t('tab.tableStructure.modal.index.name')}
   {constraintInfo}
   {setTableInfo}
   {tableInfo}
@@ -53,7 +54,9 @@
   <svelte:fragment slot="constraintProps">
     <div class="largeFormMarker">
       <div class="row">
-        <CheckboxField checked={isUnique} on:change={e => (isUnique = e.target.checked)} /> Is unique index
+        <CheckboxField checked={isUnique} on:change={e => (isUnique = e.target.checked)} />{$t(
+          'tab.tableStructure.columns.isUniqueIndex'
+        )}
       </div>
     </div>
   </svelte:fragment>

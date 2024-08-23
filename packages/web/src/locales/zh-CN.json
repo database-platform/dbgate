@@ -20,9 +20,25 @@
     "none": "取消",
     "messages": "消息",
     "results": "结果",
+    "delete": "删除",
     "remove": "移除",
     "addNew": "添加",
-    "name": "名称"
+    "addColumn": "添加列",
+    "name": "名称",
+    "value": "值",
+    "search": "搜索",
+    "description": "描述",
+    "customize": "定制",
+    "checkAll": "全选",
+    "unCheckAll": "取消"
+  },
+  "foreign": {
+    "rule": {
+      "noAction": "无动作",
+      "cascade": "级联",
+      "restrict": "限制",
+      "setNull": "设置为 NULL"
+    }
   },
   "button": {
     "reset": {
@@ -385,7 +401,7 @@
       "yesterday": "昨天",
       "nextWeek": "下周",
       "thisWeek": "本周",
-      "LastWeek": "上周",
+      "lastWeek": "上周",
       "nextMonth": "下个月",
       "thisMonth": "本月",
       "lastMonth": "上个月",
@@ -512,7 +528,7 @@
       "perspective": "透视 #",
       "generateScriptExport": "导出 #",
       "compare": "比较",
-      "diagram": "关系图 #"
+      "diagram": "ER图 #"
     },
     "tableData": {
       "openStructure": "查看结构",
@@ -541,28 +557,55 @@
         "foreignKeys": "未定义外键"
       },
       "columns": {
-        "nullability": "可空性",
-        "notNull": "不为空",
+        "nullability": "非空",
+        "notNull": "非空",
         "dataType": "数据类型",
-        "defaultValue": "默认值",
-        "isSparse": "是否稀疏",
-        "isPrimaryKey": "是否主键",
-        "isAutoincrement": "是否自动递增",
-        "computedExpression": "计算表达式",
-        "isPersisted": "是否持久化",
+        "defaultValue": "默认值。",
+        "defaultValueDetail": "默认值。eg. 字符串 'hello'",
+        "isSparse": "稀疏",
+        "isPrimaryKey": "主键",
+        "isAutoincrement": "自增",
+        "computedExpression": "表达式",
+        "isPersisted": "持久化",
         "unsigned": "无符号",
         "zeroFill": "零填充",
         "comment": "注释",
-        "name": "列名称",
+        "name": "列名",
         "columns": "列",
         "unique": "唯一",
-        "baseColumns": "基柱",
-        "referencedTable": "被引用表",
-        "referencedColumns": "被引用字段"
+        "constraintName": "名称",
+        "baseColumns": "字段",
+        "referencedTable": "引用表",
+        "referencedColumns": "引用字段",
+        "onUpdateAction": "在更新时",
+        "onDeleteAction": "在删除时",
+        "onUpdate": "更新时规则",
+        "onDelete": "删除时规则",
+        "isUniqueIndex": "唯一索引"
       },
       "modal": {
         "addColumn": "添加列",
-        "editColumn": "编辑列"
+        "editColumn": "编辑列",
+        "add": "添加",
+        "edit": "编辑",
+        "constraints": {
+          "addNew": "添加列",
+          "select": "选择列",
+          "choose": "选择列",
+          "name": "约束名称",
+          "column": "列"
+        },
+        "index": {
+          "title": "索引",
+          "name": "索引名称"
+        },
+        "unique": {
+          "title": "唯一约束"
+        },
+        "foreign": {
+          "add": "添加外键",
+          "edit": "编辑外键"
+        }
       }
     }
   },
@@ -600,6 +643,39 @@
     "saveFile": {
       "header": "保存文件",
       "name": "文件名"
+    },
+    "valueLookup": {
+      "header": "选择的值来自"
+    },
+    "dictionary": {
+      "header": "查找"
+    },
+    "confirm": {
+      "header": "保存更新",
+      "recreated": {
+        "label": "允许重建 (不要在生产数据库使用)",
+        "warn": "SQL引擎不直接支持此操作。DBmanager可以模拟它，但请检查生成的SQL脚本。"
+      },
+      "again": "不再询问"
+    },
+    "sqlGenerator": {
+      "header": "SQL 生成器",
+      "choose": "选择对象",
+      "search": "搜索表或对象",
+      "editSql": "编辑 SQL",
+      "setting": "生成器设置",
+      "warn": "SQL 已被截断，文件大小超出限制",
+      "loading": "加载SQL预览"
+    },
+    "color": {
+      "database": {
+        "header": "选择库颜色",
+        "text": "此颜色覆盖特定数据库的连接颜色。"
+      },
+      "connection": {
+        "header": "选择链接颜色",
+        "text": "此颜色用作此连接中所有数据库的默认颜色。"
+      }
     }
   },
   "widgets": {
@@ -608,7 +684,7 @@
       "objectTitle": "表, 视图, 函数",
       "objectDocumentTitle": "集合",
       "contentTitle": "数据资产详情",
-      "contentError": "数据资产没有被选择"
+      "contentError": "请选择数据资产"
     },
     "connectionList": {
       "search": "搜索数据资产",

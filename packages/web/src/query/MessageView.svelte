@@ -33,13 +33,15 @@
     if (!eventName) {
       return;
     }
-    const sql = await localforage.getItem(eventName);
-    await apiCall('sessions/save-logs', {
-      sesid: eventName.split('session-info-')[1],
-      sql,
-      message: JSON.stringify(items),
-    });
-    localforage.removeItem(eventName);
+    try {
+      const sql = await localforage.getItem(eventName);
+      await apiCall('sessions/save-logs', {
+        sesid: eventName.split('session-info-')[1],
+        sql,
+        message: JSON.stringify(items),
+      });
+      localforage.removeItem(eventName);
+    } catch (err) {}
   }
 
   $: {

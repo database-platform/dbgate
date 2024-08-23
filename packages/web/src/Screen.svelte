@@ -14,8 +14,8 @@
     visibleToolbar,
     visibleIconBar,
   } from './stores';
-  import TabsPanel from './tabpanel/TabsPanel.svelte';
-  import TabRegister from './tabpanel/TabRegister.svelte';
+  // import TabsPanel from './tabpanel/TabsPanel.svelte';
+  // import TabRegister from './tabpanel/TabRegister.svelte';
   import CommandPalette from './commands/CommandPalette.svelte';
   import Toolbar from './widgets/Toolbar.svelte';
   import splitterDrag from './utility/splitterDrag';
@@ -28,7 +28,7 @@
   import TitleBar from './widgets/TitleBar.svelte';
   import FontIcon from './icons/FontIcon.svelte';
   import getElectron from './utility/getElectron';
-  import TabsContainer from './tabpanel/TabsContainer.svelte';
+  // import TabsContainer from './tabpanel/TabsContainer.svelte';
   import MultiTabsContainer from './tabpanel/MultiTabsContainer.svelte';
 
   $: currentThemeType = $currentThemeDefinition?.themeType == 'dark' ? 'theme-type-dark' : 'theme-type-light';
@@ -46,8 +46,8 @@
 
 <div class="not-supported" class:isElectron>
   <div class="m-5 big-icon"><FontIcon icon="img warn" /></div>
-  <div class="m-3">Sorry, DbGate is not supported on mobile devices.</div>
-  <div class="m-3">Please visit <a href="https://dbgate.org">DbGate web</a> for more info.</div>
+  <div class="m-3">Sorry, DBmanager is not supported on mobile devices.</div>
+  <div class="m-3">Please visit <a href="https://platform.dataleapinfo.com">DBmanager web</a> for more info.</div>
 </div>
 
 <div
