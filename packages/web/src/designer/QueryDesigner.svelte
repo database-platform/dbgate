@@ -1,8 +1,8 @@
 <script lang="ts">
   import _ from 'lodash';
-
+  import { t } from 'svelte-i18n';
   import Designer from './Designer.svelte';
-  import { isConnectedByReference, referenceIsConnecting } from './designerTools';
+  import { isConnectedByReference } from './designerTools';
   import QueryDesignerReference from './QueryDesignerReference.svelte';
 </script>
 
@@ -30,7 +30,7 @@
       };
 
       return [
-        { text: 'Remove', onClick: () => onRemoveReference(reference) },
+        { text: $t('common.remove'), onClick: () => onRemoveReference(reference) },
         !isConnected && [
           { divider: true },
           { onClick: () => setJoinType('INNER JOIN'), text: 'Set INNER JOIN' },

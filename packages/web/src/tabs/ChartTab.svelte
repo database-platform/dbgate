@@ -18,7 +18,7 @@
   import { derived } from 'svelte/store';
   import ChartEditor from '../charts/ChartEditor.svelte';
   import invalidateCommands from '../commands/invalidateCommands';
-  import registerCommand from '../commands/registerCommand';
+  // import registerCommand from '../commands/registerCommand';
   import { registerFileCommands } from '../commands/stdCommands';
 
   import ErrorInfo from '../elements/ErrorInfo.svelte';
@@ -26,10 +26,10 @@
   import LoadingInfo from '../elements/LoadingInfo.svelte';
 
   import useEditorData from '../query/useEditorData';
-  import { getContextMenu, registerMenu } from '../utility/contextMenu';
+  import { registerMenu } from '../utility/contextMenu';
   import createActivator, { getActiveComponent } from '../utility/createActivator';
   import createUndoReducer from '../utility/createUndoReducer';
-  import resolveApi from '../utility/resolveApi';
+  // import resolveApi from '../utility/resolveApi';
 
   export let tabid;
   export let conid;
@@ -41,7 +41,7 @@
     return $editorState.value || '';
   }
 
-  const { editorState, editorValue, setEditorData } = useEditorData({
+  const { editorState, setEditorData } = useEditorData({
     tabid,
     onInitialData: value => {
       dispatchModel({ type: 'reset', value });

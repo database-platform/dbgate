@@ -18,6 +18,7 @@
   import TableControl from './TableControl.svelte';
   import FormStyledButton from '../buttons/FormStyledButton.svelte';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import FontIcon from '../icons/FontIcon.svelte';
 
   export let value;
@@ -120,29 +121,33 @@
   <TableControl
     rows={columns || []}
     columns={[
-      { fieldName: 'columnName', slot: 8, header: 'Column/Expression' },
-      { fieldName: 'tableDisplayName', header: 'Table', formatter: row => getTableDisplayName(row, tables) },
-      { fieldName: 'isOutput', header: 'Output', slot: 0 },
-      { fieldName: 'alias', header: 'Alias', slot: 1 },
-      { fieldName: 'isGrouped', header: 'Group by', slot: 2 },
-      { fieldName: 'aggregate', header: 'Aggregate', slot: 3 },
-      { fieldName: 'sortOrder', header: 'Sort order', slot: 4 },
-      { fieldName: 'filter', header: 'Filter', slot: 5, props: { filterField: 'filter' } },
+      { fieldName: 'columnName', slot: 8, header: $t('tab.design.columns.columnName') },
+      {
+        fieldName: 'tableDisplayName',
+        header: $t('tab.design.columns.table'),
+        formatter: row => getTableDisplayName(row, tables),
+      },
+      { fieldName: 'isOutput', header: $t('tab.design.columns.output'), slot: 0 },
+      { fieldName: 'alias', header: $t('tab.design.columns.alias'), slot: 1 },
+      { fieldName: 'isGrouped', header: $t('tab.design.columns.groupBy'), slot: 2 },
+      { fieldName: 'aggregate', header: $t('tab.design.columns.aggregate'), slot: 3 },
+      { fieldName: 'sortOrder', header: $t('tab.design.columns.sortOrder'), slot: 4 },
+      { fieldName: 'filter', header: $t('tab.design.columns.filter'), slot: 5, props: { filterField: 'filter' } },
       ..._.range(settings?.additionalFilterCount || 0).map(index => ({
         fieldName: `additionalFilter${index + 1}`,
-        header: `OR Filter ${index + 2}`,
+        header: `${$t('tab.design.columns.orFilter')} ${index + 2}`,
         slot: 5,
         props: { filterField: `additionalFilter${index + 1}` },
       })),
       hasGroupedColumn && {
         fieldName: 'groupFilter',
-        header: 'Group filter',
+        header: $t('tab.design.columns.groupFilter'),
         slot: 5,
         props: { filterField: 'groupFilter' },
       },
       ..._.range(hasGroupedColumn ? settings?.additionalGroupFilterCount || 0 : 0).map(index => ({
         fieldName: `additionalGroupFilter${index + 1}`,
-        header: `OR group filter ${index + 2}`,
+        header: `${$t('tab.design.columns.orGroupFilter')} ${index + 2}`,
         slot: 5,
         props: { filterField: `additionalGroupFilter${index + 1}` },
       })),
@@ -253,16 +258,28 @@
       </div>
     </svelte:fragment>
   </TableControl>
-  <FormStyledButton value="Add custom expression" on:click={addExpressionColumn} style="width:200px" />
-  <FormStyledButton value="Add OR condition" on:click={addOrCondition} style="width:200px" />
+  <FormStyledButton
+    value={$t('tab.design.btn.addCustomExpression')}
+    on:click={addExpressionColumn}
+    style="width:200px"
+  />
+  <FormStyledButton value={$t('tab.design.btn.addOrCondition')} on:click={addOrCondition} style="width:200px" />
   {#if settings?.additionalFilterCount > 0}
-    <FormStyledButton value="Remove OR condition" on:click={removeOrCondition} style="width:200px" />
+    <FormStyledButton value={$t('tab.design.btn.removeOrCondition')} on:click={removeOrCondition} style="width:200px" />
   {/if}
   {#if hasGroupedColumn}
-    <FormStyledButton value="Add group OR condition" on:click={addGroupOrCondition} style="width:200px" />
+    <FormStyledButton
+      value={$t('tab.design.btn.addGroupOrCondition')}
+      on:click={addGroupOrCondition}
+      style="width:200px"
+    />
   {/if}
   {#if hasGroupedColumn && settings?.additionalGroupFilterCount > 0}
-    <FormStyledButton value="Remove group OR condition" on:click={removeGroupOrCondition} style="width:200px" />
+    <FormStyledButton
+      value={$t('tab.design.btn.removeGroupOrCondition')}
+      on:click={removeGroupOrCondition}
+      style="width:200px"
+    />
   {/if}
 </div>
 

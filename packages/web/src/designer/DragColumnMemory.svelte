@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from 'svelte-i18n';
   export let sourceDragColumn$;
   export let targetDragColumn$;
   export let settings;
@@ -40,7 +41,7 @@
     {#if memory}
       {memory.columnName}
     {:else}
-      Drag & drop column here
+      {$t('tab.design.dragDropColumn')}
     {/if}
   </div>
 {/if}

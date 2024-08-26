@@ -32,7 +32,8 @@
     "checkAll": "Check All",
     "unCheckAll": "Uncheck All",
     "splitWindow": "Split window",
-    "newQuery": "New query"
+    "newQuery": "New query",
+    "fill": "Fill"
   },
   "foreign": {
     "rule": {
@@ -619,6 +620,54 @@
         "foreign": {
           "add": "Add foreign key",
           "edit": "Edit foreign key"
+        }
+      }
+    },
+    "design": {
+      "title": "Columns",
+      "dragDropColumn": "Drag & drop column here",
+      "search": "Filter columns",
+      "columns": {
+        "columnName": "Column/Expression",
+        "table": "Table",
+        "output": "Output",
+        "alias": "Alias",
+        "groupBy": "Group by",
+        "aggregate": "Aggregate",
+        "sortOrder": "Sort order",
+        "filter": "Filter",
+        "orFilter": "Or Filter",
+        "groupFilter": "Group filter",
+        "orGroupFilter": "Or group filter"
+      },
+      "btn": {
+        "addCustomExpression": "Add custom expression",
+        "addOrCondition": "Add OR condition",
+        "removeOrCondition": "Remove OR condition",
+        "addGroupOrCondition": "Add group OR condition",
+        "removeGroupOrCondition": "Remove group OR condition"
+      }
+    },
+    "chart": {
+      "title": {
+        "style": "Style",
+        "data": "Data"
+      },
+      "style": {
+        "form": {
+          "chartType": "Chart type",
+          "chartTitle": "Chart title",
+          "truncateFrom": "Truncate from",
+          "truncateLimit": "Truncate limit",
+          "showRelativeValues": "Show relative values",
+          "colorSet": "Color set"
+        }
+      },
+      "data": {
+        "form": {
+          "labelColumn": "Label column",
+          "color": "Color",
+          "label": "Label"
         }
       }
     }

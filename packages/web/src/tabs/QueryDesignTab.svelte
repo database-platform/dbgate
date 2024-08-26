@@ -55,6 +55,7 @@
   import ToolStripExportButton, { createQuickExportHandlerRef } from '../buttons/ToolStripExportButton.svelte';
   import ToolStripSaveButton from '../buttons/ToolStripSaveButton.svelte';
   import { onDestroy, onMount } from 'svelte';
+  import { t } from 'svelte-i18n';
 
   export let tabid;
   export let conid;
@@ -282,7 +283,7 @@
       <ResultTabs
         tabs={[
           {
-            label: 'Columns',
+            label: $t('tab.design.columns.title'),
             component: QueryDesignColumns,
             props: {
               value: $modelState.value || {},
@@ -319,6 +320,6 @@
     <ToolStripCommandButton command="designer.kill" />
     <ToolStripCommandButton command="designer.openSql" />
     <ToolStripSaveButton idPrefix="designer" />
-    <ToolStripExportButton command="jslTableGrid.export" {quickExportHandlerRef} label="Export result" />
+    <ToolStripExportButton command="jslTableGrid.export" {quickExportHandlerRef} label={$t('common.export')} />
   </svelte:fragment>
 </ToolStripContainer>

@@ -14,6 +14,7 @@
   import { loadChartData, loadChartStructure } from './chartDataLoader';
   import DataChart from './DataChart.svelte';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import ErrorInfo from '../elements/ErrorInfo.svelte';
   import FormColorField from '../forms/FormColorField.svelte';
 
@@ -95,10 +96,10 @@
   <HorizontalSplitter initialValue="300px" bind:size={managerSize}>
     <div class="left" slot="1">
       <WidgetColumnBar>
-        <WidgetColumnBarItem title="Style" name="style" height="40%">
+        <WidgetColumnBarItem title={$t('tab.chart.title.style')} name="style" height="40%">
           <ManagerInnerContainer width={managerSize}>
             <FormSelectField
-              label="Chart type"
+              label={$t('tab.chart.style.form.chartType')}
               name="chartType"
               isNative
               options={[
@@ -108,29 +109,29 @@
                 { value: 'polarArea', label: 'Polar area' },
               ]}
             />
-            <FormTextField label="Chart title" name="chartTitle" />
-            <FormSelectField
-              label="Truncate from"
-              name="truncateFrom"
-              isNative
-              options={[
-                { value: 'begin', label: 'Begin' },
-                { value: 'end', label: 'End (most recent data for datetime)' },
-              ]}
-            />
-            <FormTextField label="Truncate limit" name="truncateLimit" />
-            <FormCheckboxField label="Show relative values" name="showRelativeValues" />
+            <FormTextField label={$t('tab.chart.style.form.chartTitle')} name="chartTitle" />
+            <!-- <FormSelectField -->
+            <!--   label={$t('tab.chart.style.form.truncateFrom')} -->
+            <!--   name="truncateFrom" -->
+            <!--   isNative -->
+            <!--   options={[ -->
+            <!--     { value: 'begin', label: 'Begin' }, -->
+            <!--     { value: 'end', label: 'End (most recent data for datetime)' }, -->
+            <!--   ]} -->
+            <!-- /> -->
+            <!-- <FormTextField label={$t('tab.chart.style.form.truncateLimit')} name="truncateLimit" /> -->
+            <FormCheckboxField label={$t('tab.chart.style.form.showRelativeValues')} name="showRelativeValues" />
             {#if $configStore.chartType == 'line'}
-              <FormCheckboxField label="Fill" name="fillLineChart" defaultValue={true} />
+              <FormCheckboxField label={$t('common.fill')} name="fillLineChart" defaultValue={true} />
             {/if}
-            <FormTextField label="Color set" name="colorSeed" />
+            <FormTextField label={$t('tab.chart.style.form.colorSet')} name="colorSeed" />
           </ManagerInnerContainer>
         </WidgetColumnBarItem>
-        <WidgetColumnBarItem title="Data" name="data">
+        <WidgetColumnBarItem title={$t('tab.chart.title.data')} name="data">
           <ManagerInnerContainer width={managerSize}>
             {#if availableColumnNames.length > 0}
               <FormSelectField
-                label="Label column"
+                label={$t('tab.chart.data.form.labelColumn')}
                 name="labelColumn"
                 isNative
                 options={availableColumnNames.map(col => ({ value: col, label: col }))}
@@ -140,8 +141,12 @@
             {#each availableColumnNames as col (col)}
               <FormCheckboxField label={col} name={`dataColumn_${col}`} />
               {#if config[`dataColumn_${col}`]}
-                <FormColorField label="Color" name={`dataColumnColor_${col}`} emptyLabel="Random" />
-                <FormTextField label="Label" name={`dataColumnLabel_${col}`} />
+                <FormColorField
+                  label={$t('tab.chart.data.form.color')}
+                  name={`dataColumnColor_${col}`}
+                  emptyLabel="Random"
+                />
+                <FormTextField label={$t('tab.chart.data.form.label')} name={`dataColumnLabel_${col}`} />
               {/if}
             {/each}
           </ManagerInnerContainer>

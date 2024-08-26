@@ -32,7 +32,8 @@
     "checkAll": "全选",
     "unCheckAll": "取消",
     "splitWindow": "分割窗口",
-    "newQuery": "新建查询"
+    "newQuery": "新建查询",
+    "fill": "填充"
   },
   "foreign": {
     "rule": {
@@ -619,6 +620,54 @@
         "foreign": {
           "add": "添加外键",
           "edit": "编辑外键"
+        }
+      }
+    },
+    "design": {
+      "title": "列",
+      "dragDropColumn": "拖拽列到这里",
+      "search": "过滤列",
+      "columns": {
+        "columnName": "列/表达式",
+        "table": "表",
+        "output": "输出",
+        "alias": "别名",
+        "groupBy": "分组",
+        "aggregate": "合计",
+        "sortOrder": "排序",
+        "filter": "过滤",
+        "orFilter": "或过滤",
+        "groupFilter": "分组过滤",
+        "orGroupFilter": "或分组过滤"
+      },
+      "btn": {
+        "addCustomExpression": "添加自定义表达式",
+        "addOrCondition": "添加或条件",
+        "removeOrCondition": "移除或条件",
+        "addGroupOrCondition": "添加分组或条件",
+        "removeGroupOrCondition": "移除分组或条件"
+      }
+    },
+    "chart": {
+      "title": {
+        "style": "样式",
+        "data": "数据"
+      },
+      "style": {
+        "form": {
+          "chartType": "图表类型",
+          "chartTitle": "图表标题",
+          "truncateFrom": "Truncate from",
+          "truncateLimit": "Truncate limit",
+          "showRelativeValues": "相对值",
+          "colorSet": "颜色设置"
+        }
+      },
+      "data": {
+        "form": {
+          "labelColumn": "标签列",
+          "color": "颜色",
+          "label": "标签"
         }
       }
     }

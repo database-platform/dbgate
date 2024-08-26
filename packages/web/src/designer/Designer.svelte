@@ -33,6 +33,7 @@
   import { getTableInfo, useDatabaseInfo, useUsedApps } from '../utility/metadataLoaders';
   import cleanupDesignColumns from './cleanupDesignColumns';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import { writable } from 'svelte/store';
   import { tick } from 'svelte';
   import contextMenu from '../utility/contextMenu';
@@ -975,7 +976,7 @@
     <div class="panel">
       <DragColumnMemory {settings} {sourceDragColumn$} {targetDragColumn$} />
       <div class="searchbox">
-        <SearchInput bind:value={columnFilter} placeholder="Filter columns" />
+        <SearchInput bind:value={columnFilter} placeholder={$t('tab.design.search')} />
         <CloseSearchButton bind:filter={columnFilter} />
       </div>
     </div>
