@@ -818,6 +818,8 @@
       "structureError": "No structure was loaded, probably table doesn't exist in current database",
       "rowEditableError": "No rows loaded, check filter or add new documents. You could copy documents from ohter collections/tables with Copy advanved/Copy as JSON command.",
       "rowError": "No rows loaded!"
-    }
+    },
+    "perspective": "Invalid perspective format, please create new perspective",
+    "search": "Search column or table"
   }
 }

@@ -36,6 +36,7 @@
   import runCommand from '../commands/runCommand';
   import { apiCall } from '../utility/api';
   import { filterAppsForDatabase } from '../utility/appTools';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export let conid;
   export let database;
@@ -52,7 +53,7 @@
 
   $: dbApps = filterAppsForDatabase($currentDatabase?.connection, $currentDatabase?.name, $apps || []);
 
-  $: console.log('OBJECTS', $objects);
+  $: console.log('OBJECTS', $objects, $currentDatabase);
 
   $: objectList = _.flatten([
     ...['tables', 'collections', 'views', 'matviews', 'procedures', 'functions'].map(objectTypeField =>
@@ -113,11 +114,13 @@
     <ErrorInfo message={$t('widgets.sqlObjectList.error', { values: { database } })} icon="img alert" />
     <div class="m-1" />
     <InlineButton on:click={handleRefreshDatabase}>{$t('common.refresh')}</InlineButton>
-    {#if driver?.databaseEngineTypes?.includes('sql')}
+    {#if hasDataPermission($currentDatabase.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
+      && driver?.databaseEngineTypes?.includes('sql')}
       <div class="m-1" />
       <InlineButton on:click={() => runCommand('new.table')}>{$t('contextMenu.database.newTable')}</InlineButton>
     {/if}
-    {#if driver?.databaseEngineTypes?.includes('document')}
+    {#if hasDataPermission($currentDatabase.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
+      && driver?.databaseEngineTypes?.includes('document')}
       <div class="m-1" />
       <InlineButton on:click={() => runCommand('new.collection')}
         >{$t('contextMenu.database.newCollection')}</InlineButton
@@ -128,7 +131,9 @@
   <SearchBoxWrapper>
     <SearchInput placeholder={$t('widgets.sqlObjectList.search')} bind:value={filter} />
     <CloseSearchButton bind:filter />
-    <DropDownButton icon="icon plus-thick" menu={createAddMenu} />
+    {#if hasDataPermission($currentDatabase.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
+      <DropDownButton icon="icon plus-thick" menu={createAddMenu} />
+    {/if}
     <InlineButton on:click={handleRefreshDatabase} title={$t('widgets.sqlObjectList.refresh')}>
       <FontIcon icon="icon refresh" />
     </InlineButton>

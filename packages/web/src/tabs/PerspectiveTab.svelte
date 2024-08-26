@@ -44,6 +44,7 @@
   import createUndoReducer from '../utility/createUndoReducer';
   import { registerFileCommands } from '../commands/stdCommands';
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
   import ToolStripSaveButton from '../buttons/ToolStripSaveButton.svelte';
   import ErrorInfo from '../elements/ErrorInfo.svelte';
 
@@ -123,7 +124,7 @@
 
 <ToolStripContainer>
   {#if isFormatError}
-    <ErrorInfo message="Invalid perspective format, please create new perspective" alignTop />
+    <ErrorInfo message={$t('message.perspective')} alignTop />
   {:else}
     <PerspectiveView
       {conid}
@@ -152,7 +153,9 @@
   <svelte:fragment slot="toolstrip">
     <ToolStripCommandButton
       command="designer.arrange"
-      buttonLabel={$modelState.value?.isArranged ? '(Arranged)' : 'Arrange'}
+      buttonLabel={$modelState.value?.isArranged
+        ? `(${$t('command.designer.arrange')})`
+        : $t('command.designer.arrange')}
     />
     <ToolStripCommandButton command="perspective.refresh" />
     <ToolStripCommandButton command="perspective.customJoin" />

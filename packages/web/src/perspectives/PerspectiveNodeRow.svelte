@@ -2,12 +2,12 @@
   import type { ChangePerspectiveConfigFunc, PerspectiveConfig } from 'dbgate-datalib';
   import { PerspectiveTreeNode } from 'dbgate-datalib';
 
-  import ColumnLabel from '../elements/ColumnLabel.svelte';
+  // import ColumnLabel from '../elements/ColumnLabel.svelte';
   import { plusExpandIcon } from '../icons/expandIcons';
   import FontIcon from '../icons/FontIcon.svelte';
-  import { showModal } from '../modals/modalTools';
+  // import { showModal } from '../modals/modalTools';
   import contextMenu from '../utility/contextMenu';
-  import CustomJoinModal from './CustomJoinModal.svelte';
+  // import CustomJoinModal from './CustomJoinModal.svelte';
   import { getPerspectiveNodeMenu } from './perspectiveMenu';
   import SortOrderIcon from '../designer/SortOrderIcon.svelte';
 

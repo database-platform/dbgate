@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   import { copyTextToClipboard } from '../utility/clipboard';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export const extractKey = props => props.name;
 
@@ -39,9 +40,10 @@
     $currentDatabase,
     $apps,
     $openedSingleDatabaseConnections,
-    $__
+    $__,
+    permission
   ) {
-    const apps = filterAppsForDatabase(connection, name, $apps);
+    const apps2 = filterAppsForDatabase(connection, name, $apps);
     const handleNewQuery = () => {
       const tooltip = `${getConnectionLabel(connection)}\n${name}`;
       openNewTab({
@@ -279,21 +281,22 @@
 
     const driver = findEngineDriver(connection, getExtensions());
 
-    const commands = _.flatten((apps || []).map(x => x.commands || []));
+    const commands = _.flatten((apps2 || []).map(x => x.commands || []));
 
     const isSqlOrDoc =
       driver?.databaseEngineTypes?.includes('sql') || driver?.databaseEngineTypes?.includes('document');
-    console.log('database app object: ', commands);
     return [
       { onClick: handleNewQuery, text: $__('contextMenu.common.newQuery'), isNewQuery: true },
-      driver?.databaseEngineTypes?.includes('sql') && {
-        onClick: handleNewTable,
-        text: $__('contextMenu.database.newTable'),
-      },
-      driver?.databaseEngineTypes?.includes('document') && {
-        onClick: handleNewCollection,
-        text: $__('contextMenu.database.newCollection'),
-      },
+      hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_CREATE) &&
+        driver?.databaseEngineTypes?.includes('sql') && {
+          onClick: handleNewTable,
+          text: $__('contextMenu.database.newTable'),
+        },
+      hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_CREATE) &&
+        driver?.databaseEngineTypes?.includes('document') && {
+          onClick: handleNewCollection,
+          text: $__('contextMenu.database.newCollection'),
+        },
       driver?.databaseEngineTypes?.includes('sql') && {
         onClick: handleQueryDesigner,
         text: $__('contextMenu.database.designQuery'),
@@ -303,14 +306,15 @@
         text: $__('contextMenu.database.designPerspectiveQuery'),
       },
       { divider: true },
-      isSqlOrDoc && !connection.isReadOnly && { onClick: handleImport, text: $__('contextMenu.database.importWizard') },
-      isSqlOrDoc && { onClick: handleExport, text: $__('contextMenu.database.exportWizard') },
-      driver?.databaseEngineTypes?.includes('sql') && {
-        onClick: handleSqlRestore,
-        text: $__('contextMenu.common.restoreSqlDump'),
-      },
-      driver?.supportsDatabaseDump && { onClick: handleSqlDump, text: $__('contextMenu.common.backupSqlDump') },
-      isSqlOrDoc &&
+      // isSqlOrDoc && !connection.isReadOnly && { onClick: handleImport, text: $__('contextMenu.database.importWizard') },
+      // isSqlOrDoc && { onClick: handleExport, text: $__('contextMenu.database.exportWizard') },
+      // driver?.databaseEngineTypes?.includes('sql') && {
+      //   onClick: handleSqlRestore,
+      //   text: $__('contextMenu.common.restoreSqlDump'),
+      // },
+      // driver?.supportsDatabaseDump && { onClick: handleSqlDump, text: $__('contextMenu.common.backupSqlDump') },
+      hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_CREATE) &&
+        isSqlOrDoc &&
         !connection.isReadOnly &&
         !connection.singleDatabase && { onClick: handleDropDatabase, text: $__('contextMenu.database.dropDatabase') },
       { divider: true },
@@ -330,18 +334,18 @@
         onClick: handleDatabaseProfiler,
         text: $__('contextMenu.database.databaseProfiler'),
       },
-      isSqlOrDoc && { onClick: handleOpenJsonModel, text: $__('contextMenu.database.openJsonModel') },
-      isSqlOrDoc && { onClick: handleExportModel, text: $__('contextMenu.database.exportModel') },
-      isSqlOrDoc &&
-        _.get($currentDatabase, 'connection._id') &&
-        (_.get($currentDatabase, 'connection._id') != _.get(connection, '_id') ||
-          (_.get($currentDatabase, 'connection._id') == _.get(connection, '_id') &&
-            _.get($currentDatabase, 'name') != _.get(connection, 'name'))) && {
-          onClick: handleCompareWithCurrentDb,
-          text: $__('contextMenu.database.compareDatabase', {
-            values: { currentDatabaseName: _.get($currentDatabase, 'name') },
-          }),
-        },
+      // isSqlOrDoc && { onClick: handleOpenJsonModel, text: $__('contextMenu.database.openJsonModel') },
+      // isSqlOrDoc && { onClick: handleExportModel, text: $__('contextMenu.database.exportModel') },
+      // isSqlOrDoc &&
+      //   _.get($currentDatabase, 'connection._id') &&
+      //   (_.get($currentDatabase, 'connection._id') != _.get(connection, '_id') ||
+      //     (_.get($currentDatabase, 'connection._id') == _.get(connection, '_id') &&
+      //       _.get($currentDatabase, 'name') != _.get(connection, 'name'))) && {
+      //     onClick: handleCompareWithCurrentDb,
+      //     text: $__('contextMenu.database.compareDatabase', {
+      //       values: { currentDatabaseName: _.get($currentDatabase, 'name') },
+      //     }),
+      //   },
 
       driver?.databaseEngineTypes?.includes('keyvalue') && {
         onClick: handleGenerateScript,
@@ -425,8 +429,13 @@
       $currentDatabase,
       $apps,
       $openedSingleDatabaseConnections,
-      $__
+      $__,
+      data.permission
     );
+  }
+
+  function handleClick() {
+    $currentDatabase = data;
   }
 
   $: isPinned = !!$pinnedDatabases.find(x => x?.name == data.name && x?.connection?._id == data.connection?._id);
@@ -443,7 +452,7 @@
     passProps?.connectionColorFactory({ conid: _.get(data.connection, '_id'), database: data.name }, null, null, false)}
   isBold={_.get($currentDatabase, 'connection._id') == _.get(data.connection, '_id') &&
     _.get($currentDatabase, 'name') == data.name}
-  on:click={() => ($currentDatabase = data)}
+  on:click={() => handleClick()}
   on:dragstart
   on:dragenter
   on:dragend

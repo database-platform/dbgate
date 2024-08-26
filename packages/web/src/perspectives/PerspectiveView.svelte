@@ -29,13 +29,14 @@
     extractPerspectiveDatabases,
     PerspectiveDataProvider,
     PerspectiveTableNode,
-    PerspectiveTreeNode,
+    // PerspectiveTreeNode,
     processPerspectiveDefaultColunns,
     shouldProcessPerspectiveDefaultColunns,
   } from 'dbgate-datalib';
   import type { ChangePerspectiveConfigFunc, PerspectiveConfig } from 'dbgate-datalib';
 
   import _ from 'lodash';
+  import { t } from 'svelte-i18n';
 
   import HorizontalSplitter from '../elements/HorizontalSplitter.svelte';
   import debug from 'debug';
@@ -168,7 +169,7 @@
 <HorizontalSplitter initialValue={getInitialManagerSize()} bind:size={managerSize} allowCollapseChild1>
   <div class="left" slot="1">
     <WidgetColumnBar>
-      <WidgetColumnBarItem title="Choose data" name="perspectiveTree" height={'70%'}>
+      <WidgetColumnBarItem title={$t('common.choose')} name="perspectiveTree" height={'70%'}>
         {#if tempRoot && tempRoot != root}
           <div class="temp-root">
             <div>
@@ -184,7 +185,7 @@
         {/if}
 
         <SearchBoxWrapper>
-          <SearchInput placeholder="Search column or table" bind:value={filter} />
+          <SearchInput placeholder={$t('message.search')} bind:value={filter} />
           <CloseSearchButton bind:filter />
         </SearchBoxWrapper>
 

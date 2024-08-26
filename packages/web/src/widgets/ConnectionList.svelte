@@ -1,6 +1,6 @@
 <script lang="ts">
   import _ from 'lodash';
-  import { _ as __ } from 'svelte-i18n';
+  import { t } from 'svelte-i18n';
   import InlineButton from '../buttons/InlineButton.svelte';
   import SearchInput from '../elements/SearchInput.svelte';
   import WidgetsInnerContainer from './WidgetsInnerContainer.svelte';
@@ -114,7 +114,7 @@
 </script>
 
 <SearchBoxWrapper>
-  <SearchInput placeholder={$__('widgets.connectionList.search')} bind:value={filter} />
+  <SearchInput placeholder={$t('widgets.connectionList.search')} bind:value={filter} />
   <CloseSearchButton bind:filter />
   {#if $commandsCustomized['new.connection']?.enabled}
     <InlineButton on:click={() => runCommand('new.connection')} title="Add new connection">
@@ -124,7 +124,7 @@
       <FontIcon icon="icon add-folder" />
     </InlineButton>
   {/if}
-  <InlineButton on:click={handleRefreshConnections} title={$__('widgets.connectionList.refresh')}>
+  <InlineButton on:click={handleRefreshConnections} title={$t('widgets.connectionList.refresh')}>
     <FontIcon icon="icon refresh" />
   </InlineButton>
 </SearchBoxWrapper>

@@ -78,7 +78,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
-  import { _ as __ } from 'svelte-i18n';
+  import { t } from 'svelte-i18n';
   import AppObjectCore from './AppObjectCore.svelte';
   import {
     currentDatabase,
@@ -187,9 +187,9 @@
     };
     const handleCreateDatabase = () => {
       showModal(InputTextModal, {
-        header: $__('modal.newdb.header'),
+        header: $t('modal.newdb.header'),
         value: 'newdb',
-        label: $__('modal.newdb.label'),
+        label: $t('modal.newdb.label'),
         onConfirm: name =>
           apiCall('server-connections/create-database', {
             conid: data._id,
@@ -210,7 +210,7 @@
     const handleNewQuery = () => {
       const tooltip = `${getConnectionLabel(data)}`;
       openNewTab({
-        title: $__('tab.common.query'),
+        title: $t('tab.common.query'),
         icon: 'img sql-file',
         tooltip,
         tabComponent: 'QueryTab',
@@ -224,42 +224,42 @@
       config.runAsPortal == false && [
         {
           text: $openedConnections.includes(data._id)
-            ? $__('contextMenu.common.details')
-            : $__('contextMenu.common.edit'),
+            ? $t('contextMenu.common.details')
+            : $t('contextMenu.common.edit'),
           onClick: handleOpenConnectionTab,
         },
         !$openedConnections.includes(data._id) && {
-          text: $__('contextMenu.common.delete'),
+          text: $t('contextMenu.common.delete'),
           onClick: handleDelete,
         },
         {
-          text: $__('contextMenu.common.duplicate'),
+          text: $t('contextMenu.common.duplicate'),
           onClick: handleDuplicate,
         },
       ],
       !data.singleDatabase && [
         !$openedConnections.includes(data._id) && {
-          text: $__('contextMenu.connection.connect'),
+          text: $t('contextMenu.connection.connect'),
           onClick: handleConnect,
         },
-        { onClick: handleNewQuery, text: $__('contextMenu.common.newQuery'), isNewQuery: true },
+        { onClick: handleNewQuery, text: $t('contextMenu.common.newQuery'), isNewQuery: true },
         $openedConnections.includes(data._id) &&
           data.status && {
-            text: $__('contextMenu.common.refresh'),
+            text: $t('contextMenu.common.refresh'),
             onClick: handleRefresh,
           },
         $openedConnections.includes(data._id) && {
-          text: $__('contextMenu.connection.disconnect'),
+          text: $t('contextMenu.connection.disconnect'),
           onClick: handleDisconnect,
         },
         $openedConnections.includes(data._id) &&
           driver?.supportedCreateDatabase &&
           !data.isReadOnly && {
-            text: $__('contextMenu.connection.createDatabase'),
+            text: $t('contextMenu.connection.createDatabase'),
             onClick: handleCreateDatabase,
           },
         driver?.supportsServerSummary && {
-          text: $__('contextMenu.connection.serverSummary'),
+          text: $t('contextMenu.connection.serverSummary'),
           onClick: handleServerSummary,
         },
       ],
@@ -272,13 +272,14 @@
           $currentDatabase,
           $apps,
           $openedSingleDatabaseConnections,
-          $__
+          $t,
+          data.permission
         ),
       ],
 
       driver?.databaseEngineTypes?.includes('sql') && {
         onClick: handleSqlRestore,
-        text: $__('contextMenu.common.restoreSqlDump'),
+        text: $t('contextMenu.common.restoreSqlDump'),
       },
     ];
   };

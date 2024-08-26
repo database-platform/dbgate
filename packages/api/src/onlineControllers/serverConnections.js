@@ -133,6 +133,34 @@ module.exports = {
     return { status: 'ok' };
   },
 
+  disconnectManager_meta: true,
+  async disconnectManager({ conid }, req) {
+    // testConnectionPermission(conid, req);
+    await this.close(`${conid}:manager`, true);
+    return { status: 'ok' };
+  },
+
+  listDatabasesManager_meta: true,
+  async listDatabasesManager({ conid }, req) {
+    if (!conid) return [];
+    // testConnectionPermission(conid, req);
+    const conids = conid.split('_');
+    const opened = await this.ensureOpened(`${conid}:manager`);
+    if (opened.databases && opened.databases.length != 0) {
+      const permissions = await permissionService.findDatbase(conids[1], conids[2]);
+      console.log('list all permissions ', permissions.length);
+      opened.databases?.map(db => {
+        const permission = permissions.find(p => p.schema === db.name);
+        if (permission) {
+          db.permission = permission;
+        } else {
+          db.permission = null;
+        }
+      });
+    }
+    return opened.databases;
+  },
+
   listDatabases_meta: true,
   async listDatabases({ conid }, req) {
     if (!conid) return [];
@@ -142,14 +170,28 @@ module.exports = {
     if (opened.databases && opened.databases.length != 0) {
       const permissions = await permissionService.findDatbase(conids[1], conids[2]);
       console.log('permissions ', permissions.length);
-      opened.databases?.map(db => {
+      opened.databases = opened.databases?.filter(db => {
         const permission = permissions.find(p => p.schema === db.name);
         if (permission) {
+          if (permission.hidden === 1) {
+            return false;
+          }
+          if (permission.dql === 0 && permission.dml === 0 && permission.dcl === 0 && permission.ddl === 0) {
+            return false;
+          }
           db.permission = permission;
-        } else {
-          db.permission = null;
+          return true;
         }
+        return false;
       });
+      //   opened.databases?.map(db => {
+      //     const permission = permissions.find(p => p.schema === db.name);
+      //     if (permission) {
+      //       db.permission = permission;
+      //     } else {
+      //       db.permission = null;
+      //     }
+      //   });
     }
     return opened.databases;
   },

@@ -769,7 +769,7 @@
   import _ from 'lodash';
   import AppObjectCore from './AppObjectCore.svelte';
   import {
-    // currentDatabase,
+    currentDatabase,
     // extensions,
     getCurrentSettings,
     getExtensions,
@@ -805,7 +805,9 @@
   }
 
   function createMenu() {
-    return createDatabaseObjectMenu(data, passProps?.connection);
+    const menus = createDatabaseObjectMenu(data, passProps?.connection);
+    console.log('menus: ', $currentDatabase, menus);
+    return menus;
   }
 
   $: isPinned = !!$pinnedTables.find(x => testEqual(data, x));
