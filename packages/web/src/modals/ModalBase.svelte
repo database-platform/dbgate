@@ -86,7 +86,7 @@
   .window:not(.fullScreen):not(.simple) {
     border-radius: 10px;
     margin: auto;
-    margin-top: 15vh;
+    margin-top: 1vh;
     width: 50%;
   }
 
@@ -116,7 +116,7 @@
 
   .header {
     font-size: 15pt;
-    padding: 15px;
+    padding: 8px 15px;
     display: flex;
     justify-content: space-between;
     background-color: var(--theme-bg-modalheader);
@@ -132,7 +132,7 @@
   }
 
   .content:not(.noPadding):not(.fullScreen) {
-    padding: 15px;
+    padding: 8px 15px;
   }
 
   .content.fullScreen {
@@ -146,7 +146,7 @@
 
   .footer:not(.fullScreen) {
     border-bottom: 1px solid var(--theme-border);
-    padding: 15px;
+    padding: 8px 15px;
     background-color: var(--theme-bg-modalheader);
   }
 

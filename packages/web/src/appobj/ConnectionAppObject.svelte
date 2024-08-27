@@ -14,6 +14,7 @@
   export function openConnection(connection) {
     // const config = getCurrentConfig();
     if (connection.singleDatabase) {
+      console.log('currentDatabase open connection single: ', connection);
       currentDatabase.set({ connection, name: connection.defaultDatabase });
       apiCall('database-connections/refresh', {
         conid: connection._id,
@@ -107,6 +108,7 @@
   import { closeMultipleTabs } from '../tabpanel/TabsPanel.svelte';
   // import AboutModal from '../modals/AboutModal.svelte';
   import { tick } from 'svelte';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export let data;
   export let passProps;
@@ -142,6 +144,7 @@
       return;
     }
     if ($openedSingleDatabaseConnections.includes(data._id)) {
+      console.log('currentDatabase change current db: ', data);
       currentDatabase.set({ connection: data, name: data.defaultDatabase });
       return;
     }
@@ -164,6 +167,7 @@
   };
 
   const getContextMenu = () => {
+    console.log('connection app object: ', data);
     const driver = $extensions.drivers.find(x => x.engine == data.engine);
     const config = getCurrentConfig();
     const handleRefresh = () => {
@@ -222,20 +226,23 @@
 
     return [
       config.runAsPortal == false && [
-        {
-          text: $openedConnections.includes(data._id)
-            ? $t('contextMenu.common.details')
-            : $t('contextMenu.common.edit'),
+        // {
+        //   text: $openedConnections.includes(data._id) ? $t('contextMenu.common.details')
+        //    : $t('contextMenu.common.edit'),
+        //   onClick: handleOpenConnectionTab,
+        // },
+        $openedConnections.includes(data._id) && {
+          text: $t('contextMenu.common.details'),
           onClick: handleOpenConnectionTab,
         },
-        !$openedConnections.includes(data._id) && {
-          text: $t('contextMenu.common.delete'),
-          onClick: handleDelete,
-        },
-        {
-          text: $t('contextMenu.common.duplicate'),
-          onClick: handleDuplicate,
-        },
+        // !$openedConnections.includes(data._id) && {
+        //   text: $t('contextMenu.common.delete'),
+        //   onClick: handleDelete,
+        // },
+        // {
+        //   text: $t('contextMenu.common.duplicate'),
+        //   onClick: handleDuplicate,
+        // },
       ],
       !data.singleDatabase && [
         !$openedConnections.includes(data._id) && {
@@ -252,12 +259,12 @@
           text: $t('contextMenu.connection.disconnect'),
           onClick: handleDisconnect,
         },
-        $openedConnections.includes(data._id) &&
-          driver?.supportedCreateDatabase &&
-          !data.isReadOnly && {
-            text: $t('contextMenu.connection.createDatabase'),
-            onClick: handleCreateDatabase,
-          },
+        // $openedConnections.includes(data._id) &&
+        // driver?.supportedCreateDatabase &&
+        // !data.isReadOnly && {
+        //   text: $t('contextMenu.connection.createDatabase'),
+        //   onClick: handleCreateDatabase,
+        // },
         driver?.supportsServerSummary && {
           text: $t('contextMenu.connection.serverSummary'),
           onClick: handleServerSummary,
@@ -277,10 +284,10 @@
         ),
       ],
 
-      driver?.databaseEngineTypes?.includes('sql') && {
-        onClick: handleSqlRestore,
-        text: $t('contextMenu.common.restoreSqlDump'),
-      },
+      // driver?.databaseEngineTypes?.includes('sql') && {
+      //   onClick: handleSqlRestore,
+      //   text: $t('contextMenu.common.restoreSqlDump'),
+      // },
     ];
   };
 

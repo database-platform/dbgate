@@ -1,12 +1,12 @@
 <script>
   import _ from 'lodash';
-  import { onMount } from 'svelte';
+  import { afterUpdate } from 'svelte';
   import { currentDropDownMenu } from '../stores';
   import DropDownMenu from './DropDownMenu.svelte';
 
   let microLeft;
   let microTop;
-  onMount(() => {
+  afterUpdate(() => {
     const rootStyle = window.document.documentElement.style;
     microLeft = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-left')) || 0;
     microTop = parseFloat(rootStyle.getPropertyValue('--dim-micro-app-top')) || 0;

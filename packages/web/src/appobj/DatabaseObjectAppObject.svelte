@@ -105,11 +105,11 @@
         functionName: 'tableReader',
         isExport: true,
       },
-      {
-        label: '__contextMenu.common.import',
-        isImport: true,
-        requiresWriteAccess: true,
-      },
+      // {
+      //   label: '__contextMenu.common.import',
+      //   isImport: true,
+      //   requiresWriteAccess: true,
+      // },
       {
         label: '__contextMenu.dbobject.openActiveChart',
         isActiveChart: true,
@@ -687,10 +687,43 @@
     );
   }
 
-  export function createDatabaseObjectMenu(data, connection = null) {
+  export function createDatabaseObjectMenu(data, connection = null, permission = null) {
     const { objectTypeField } = data;
     return menus[objectTypeField]
-      .filter(x => x)
+      .filter(x => {
+        if (
+          x.label === '__contextMenu.dbobject.dropTable' ||
+          x.label === '__contextMenu.dbobject.dropView' ||
+          x.label === '__contextMenu.dbobject.dropProcedure' ||
+          x.label === '__contextMenu.dbobject.dropFunction'
+        ) {
+          if (!hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_DROP)) {
+            return false;
+          }
+        }
+
+        if (x.label === '__contextMenu.dbobject.renameTable') {
+          if (!hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_RENAME)) {
+            return false;
+          }
+        }
+        if (x.label === '__contextMenu.dbobject.truncateTable') {
+          if (!hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_TRUNCATE)) {
+            return false;
+          }
+        }
+        if (x.label === '__contextMenu.common.export') {
+          if (!hasDataPermission(permission, PERMISSION.DQL, PERMISSION.DQL_EXPORT)) {
+            return false;
+          }
+        }
+        if (x.label === '__contextMenu.common.import') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)) {
+            return false;
+          }
+        }
+        return x;
+      })
       .map(menu => {
         if (menu.divider) return menu;
 
@@ -796,6 +829,7 @@
   import { extractShellConnection } from '../impexp/createImpExpScript';
   import { format as dateFormat } from 'date-fns';
   import { getDefaultFileFormat } from '../plugins/fileformats';
+  import { PERMISSION, hasDataPermission } from '../utility/hasPermission';
 
   export let data;
   export let passProps;
@@ -805,7 +839,7 @@
   }
 
   function createMenu() {
-    const menus = createDatabaseObjectMenu(data, passProps?.connection);
+    const menus = createDatabaseObjectMenu(data, passProps?.connection, data.permission || $currentDatabase.permission);
     console.log('menus: ', $currentDatabase, menus);
     return menus;
   }

@@ -6,7 +6,7 @@
     const newPlugins = {};
     for (const installed of installedPlugins || []) {
       if (!_.keys(pluginsDict).includes(installed.name)) {
-        console.log('Loading module', installed.name);
+        // console.log('Loading module', installed.name);
         loadingPluginStore.set({
           loaded: false,
           loadingPackageName: installed.name,
@@ -15,7 +15,7 @@
           packageName: installed.name,
         });
         const module = eval(`${resp}; plugin`);
-        console.log('Loaded plugin', module);
+        // console.log('Loaded plugin', module);
         const moduleContent = module.__esModule ? module.default : module;
         newPlugins[installed.name] = moduleContent;
       }

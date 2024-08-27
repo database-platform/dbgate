@@ -21,6 +21,7 @@ currentDatabase.subscribe(value => {
 });
 
 function switchDatabaseCommand(db) {
+  console.log('currentDatabase switch: ', db);
   return {
     text: `${db.name} on ${getConnectionLabel(db?.connection, { allowExplicitDatabase: false })}`,
     onClick: () => currentDatabase.set(db),

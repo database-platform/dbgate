@@ -7,7 +7,7 @@ import { getSettings, useConfig, useSettings } from './utility/metadataLoaders';
 import _ from 'lodash';
 import { safeJsonParse } from 'dbgate-tools';
 import { apiCall } from './utility/api';
-import { translate } from './i18nConfig';
+import { getLocalStorage } from './utility/storageCache';
 
 export interface TabDefinition {
   title: string;
@@ -260,6 +260,13 @@ currentDatabase.subscribe(value => {
       } else {
         openedConnections.update(x => _.uniq([...x, value?.connection?._id]));
         expandedConnections.update(x => _.uniq([...x, value?.connection?._id]));
+      }
+      const databases = getLocalStorage(`database_list_${value?.connection._id}`) || [];
+      if (!value.permission) {
+        const db = databases.find(db => db.name === value.name);
+        if (db) {
+          value.permission = db.permission;
+        }
       }
       currentDatabaseValue = value;
       console.log('store currentDatabase: ', value);

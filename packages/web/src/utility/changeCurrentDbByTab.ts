@@ -20,6 +20,7 @@ openedTabs.subscribe(value => {
     if (conid && database && (conid != lastTab?.props?.conid || database != lastTab?.props?.database)) {
       const doWork = async () => {
         const connection = await getConnectionInfo({ conid });
+        console.log('currentDatabase change current db: ', database);
         currentDatabase.set({
           connection,
           name: database,

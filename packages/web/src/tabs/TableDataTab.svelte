@@ -86,7 +86,7 @@
   import ErrorMessageModal from '../modals/ErrorMessageModal.svelte';
   import { useConnectionInfo, useDatabaseInfo } from '../utility/metadataLoaders';
   import { scriptToSql } from 'dbgate-sqltree';
-  import { extensions } from '../stores';
+  import { extensions, currentDatabase } from '../stores';
   import ConfirmSqlModal from '../modals/ConfirmSqlModal.svelte';
   import createActivator, { getActiveComponent } from '../utility/createActivator';
   import registerCommand from '../commands/registerCommand';
@@ -105,6 +105,7 @@
   import useEditorData from '../query/useEditorData';
   import { markTabSaved, markTabUnsaved } from '../utility/common';
   import ToolStripButton from '../buttons/ToolStripButton.svelte';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export let tabid;
   export let conid;
@@ -123,6 +124,12 @@
   let autoRefreshTimer = null;
 
   $: connection = useConnectionInfo({ conid });
+
+  let permission;
+  $: {
+    const table = $dbinfo?.tables?.find(table => table.pureName === pureName);
+    permission = table?.permission || $currentDatabase?.permission;
+  }
 
   const { setEditorData } = useEditorData({
     tabid,
@@ -258,7 +265,6 @@
     {changeSetStore}
     {dispatchChangeSet}
   />
-
   <svelte:fragment slot="toolstrip">
     <ToolStripCommandSplitButton
       buttonLabel={autoRefreshStarted ? `Refresh (every ${autoRefreshInterval}s)` : null}
@@ -273,20 +279,25 @@
 
     <!-- <ToolStripCommandButton command="dataGrid.refresh" hideDisabled />
     <ToolStripCommandButton command="dataForm.refresh" hideDisabled /> -->
-
     <ToolStripCommandButton command="dataForm.goToFirst" hideDisabled />
     <ToolStripCommandButton command="dataForm.goToPrevious" hideDisabled />
     <ToolStripCommandButton command="dataForm.goToNext" hideDisabled />
     <ToolStripCommandButton command="dataForm.goToLast" hideDisabled />
-
-    <ToolStripCommandButton command="tableData.save" />
-    <ToolStripCommandButton command="dataGrid.revertAllChanges" hideDisabled />
-    <ToolStripCommandButton command="dataGrid.insertNewRow" hideDisabled />
-    <ToolStripCommandButton command="dataGrid.deleteSelectedRows" hideDisabled />
+    {#if hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) || hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE) || hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_DELETE)}
+      <ToolStripCommandButton command="tableData.save" />
+      <ToolStripCommandButton command="dataGrid.revertAllChanges" hideDisabled />
+    {/if}
+    {#if hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)}
+      <ToolStripCommandButton command="dataGrid.insertNewRow" hideDisabled />
+    {/if}
+    {#if hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)}
+      <ToolStripCommandButton command="dataGrid.deleteSelectedRows" hideDisabled />
+    {/if}
     <ToolStripCommandButton command="dataGrid.switchToForm" hideDisabled />
     <ToolStripCommandButton command="dataGrid.switchToTable" hideDisabled />
-    <ToolStripExportButton {quickExportHandlerRef} />
-
+    {#if hasDataPermission(permission, PERMISSION.DQL, PERMISSION.DQL_EXPORT)}
+      <ToolStripExportButton {quickExportHandlerRef} />
+    {/if}
     <ToolStripButton
       icon="icon structure"
       on:click={() => {

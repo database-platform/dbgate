@@ -1,8 +1,12 @@
 const { DatabaseAuth, AuthMask, DesensType } = require('../models');
 
 class PermissionService {
-  async findDatbase(group_id, db_id, schema, type) {
+  async findDatbase(group_id, db_id) {
     return this.find({ group_id, db_id, type: 'database' });
+  }
+
+  async findDatabaseBySchema(group_id, db_id, schema) {
+    return this.find({ group_id, db_id, schema, type: 'database' });
   }
 
   // type: table, view, procedure, function

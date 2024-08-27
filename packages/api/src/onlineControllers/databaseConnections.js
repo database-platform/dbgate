@@ -448,7 +448,6 @@ module.exports = {
       this.close(conid, existing.database, kill);
     }
   },
-
   disconnect_meta: true,
   async disconnect({ conid, database }, req) {
     // testConnectionPermission(conid, req);
@@ -467,14 +466,8 @@ module.exports = {
     }
   },
 
-  structure_meta: true,
-  async structure({ conid, database }, req) {
-    // testConnectionPermission(conid, req);
-    if (conid == '__model') {
-      const model = await importDbModel(database);
-      return model;
-    }
-
+  structureManager_meta: true,
+  async structureManager({ conid, database }, req) {
     const opened = await this.ensureOpened(conid, database);
     if (opened.structure) {
       const { tables, views, procedures, functions } = opened.structure;
@@ -506,6 +499,67 @@ module.exports = {
         functions.map(func => {
           const functionPermission = functionPermissions.find(p => p.tname === func.pureName);
           func.permission = functionPermission ?? null;
+        });
+      }
+    }
+
+    return opened.structure;
+  },
+  structure_meta: true,
+  async structure({ conid, database }, req) {
+    // testConnectionPermission(conid, req);
+    if (conid == '__model') {
+      const model = await importDbModel(database);
+      return model;
+    }
+
+    const opened = await this.ensureOpened(conid, database);
+    if (opened.structure) {
+      const { tables, views, procedures, functions } = opened.structure;
+      // username_groupId_dbId_dbName
+      const conids = conid.split('_');
+      if (tables.length !== 0) {
+        const tablePermissions = await permissionService.findStructure(conids[1], conids[2], database, 'table');
+        opened.structure.tables = tables.filter(table => {
+          const tablePermission = tablePermissions.find(p => p.tname === table.pureName);
+          table.permission = tablePermission ?? null;
+          if (tablePermission && tablePermission.hidden === 1) {
+            return false;
+          }
+          return true;
+        });
+      }
+      if (views.length) {
+        const viewPermissions = await permissionService.findStructure(conids[1], conids[2], database, 'view');
+        views.map(view => {
+          const viewPermission = viewPermissions.find(p => p.tname === view.pureName);
+          view.permission = viewPermission ?? null;
+          if (viewPermission && viewPermission.hidden === 1) {
+            return false;
+          }
+          return true;
+        });
+      }
+      if (procedures.length) {
+        const procedurePermissions = await permissionService.findStructure(conids[1], conids[2], database, 'procedure');
+        procedures.map(procedure => {
+          const procedurePermission = procedurePermissions.find(p => p.tname === procedure.pureName);
+          procedure.permission = procedurePermission ?? null;
+          if (procedurePermission && procedurePermission.hidden === 1) {
+            return false;
+          }
+          return true;
+        });
+      }
+      if (functions.length) {
+        const functionPermissions = await permissionService.findStructure(conids[1], conids[2], database, 'function');
+        functions.map(func => {
+          const functionPermission = functionPermissions.find(p => p.tname === func.pureName);
+          func.permission = functionPermission ?? null;
+          if (functionPermission && functionPermission.hidden === 1) {
+            return false;
+          }
+          return true;
         });
       }
     }
