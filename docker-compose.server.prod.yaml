@@ -16,16 +16,17 @@ services:
       # redis single
       - REDIS_TYPE=single
       - REDIS_PORT=6379
-      - REDIS_HOST=127.0.0.1
-      - REDIS_PASSWORD=redis-123456
+      - REDIS_HOST=redis
+      # - REDIS_PASSWORD=redis-123456
     networks:
       - dbserver
+      - uccserver
     deploy:
       replicas: 3
       resources:
         limits:
-          cpus: '4.0'
-          memory: '4g'
+          cpus: '1.0'
+          memory: '2g'
       update_config:
         order: start-first
         failure_action: rollback
@@ -48,4 +49,6 @@ services:
 
 networks:
   dbserver:
+    external: true
+  uccserver:
     external: true

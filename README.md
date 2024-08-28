@@ -1,7 +1,27 @@
 ## 部署
 
+### deploy gateway
+
 docker stack deploy -c docker-compose.traefik.prod.yaml traefik -d
+
+### deploy web
+
+yarn prepare:docker:web
+
+cd docker
+docker build -f Dockerfile.alpine.web -t myregistry.dataleapinfo.com:5443/dbgate-web:latest .
+cd ..
+
 docker stack deploy -c docker-compose.web.prod.yaml dbgatex-web -d
+
+### deploy server
+
+yarn prepare:docker
+
+cd docker
+docker build -f Dockerfile.alpine -t myregistry.dataleapinfo.com:5443/dbgate-server:latest .
+cd ..
+
 docker stack deploy -c docker-compose.server.prod.yaml dbgatex-server -d
 
 [![NPM version](https://img.shields.io/npm/v/dbgate-serve.svg)](https://www.npmjs.com/package/dbgate-serve)
