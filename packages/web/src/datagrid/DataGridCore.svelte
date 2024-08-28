@@ -370,7 +370,7 @@
   import DataFilterControl from './DataFilterControl.svelte';
   import createReducer from '../utility/createReducer';
   import keycodes from '../utility/keycodes';
-  import { copyRowsFormat, currentArchive, selectedCellsCallback } from '../stores';
+  import { currentDatabase, copyRowsFormat, currentArchive, selectedCellsCallback } from '../stores';
   import {
     copyRowsFormatDefs,
     copyRowsToClipboard,
@@ -402,6 +402,7 @@
   import { getDatabaseInfo, useDatabaseStatus } from '../utility/metadataLoaders';
   import { showSnackbarSuccess } from '../utility/snackbar';
   import { openJsonLinesData } from '../utility/openJsonLinesData';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export let onLoadNextData = undefined;
   export let grider = undefined;
@@ -442,6 +443,13 @@
   const wheelRowCount = 5;
   const tabVisible: any = getContext('tabVisible');
 
+  let permission;
+  $: {
+    try {
+      const table = display?.baseTable;
+      permission = table?.permission || $currentDatabase?.permission;
+    } catch (err) {}
+  }
   let containerHeight = 0;
   let containerWidth = 0;
   $: rowHeight = $dataGridRowHeight;
@@ -1603,6 +1611,13 @@
   const [inplaceEditorState, dispatchInsplaceEditor] = createReducer((state, action) => {
     switch (action.type) {
       case 'show':
+        if (
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) &&
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) &&
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)
+        ) {
+          return {};
+        }
         if (!grider.editable) return {};
         return {
           cell: action.cell,
@@ -1674,7 +1689,10 @@
     { placeTag: 'switch' },
     { divider: true },
     { placeTag: 'save' },
-    { command: 'dataGrid.revertRowChanges', hideDisabled: true },
+    {
+      command: 'dataGrid.revertRowChanges',
+      hideDisabled: true,
+    },
     { command: 'dataGrid.revertAllChanges', hideDisabled: true },
     { command: 'dataGrid.deleteSelectedRows' },
     { command: 'dataGrid.insertNewRow' },
@@ -1689,31 +1707,40 @@
     { command: 'dataGrid.undo', hideDisabled: true },
     { command: 'dataGrid.redo', hideDisabled: true },
     { divider: true },
-    { command: 'dataGrid.editCellValue', hideDisabled: true },
-    { command: 'dataGrid.newJson', hideDisabled: true },
-    { command: 'dataGrid.editJsonDocument', hideDisabled: true },
+    {
+      command: 'dataGrid.editCellValue',
+      hideDisabled: true,
+    },
+    {
+      command: 'dataGrid.newJson',
+      hideDisabled: true,
+    },
+    {
+      command: 'dataGrid.editJsonDocument',
+      hideDisabled: true,
+    },
     { command: 'dataGrid.viewJsonDocument', hideDisabled: true },
     { command: 'dataGrid.viewJsonValue', hideDisabled: true },
     { command: 'dataGrid.openJsonArrayInSheet', hideDisabled: true },
-    { command: 'dataGrid.saveCellToFile', hideDisabled: true },
-    { command: 'dataGrid.loadCellFromFile', hideDisabled: true },
+    // { command: 'dataGrid.saveCellToFile', hideDisabled: true },
+    // { command: 'dataGrid.loadCellFromFile', hideDisabled: true },
     // { command: 'dataGrid.copyJsonDocument', hideDisabled: true },
     { divider: true },
     { placeTag: 'export' },
-    {
-      id: 'dataGrid.saveToArchive',
-      label: 'Save to current archive',
-      submenu: [
-        { command: 'dataGrid.mergeSelectedCellsIntoMirror' },
-        { command: 'dataGrid.mergeSelectedRowsIntoMirror' },
-        { command: 'dataGrid.appendSelectedCellsIntoMirror' },
-        { command: 'dataGrid.appendSelectedRowsIntoMirror' },
-        { command: 'dataGrid.replaceSelectedCellsIntoMirror' },
-        { command: 'dataGrid.replaceSelectedRowsIntoMirror' },
-      ],
-    },
+    // {
+    //   id: 'dataGrid.saveToArchive',
+    //   label: 'Save to current archive',
+    //   submenu: [
+    //     { command: 'dataGrid.mergeSelectedCellsIntoMirror' },
+    //     { command: 'dataGrid.mergeSelectedRowsIntoMirror' },
+    //     { command: 'dataGrid.appendSelectedCellsIntoMirror' },
+    //     { command: 'dataGrid.appendSelectedRowsIntoMirror' },
+    //     { command: 'dataGrid.replaceSelectedCellsIntoMirror' },
+    //     { command: 'dataGrid.replaceSelectedRowsIntoMirror' },
+    //   ],
+    // },
     { command: 'dataGrid.generateSqlFromData' },
-    { command: 'dataGrid.openFreeTable' },
+    // { command: 'dataGrid.openFreeTable' },
     { command: 'dataGrid.openChartFromSelection' },
     { command: 'dataGrid.openSelectionInMap', hideDisabled: true },
     { placeTag: 'chart' }
@@ -1723,7 +1750,63 @@
 
   function buildMenu() {
     return [
-      menu,
+      menu.filter(m => {
+        if (m.placeTag === 'save' || m.command === 'dataGrid.revertRowChanges') {
+          if (
+            !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) &&
+            !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE) &&
+            !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_DELETE)
+          ) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.deleteSelectedRows') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_DELETE)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.insertNewRow') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.cloneRows') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.setNull') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.editCellValue') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.setNull') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.newJson') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)) {
+            return false;
+          }
+        }
+        if (m.command === 'dataGrid.editJsonDocument') {
+          if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)) {
+            return false;
+          }
+        }
+        if (m.placeTag === 'export') {
+          if (!hasDataPermission(permission, PERMISSION.DQL, PERMISSION.DQL_EXPORT)) {
+            return false;
+          }
+        }
+        return m;
+      }),
       {
         id: copyRowsFormatDefs[$copyRowsFormat].id,
         text: copyRowsFormatDefs[$copyRowsFormat].label,

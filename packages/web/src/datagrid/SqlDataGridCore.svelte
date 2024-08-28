@@ -208,11 +208,11 @@
 
   registerMenu(
     { command: 'sqlDataGrid.openActiveChart', tag: 'chart' },
-    { command: 'sqlDataGrid.openQuery', tag: 'export' },
-    () => ({
-      ...createQuickExportMenu(quickExportHandler, { command: 'sqlDataGrid.export' }),
-      tag: 'export',
-    })
+    { command: 'sqlDataGrid.openQuery', tag: 'export' }
+    // () => ({
+    //   ...createQuickExportMenu(quickExportHandler, { command: 'sqlDataGrid.export' }),
+    //   tag: 'export',
+    // })
   );
 
   function handleSetLoadedRows(rows) {

@@ -199,14 +199,14 @@
         <ReferenceManager {...$$props} {managerSize} />
       </WidgetColumnBarItem>
 
-      <WidgetColumnBarItem
-        title={$t('widgets.dataGrid.macros')}
-        name="macros"
-        skip={!showMacros}
-        collapsed={!expandMacros}
-      >
-        <MacroManager {...$$props} {managerSize} />
-      </WidgetColumnBarItem>
+      <!-- <WidgetColumnBarItem -->
+      <!--   title={$t('widgets.dataGrid.macros')} -->
+      <!--   name="macros" -->
+      <!--   skip={!showMacros} -->
+      <!--   collapsed={!expandMacros} -->
+      <!-- > -->
+      <!--   <MacroManager {...$$props} {managerSize} /> -->
+      <!-- </WidgetColumnBarItem> -->
     </WidgetColumnBar>
   </div>
   <svelte:fragment slot="2">

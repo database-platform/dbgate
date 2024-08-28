@@ -16,12 +16,13 @@
   import DataGrid from '../datagrid/DataGrid.svelte';
   import SqlDataGridCore from '../datagrid/SqlDataGridCore.svelte';
   import SqlFormView from '../formview/SqlFormView.svelte';
-  import { getBoolSettingsValue } from '../settings/settingsTools';
-  import { extensions } from '../stores';
+  // import { getBoolSettingsValue } from '../settings/settingsTools';
+  import { extensions, currentDatabase } from '../stores';
   import { useConnectionInfo, useDatabaseServerVersion, useViewInfo } from '../utility/metadataLoaders';
   import { getLocalStorage, setLocalStorage } from '../utility/storageCache';
   import useGridConfig from '../utility/useGridConfig';
   import StatusBarTabItem from '../widgets/StatusBarTabItem.svelte';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export let tabid;
   export let conid;
@@ -36,6 +37,10 @@
   const config = useGridConfig(tabid);
   const cache = writable(createGridCache());
 
+  let permission;
+  $: {
+    permission = $viewInfo?.permission || $currentDatabase?.permission;
+  }
   $: display =
     $viewInfo && $connection && $serverVersion
       ? new ViewGridDisplay(
@@ -73,7 +78,9 @@
     />
     <svelte:fragment slot="toolstrip">
       <ToolStripCommandButton command="dataGrid.refresh" />
-      <ToolStripExportButton {quickExportHandlerRef} />
+      {#if hasDataPermission(permission, PERMISSION.DQL, PERMISSION.DQL_EXPORT)}
+        <ToolStripExportButton {quickExportHandlerRef} />
+      {/if}
     </svelte:fragment>
   </ToolStripContainer>
 {/if}

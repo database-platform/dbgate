@@ -290,7 +290,7 @@
     {#if hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)}
       <ToolStripCommandButton command="dataGrid.insertNewRow" hideDisabled />
     {/if}
-    {#if hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)}
+    {#if hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_DELETE)}
       <ToolStripCommandButton command="dataGrid.deleteSelectedRows" hideDisabled />
     {/if}
     <ToolStripCommandButton command="dataGrid.switchToForm" hideDisabled />

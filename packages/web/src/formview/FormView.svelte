@@ -185,8 +185,10 @@
   import createActivator, { getActiveComponent } from '../utility/createActivator';
   import createReducer from '../utility/createReducer';
   import keycodes from '../utility/keycodes';
-  import resizeObserver from '../utility/resizeObserver';
+  // import resizeObserver from '../utility/resizeObserver';
   import openReferenceForm from './openReferenceForm';
+  import { currentDatabase } from '../stores';
+  import { hasDataPermission, PERMISSION } from '../utility/hasPermission';
 
   export let conid;
   export let database;
@@ -202,6 +204,13 @@
   // export let formDisplay;
   export let onNavigate;
 
+  let permission;
+  $: {
+    try {
+      const table = display?.baseTable;
+      permission = table?.permission || $currentDatabase?.permission;
+    } catch (err) {}
+  }
   let wrapperHeight = 1;
   let wrapperWidth = 1;
   $: rowHeight = $dataGridRowHeight;
@@ -369,6 +378,13 @@
   const [inplaceEditorState, dispatchInsplaceEditor] = createReducer((state, action) => {
     switch (action.type) {
       case 'show': {
+        if (
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) &&
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) &&
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT)
+        ) {
+          return {};
+        }
         if (!grider.editable) return {};
         const column = getCellColumn(action.cell);
         if (!column) return state;
@@ -596,7 +612,28 @@
 </script>
 
 <div class="outer">
-  <div class="wrapper" use:contextMenu={menu} bind:clientHeight={wrapperHeight} bind:clientWidth={wrapperWidth}>
+  <div
+    class="wrapper"
+    use:contextMenu={menu.filter(m => {
+      if (m.placeTag === 'save' || m.command === 'dataForm.revertRowChanges') {
+        if (
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_INSERT) &&
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE) &&
+          !hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_DELETE)
+        ) {
+          return false;
+        }
+      }
+      if (m.command === 'dataForm.setNull') {
+        if (!hasDataPermission(permission, PERMISSION.DML, PERMISSION.DML_UPDATE)) {
+          return false;
+        }
+      }
+      return m;
+    })}
+    bind:clientHeight={wrapperHeight}
+    bind:clientWidth={wrapperWidth}
+  >
     {#each columnChunks as chunk, chunkIndex}
       <table on:mousedown={handleTableMouseDown}>
         {#each chunk as col, rowIndex}
@@ -634,8 +671,8 @@
                 inplaceEditorState={$inplaceEditorState}
                 {dispatchInsplaceEditor}
                 cellValue={rowData[col.uniqueName]}
-                options="{col.options}"
-                canSelectMultipleOptions="{col.canSelectMultipleOptions}"
+                options={col.options}
+                canSelectMultipleOptions={col.canSelectMultipleOptions}
                 onSetValue={value => {
                   grider.setCellValue(0, col.uniqueName, value);
                 }}
@@ -654,9 +691,9 @@
                 bind:domCell={domCells[`${rowIndex},${chunkIndex * 2 + 1}`]}
                 onSetFormView={handleSetFormView}
                 showSlot={!rowData ||
-                ($inplaceEditorState.cell &&
-                  rowIndex == $inplaceEditorState.cell[0] &&
-                  chunkIndex * 2 + 1 == $inplaceEditorState.cell[1])}
+                  ($inplaceEditorState.cell &&
+                    rowIndex == $inplaceEditorState.cell[0] &&
+                    chunkIndex * 2 + 1 == $inplaceEditorState.cell[1])}
                 isCurrentCell={currentCell[0] == rowIndex && currentCell[1] == chunkIndex * 2 + 1}
                 onDictionaryLookup={() => handleLookup(col)}
               />

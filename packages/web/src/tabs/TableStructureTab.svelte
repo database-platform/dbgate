@@ -44,7 +44,7 @@
   // import ConstraintLabel from '../elements/ConstraintLabel.svelte';
   // import ForeignKeyObjectListControl from '../elements/ForeignKeyObjectListControl.svelte';
 
-  import { extensions } from '../stores';
+  import { extensions, currentDatabase } from '../stores';
   import useEditorData from '../query/useEditorData';
   import TableEditor from '../tableeditor/TableEditor.svelte';
   import createActivator, { getActiveComponent } from '../utility/createActivator';
@@ -62,6 +62,7 @@
   import ToolStripContainer from '../buttons/ToolStripContainer.svelte';
   import ToolStripCommandButton from '../buttons/ToolStripCommandButton.svelte';
   import ToolStripButton from '../buttons/ToolStripButton.svelte';
+  import { PERMISSION, hasDataPermission } from '../utility/hasPermission';
 
   export let tabid;
   export let conid;
@@ -85,6 +86,12 @@
 
   $: showTable = $editorValue ? $editorValue.current : tableInfoWithPairingId;
 
+  let permission;
+  $: {
+    try {
+      permission = $tableInfo?.permission || $currentDatabase?.permission;
+    } catch (err) {}
+  }
   export function canSave() {
     return objectTypeField == 'tables' && !!$editorValue;
   }
@@ -171,6 +178,7 @@
     bind:this={domEditor}
     tableInfo={showTable}
     dbInfo={$dbInfo}
+    editable={hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_ALTER)}
     {driver}
     setTableInfo={objectTypeField == 'tables'
       ? tableInfoUpdater =>
@@ -188,11 +196,13 @@
       : null}
   />
   <svelte:fragment slot="toolstrip">
-    <ToolStripCommandButton command="tableStructure.save" />
-    <ToolStripCommandButton command="tableStructure.reset" />
-    <ToolStripCommandButton command="tableEditor.addColumn" />
-    <ToolStripCommandButton command="tableEditor.addIndex" />
+    {#if hasDataPermission(permission, PERMISSION.DDL, PERMISSION.DDL_ALTER)}
+      <ToolStripCommandButton command="tableStructure.save" />
+      <ToolStripCommandButton command="tableStructure.reset" />
 
+      <ToolStripCommandButton command="tableEditor.addColumn" />
+      <ToolStripCommandButton command="tableEditor.addIndex" />
+    {/if}
     {#if objectTypeField == 'tables'}
       <ToolStripButton
         icon="icon table"

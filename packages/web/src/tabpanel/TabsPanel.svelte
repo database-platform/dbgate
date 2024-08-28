@@ -387,17 +387,17 @@
             onClick: () => showModal(FavoriteModal, { savingTab: tab }),
           },
         ],
-      tabComponent &&
-        tabs[tabComponent] &&
-        tabs[tabComponent].allowSwitchDatabase &&
-        tabs[tabComponent].allowSwitchDatabase(props) && [
-          { divider: true },
-          {
-            id: 'close.switch',
-            text: 'Switch database',
-            onClick: () => showModal(SwitchDatabaseModal, { callingTab: tab }),
-          },
-        ],
+      // tabComponent &&
+      //   tabs[tabComponent] &&
+      //   tabs[tabComponent].allowSwitchDatabase &&
+      //   tabs[tabComponent].allowSwitchDatabase(props) && [
+      //     { divider: true },
+      //     {
+      //       id: 'close.switch',
+      //       text: 'Switch database',
+      //       onClick: () => showModal(SwitchDatabaseModal, { callingTab: tab }),
+      //     },
+      //   ],
       { divider: true },
       appobj &&
         appobj.createAppObjectMenu &&
