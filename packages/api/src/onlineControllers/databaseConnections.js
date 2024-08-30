@@ -85,7 +85,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -221,7 +221,7 @@ module.exports = {
             sql,
           };
           console.log('sqlSelect verifysql params: ', params);
-          const auth = req.headers['x-authorization'] || '';
+          const auth = req.headers.authorization;
           const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
           const response = await axios.post(url, params, {
             headers: {

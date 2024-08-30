@@ -26,11 +26,14 @@ class OnlineDatabase {
     }
    ]
    **/
-  async find(username, groupId, dbId) {
+  async find(username, groupId, dbId, orgGroupId) {
     let dbWhere = {};
     if (dbId) {
       // dbWhere.db_dbname = dbName;
       dbWhere.id = dbId;
+    }
+    if (orgGroupId) {
+      dbWhere.group_id = orgGroupId;
     }
     const groups = await Group.findAll({
       where: { id: groupId },

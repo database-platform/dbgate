@@ -57,7 +57,7 @@ module.exports = {
   saveLog(params, req) {
     try {
       logger.info(params, 'save log params ');
-      const auth = req.headers['x-authorization'] || '';
+      const auth = req.headers.authorization;
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/afterprocess`;
       axios.default.post(url, params, {
         headers: {
@@ -109,7 +109,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -212,7 +212,7 @@ module.exports = {
         sql,
       };
       console.log('verifysql params: ', params);
-      const auth = req.headers['x-authorization'] || '';
+      const auth = req.headers.authorization;
       // console.log('verifysql token: ', auth);
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
       const response = await axios.default.post(url, params, {

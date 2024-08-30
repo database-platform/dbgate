@@ -51,12 +51,12 @@ module.exports = {
     // }
     this.datastore = new OnlineDatabase();
   },
-  listParam_meta: true,
-  async listParam(_params) {
+  listManager_meta: true,
+  async listManager(_params) {
     let databases = [];
     try {
-      databases = await this.datastore.find(_params.username, _params.groupId);
-      // console.log('list param databases ', databases);
+      databases = await this.datastore.find(_params.username, _params.groupId, null, _params.orgGroupId);
+      // console.log('listManager databases ', databases);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
       return {
@@ -70,14 +70,8 @@ module.exports = {
   async list(_params, req) {
     let databases = [];
     try {
-      let auth;
-      // 根据传入参数加载
-      if (_params.username) {
-        auth = _params;
-      } else {
-        auth = req.auth;
-      }
-      databases = await this.datastore.find(auth.username, auth.groupId);
+      let auth = req.auth;
+      databases = await this.datastore.find(auth.username, auth.groupId, null, auth.orgGroupId);
       // console.log('databases ', databases);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
