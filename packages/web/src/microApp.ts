@@ -24,8 +24,8 @@ function fromMainAppData(data: MicroAppGlobalProps) {
   try {
     if (data?.permission) {
       const { token, dataToken } = data?.permission;
-      localStorage.setItem('accessToken', dataToken);
-      localStorage.setItem('apiToken', token);
+      // localStorage.setItem('accessToken', dataToken);
+      // localStorage.setItem('apiToken', token);
     }
 
     const rootStyle = window.document.documentElement.style;
