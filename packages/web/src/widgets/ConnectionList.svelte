@@ -4,7 +4,7 @@
   import InlineButton from '../buttons/InlineButton.svelte';
   import SearchInput from '../elements/SearchInput.svelte';
   import WidgetsInnerContainer from './WidgetsInnerContainer.svelte';
-  import { useConnectionList, useServerStatus } from '../utility/metadataLoaders';
+  import { useConnectionGroup, useConnectionList, useServerStatus } from '../utility/metadataLoaders';
   import SearchBoxWrapper from '../elements/SearchBoxWrapper.svelte';
   import AppObjectList from '../appobj/AppObjectList.svelte';
   import * as connectionAppObject from '../appobj/ConnectionAppObject.svelte';
@@ -30,19 +30,35 @@
   import { showModal } from '../modals/modalTools';
   import InputTextModal from '../modals/InputTextModal.svelte';
   import ConfirmModal from '../modals/ConfirmModal.svelte';
+  import SelectField from '../forms/SelectField.svelte';
 
+  const groups = useConnectionGroup();
   const connections = useConnectionList();
   const serverStatus = useServerStatus();
 
   let filter = '';
+  let currentGroup;
+
+  groups.subscribe(value => {
+    if (value && value.length !== 0) {
+      currentGroup = value[0].value;
+    }
+  });
 
   $: connectionsWithStatus =
     $connections && $serverStatus
-      ? $connections?.map(conn => {
-          if (conn._id) {
-            return { ...conn, status: $serverStatus[getVolatileRemapping(conn._id)] };
-          }
-        })
+      ? $connections
+          ?.map(conn => {
+            if (conn._id) {
+              return { ...conn, status: $serverStatus[getVolatileRemapping(conn._id)] };
+            }
+          })
+          .filter(conn => {
+            if (currentGroup === conn.orgGroupId) {
+              return true;
+            }
+            return false;
+          })
       : $connections;
 
   $: connectionsWithStatusFiltered = connectionsWithStatus?.filter(
@@ -113,6 +129,15 @@
   }
 </script>
 
+<div class="group">
+  <SelectField
+    bind:value={currentGroup}
+    on:change={e => {
+      currentGroup = e.detail;
+    }}
+    options={$groups}
+  />
+</div>
 <SearchBoxWrapper>
   <SearchInput placeholder={$t('widgets.connectionList.search')} bind:value={filter} />
   <CloseSearchButton bind:filter />
@@ -184,6 +209,9 @@
 </WidgetsInnerContainer>
 
 <style>
+  .group {
+    width: 100%;
+  }
   .br {
     background: var(--theme-bg-2);
     height: 1px;

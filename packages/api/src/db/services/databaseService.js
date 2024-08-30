@@ -1,7 +1,15 @@
-const { Database, Group, DatabaseGroup } = require('../models');
+const { OrgGroup, Database, Group, DatabaseGroup } = require('../models');
 const { getEngine } = require('../../utility/utils');
 
 class OnlineDatabase {
+  async findOrgGroup() {
+    const orgGroups = await OrgGroup.findAll({
+      where: { status: 0 },
+      attributes: ['id', 'group_name', ['id', 'value'], ['group_name', 'label']],
+    });
+    return orgGroups?.map(p => p.get({ plain: true })) || [];
+  }
+
   /**
    * 
    * _id(conid): `${username}_${groupId}_${db_id}`
@@ -60,6 +68,8 @@ class OnlineDatabase {
                 'create_time',
                 'update_by',
                 'update_time',
+                'group_id',
+                'trino_flag',
               ],
             },
           ],
@@ -84,6 +94,8 @@ class OnlineDatabase {
           displayName: item.db_name ?? item.db_ip,
           singleDatabase: item.db_dbname ? true : false,
           defaultDatabase: item.db_dbname ?? '',
+          orgGroupId: item.group_id,
+          trinoFlag: item.trino_flag,
         };
       });
       return acc.concat(databases);

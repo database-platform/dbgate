@@ -26,7 +26,6 @@
   */
 
 const { repeat } = require('lodash');
-const { replace } = require('lodash/fp');
 
 /**
  * @param {string} field
@@ -41,7 +40,35 @@ function processMask(field, authMask, rows) {
     }
   });
 }
-
+/**
+ * {
+    id: 1,
+    db_id: 9,
+    db_name: 'maindb',
+    table_name: 'sys_user',
+    col_name: 'phonenumber',
+    desen_id: 1,
+    DesensType: {
+      desen_type_name: '中间打码4位',
+      desen_type_code: '04',
+      remark: '中间用*打码4位',
+      desen_char: '*',
+      desen_len: 4,
+      mask_type: '2'
+    }
+  }
+ * @param {string} field
+ * @param {object} authMask
+ * @param {Array[]} rows
+ * */
+function processScanMask(field, authMask, rows) {
+  console.log('processScanMask ', field, authMask);
+  rows.map(row => {
+    if (row[field]) {
+      row[field] = buildinProcess(row[field], authMask.DesensType);
+    }
+  });
+}
 /**
  *
  * @param {string} value
@@ -147,4 +174,5 @@ function customProcess(value, authMask) {
 
 module.exports = {
   processMask,
+  processScanMask,
 };

@@ -135,6 +135,11 @@ const serverStatusLoader = () => ({
   params: {},
   reloadTrigger: { key: `server-status-changed` },
 });
+const connectionGroupLoader = () => ({
+  url: 'connections/group',
+  params: {},
+  reloadTrigger: { key: `connection-group-changed` },
+});
 
 const connectionListLoader = () => ({
   url: 'connections/list',
@@ -343,6 +348,9 @@ export function getConnectionList() {
 }
 export function useConnectionList() {
   return useCore(connectionListLoader, {});
+}
+export function useConnectionGroup() {
+  return useCore(connectionGroupLoader, {});
 }
 
 export function getConfig() {

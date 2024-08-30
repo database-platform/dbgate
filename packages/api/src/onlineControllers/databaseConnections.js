@@ -31,7 +31,7 @@ const { MissingCredentialsError } = require('../utility/exceptions');
 const pipeForkLogs = require('../utility/pipeForkLogs');
 const crypto = require('crypto');
 const PermissionService = require('../db/services/permissionService');
-const { processMask } = require('../utility/dataMask');
+const { processMask, processScanMask } = require('../utility/dataMask');
 const { getRealIp } = require('../utility/utils');
 const { default: axios } = require('axios');
 
@@ -85,7 +85,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -248,8 +248,17 @@ module.exports = {
     if (select.range && res.rows && res.rows.length !== 0) {
       const tname = select.from.name.pureName;
       const conids = conid.split('_');
+
+      const desenScans = await permissionService.findDesenScan(conids[2], database, tname);
+      console.log('select desen scan: ', desenScans?.length);
+      if (desenScans && desenScans.length !== 0) {
+        desenScans.map(scan => {
+          processScanMask(scan.col_name, scan, res.rows);
+        });
+      }
+
       const columnPermission = await permissionService.findColumn(conids[1], conids[2], database, tname);
-      console.log('select permission: ', columnPermission);
+      console.log('select permission: ', columnPermission?.length);
       if (columnPermission && columnPermission.length !== 0) {
         columnPermission.map(permission => {
           processMask(permission.tcolumn, permission.AuthMask, res.rows);

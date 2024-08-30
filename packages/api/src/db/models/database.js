@@ -49,6 +49,12 @@ module.exports = sequelize => {
       update_time: {
         type: DataTypes.DATE,
       },
+      group_id: {
+        type: DataTypes.NUMBER,
+      },
+      trino_flag: {
+        type: DataTypes.NUMBER,
+      },
     },
     {
       tableName: 'tbl_database',

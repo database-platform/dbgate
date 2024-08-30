@@ -66,12 +66,26 @@ module.exports = {
     return databases;
   },
 
+  group_meta: true,
+  async group() {
+    let groups = [];
+    try {
+      groups = await this.datastore.findOrgGroup();
+    } catch (err) {
+      logger.error({ err }, 'Error connection groups.');
+      return {
+        apiErrorMessage: err.message,
+      };
+    }
+    return groups;
+  },
+
   list_meta: true,
   async list(_params, req) {
     let databases = [];
     try {
       let auth = req.auth;
-      databases = await this.datastore.find(auth.username, auth.groupId, null, auth.orgGroupId);
+      databases = await this.datastore.find(auth.username, auth.groupId);
       // console.log('databases ', databases);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');

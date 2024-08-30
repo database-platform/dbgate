@@ -1,4 +1,5 @@
-const { DatabaseAuth, AuthMask, DesensType } = require('../models');
+const { pick } = require('lodash');
+const { DatabaseAuth, AuthMask, DesensScanResult, DesensConfig, DesensType } = require('../models');
 
 class PermissionService {
   async findDatbase(group_id, db_id) {
@@ -37,6 +38,38 @@ class PermissionService {
       console.error(error);
     }
     return [];
+  }
+
+  async findDesenScan(db_id, db_name, table_name) {
+    try {
+      const scanList = await DesensScanResult.findAll({
+        where: { db_id, db_name, table_name },
+        include: {
+          where: { status: 0 },
+          model: DesensConfig,
+          // required: true,
+          attributes: ['id'],
+          include: {
+            where: { status: 0 },
+            model: DesensType,
+            required: true,
+            attributes: ['desen_type_name', 'desen_type_code', 'remark', 'desen_char', 'desen_len', 'mask_type'],
+          },
+        },
+      });
+      if (!scanList) {
+        return [];
+      }
+      return scanList?.map(p => {
+        const desens = p.get({ plain: true });
+        return {
+          ...pick(desens, ['id', 'db_id', 'db_name', 'table_name', 'col_name', 'desen_id']),
+          DesensType: desens.DesensConfig.DesensType,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
