@@ -839,7 +839,11 @@
   }
 
   function createMenu() {
-    const menus = createDatabaseObjectMenu(data, passProps?.connection, data.permission || $currentDatabase.permission);
+    const menus = createDatabaseObjectMenu(
+      data,
+      passProps?.connection,
+      data.permission || $currentDatabase?.permission
+    );
     console.log('menus: ', $currentDatabase, menus);
     return menus;
   }

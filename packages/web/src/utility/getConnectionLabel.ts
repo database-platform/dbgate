@@ -10,6 +10,9 @@ function getConnectionLabelCore(connection, { allowExplicitDatabase = true } = {
     return null;
   }
   if (connection.displayName) {
+    if (connection.trinoCatalog) {
+      return `${connection.displayName} ${connection.trinoCatalog} `;
+    }
     return connection.displayName;
   }
   if (connection.singleDatabase && connection.server && allowExplicitDatabase && connection.defaultDatabase) {

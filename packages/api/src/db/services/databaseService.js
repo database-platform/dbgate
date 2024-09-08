@@ -35,7 +35,7 @@ class OnlineDatabase {
    ]
    **/
   async find(username, groupId, dbId, orgGroupId) {
-    let dbWhere = {};
+    let dbWhere = { db_status: 0 };
     if (dbId) {
       // dbWhere.db_dbname = dbName;
       dbWhere.id = dbId;
@@ -70,6 +70,7 @@ class OnlineDatabase {
                 'update_time',
                 'group_id',
                 'trino_flag',
+                'trino_catalog',
               ],
             },
           ],
@@ -95,7 +96,8 @@ class OnlineDatabase {
           singleDatabase: item.db_dbname ? true : false,
           defaultDatabase: item.db_dbname ?? '',
           orgGroupId: item.group_id,
-          trinoFlag: item.trino_flag,
+          trinoFlag: item.trino_flag === 1 ? true : false,
+          trinoCatalog: item.trino_catalog,
         };
       });
       return acc.concat(databases);

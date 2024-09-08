@@ -5,8 +5,8 @@
   import WidgetsInnerContainer from './WidgetsInnerContainer.svelte';
   import SearchBoxWrapper from '../elements/SearchBoxWrapper.svelte';
   import SubDatabaseList from '../appobj/SubDatabaseList.svelte';
-  import { openedConnections } from '../stores';
-  import { useConnectionColorFactory } from '../utility/useConnectionColor';
+  // import { openedConnections } from '../stores';
+  // import { useConnectionColorFactory } from '../utility/useConnectionColor';
   import FontIcon from '../icons/FontIcon.svelte';
   import CloseSearchButton from '../buttons/CloseSearchButton.svelte';
   import { apiCall } from '../utility/api';

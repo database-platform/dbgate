@@ -24,7 +24,7 @@
     const username = $currentDatabase?.connection?._id.split('_')[0];
     const userInfo = JSON.parse(localStorage.getItem('user-info'));
     if (username === userInfo.username) {
-      singleDatabase = $currentDatabase.connection.singleDatabase;
+      singleDatabase = $currentDatabase?.connection.singleDatabase;
       database = $currentDatabase.name;
       conid = $currentDatabase.connection._id;
     }

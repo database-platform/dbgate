@@ -174,6 +174,7 @@
       apiCall('server-connections/refresh', { conid: data._id });
     };
     const handleDisconnect = () => {
+      console.log('xxx disconnect');
       disconnectServerConnection(data._id);
     };
     const handleDelete = () => {

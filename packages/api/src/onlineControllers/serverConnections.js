@@ -41,7 +41,7 @@ module.exports = {
     existing.status = status;
     socket.emitChanged(`server-status-changed`);
   },
-  handle_ping() { },
+  handle_ping() {},
   handle_response(conid, { msgid, ...response }) {
     const [resolve, reject] = this.requests[msgid];
     resolve(response);
@@ -59,12 +59,18 @@ module.exports = {
       if (connection.passwordMode == 'askPassword' || connection.passwordMode == 'askUser') {
         throw new MissingCredentialsError({ conid, passwordMode: connection.passwordMode });
       }
+      let processStr = 'serverConnectionProcess';
+      // if (connection.trinoFlag) {
+      //   processStr = 'trinoServerConnectionProcess';
+      // } else {
+      //   processStr = 'serverConnectionProcess';
+      // }
       const subprocess = fork(
         global['API_PACKAGE'] || process.argv[1],
         [
           '--is-forked-api',
           '--start-process',
-          'serverConnectionProcess',
+          processStr,
           ...processArgs.getPassArgs(),
           // ...process.argv.slice(3),
         ],

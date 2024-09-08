@@ -55,6 +55,9 @@ module.exports = sequelize => {
       trino_flag: {
         type: DataTypes.NUMBER,
       },
+      trino_catalog: {
+        type: DataTypes.STRING,
+      },
     },
     {
       tableName: 'tbl_database',

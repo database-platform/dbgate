@@ -53,8 +53,6 @@
 
   $: dbApps = filterAppsForDatabase($currentDatabase?.connection, $currentDatabase?.name, $apps || []);
 
-  // $: console.log('OBJECTS', $objects, $currentDatabase);
-
   $: objectList = _.flatten([
     ...['tables', 'collections', 'views', 'matviews', 'procedures', 'functions'].map(objectTypeField =>
       _.sortBy(
@@ -71,6 +69,8 @@
       }))
     ),
   ]);
+
+  $: console.log('sqlObjectList: ', $objects, objectList);
 
   // let generateIndex = 0;
   // setInterval(() => (generateIndex += 1), 2000);
@@ -114,12 +114,12 @@
     <ErrorInfo message={$t('widgets.sqlObjectList.error', { values: { database } })} icon="img alert" />
     <div class="m-1" />
     <InlineButton on:click={handleRefreshDatabase}>{$t('common.refresh')}</InlineButton>
-    {#if hasDataPermission($currentDatabase.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
+    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
       && driver?.databaseEngineTypes?.includes('sql')}
       <div class="m-1" />
       <InlineButton on:click={() => runCommand('new.table')}>{$t('contextMenu.database.newTable')}</InlineButton>
     {/if}
-    {#if hasDataPermission($currentDatabase.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
+    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
       && driver?.databaseEngineTypes?.includes('document')}
       <div class="m-1" />
       <InlineButton on:click={() => runCommand('new.collection')}
@@ -131,7 +131,7 @@
   <SearchBoxWrapper>
     <SearchInput placeholder={$t('widgets.sqlObjectList.search')} bind:value={filter} />
     <CloseSearchButton bind:filter />
-    {#if hasDataPermission($currentDatabase.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
+    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
       <DropDownButton icon="icon plus-thick" menu={createAddMenu} />
     {/if}
     <InlineButton on:click={handleRefreshDatabase} title={$t('widgets.sqlObjectList.refresh')}>

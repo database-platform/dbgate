@@ -4,6 +4,7 @@ const serverConnectionProcess = require('./serverConnectionProcess');
 const sessionProcess = require('./sessionProcess');
 const jslDatastoreProcess = require('./jslDatastoreProcess');
 const sshForwardProcess = require('./sshForwardProcess');
+const trinoServerConnectionProcess = require('./trinoServerConnectionProcess');
 
 module.exports = {
   connectProcess,
@@ -12,4 +13,5 @@ module.exports = {
   sessionProcess,
   jslDatastoreProcess,
   sshForwardProcess,
+  trinoServerConnectionProcess,
 };

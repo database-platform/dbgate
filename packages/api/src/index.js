@@ -101,8 +101,6 @@ const dbgateTools = require('dbgate-tools');
 global['DBGATE_TOOLS'] = dbgateTools;
 
 if (processArgs.startProcess) {
-  console.log('startProcess ', processArgs.startProcess);
-
   const proc = require('./proc');
   const module = proc[processArgs.startProcess];
   module.start();
