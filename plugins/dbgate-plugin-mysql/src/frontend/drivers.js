@@ -153,4 +153,52 @@ const mariaDriver = {
   },
 };
 
-module.exports = [mysqlDriver, mariaDriver];
+/** @type {import('dbgate-types').EngineDriver} */
+const tidbDriver = {
+  ...mysqlDriverBase,
+  engine: 'tidb@dbgate-plugin-mysql',
+  title: 'TiDB',
+  __analyserInternals: {
+    quoteDefaultValues: false,
+  },
+};
+
+/** @type {import('dbgate-types').EngineDriver} */
+const oceanbaseDriver = {
+  ...mysqlDriverBase,
+  engine: 'oceanbase@dbgate-plugin-mysql',
+  title: 'OceanBase',
+  __analyserInternals: {
+    quoteDefaultValues: false,
+  },
+};
+
+/** @type {import('dbgate-types').EngineDriver} */
+const gbase8aDriver = {
+  ...mysqlDriverBase,
+  engine: 'gbase@dbgate-plugin-mysql',
+  title: 'Gbase8a',
+  __analyserInternals: {
+    quoteDefaultValues: false,
+  },
+};
+/** @type {import('dbgate-types').EngineDriver} */
+const gaussDriver = {
+  ...mysqlDriverBase,
+  engine: 'gauss@dbgate-plugin-mysql',
+  title: 'Gauss',
+  __analyserInternals: {
+    quoteDefaultValues: false,
+  },
+};
+/** @type {import('dbgate-types').EngineDriver} */
+const golderDriver = {
+  ...mysqlDriverBase,
+  engine: 'golder@dbgate-plugin-mysql',
+  title: 'Golder',
+  __analyserInternals: {
+    quoteDefaultValues: false,
+  },
+};
+
+module.exports = [mysqlDriver, mariaDriver, tidbDriver, oceanbaseDriver, gbase8aDriver, gaussDriver, golderDriver];

@@ -247,4 +247,54 @@ const redshiftDriver = {
   },
 };
 
-module.exports = [postgresDriver, cockroachDriver, redshiftDriver];
+/** @type {import('dbgate-types').EngineDriver} */
+const polardbDriver = {
+  ...postgresDriverBase,
+  engine: 'polardb@dbgate-plugin-postgres',
+  title: 'PolarDB-PG',
+  defaultPort: 5432,
+  dialect: {
+    ...dialect,
+    materializedViews: true,
+  },
+
+  dialectByVersion(version) {
+    if (version) {
+      return {
+        ...dialect,
+        materializedViews:
+          version &&
+          version.versionMajor != null &&
+          version.versionMinor != null &&
+          (version.versionMajor > 9 || version.versionMajor == 9 || version.versionMinor >= 3),
+      };
+    }
+    return dialect;
+  },
+};
+/** @type {import('dbgate-types').EngineDriver} */
+const opengaussDriver = {
+  ...postgresDriverBase,
+  engine: 'opengauss@dbgate-plugin-postgres',
+  title: 'Opengauss',
+  defaultPort: 5432,
+  dialect: {
+    ...dialect,
+    materializedViews: true,
+  },
+
+  dialectByVersion(version) {
+    if (version) {
+      return {
+        ...dialect,
+        materializedViews:
+          version &&
+          version.versionMajor != null &&
+          version.versionMinor != null &&
+          (version.versionMajor > 9 || version.versionMajor == 9 || version.versionMinor >= 3),
+      };
+    }
+    return dialect;
+  },
+};
+module.exports = [postgresDriver, cockroachDriver, redshiftDriver, polardbDriver, opengaussDriver];

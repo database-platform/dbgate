@@ -101,7 +101,7 @@ const drivers = driverBases.map(driverBase => ({
         columns: [],
       };
     }
-    console.log('postgres sql: ', sql)
+    // console.log('postgres sql: ', sql);
     const res = await client.query({ text: sql, rowMode: 'array' });
     const columns = extractPostgresColumns(res);
     return { rows: (res.rows || []).map(row => zipDataRow(row, columns)), columns };
@@ -170,10 +170,13 @@ const drivers = driverBases.map(driverBase => ({
   async getVersion(client) {
     const { rows } = await this.query(client, 'SELECT version()');
     const { version } = rows[0];
-
+    //  PostgreSQL 15.8 (PolarDB 15.8.2.0 build unknown) on x86_64-linux-gnu
+    console.log('version: ', version);
     const isCockroach = version.toLowerCase().includes('cockroachdb');
     const isRedshift = version.toLowerCase().includes('redshift');
-    const isPostgres = !isCockroach && !isRedshift;
+    const isPolardb = version.toLowerCase().includes('polardb');
+    const isOpengauss = version.toLowerCase().includes('opengauss');
+    const isPostgres = !isCockroach && !isRedshift && !isPolardb && !isOpengauss;
 
     const m = version.match(/([\d\.]+)/);
     let versionText = null;
@@ -182,6 +185,8 @@ const drivers = driverBases.map(driverBase => ({
     if (m) {
       if (isCockroach) versionText = `CockroachDB ${m[1]}`;
       if (isRedshift) versionText = `Redshift ${m[1]}`;
+      if (isPolardb) versionText = `PolarDB-PG ${m[1]}`;
+      if (isOpengauss) versionText = `Opengauss ${m[1]}`;
       if (isPostgres) versionText = `PostgreSQL ${m[1]}`;
       const numbers = m[1].split('.');
       if (numbers[0]) versionMajor = parseInt(numbers[0]);
@@ -194,12 +199,14 @@ const drivers = driverBases.map(driverBase => ({
       isPostgres,
       isCockroach,
       isRedshift,
+      isPolardb,
+      isOpengauss,
       versionMajor,
       versionMinor,
     };
   },
   async readQuery(client, sql, structure) {
-    console.log('readQuery sql: ', sql);
+    // console.log('readQuery sql: ', sql);
     const query = new pg.Query({
       text: sql,
       rowMode: 'array',
@@ -254,7 +261,7 @@ const drivers = driverBases.map(driverBase => ({
   },
   async listDatabases(client) {
     const { rows } = await this.query(client, 'SELECT datname AS name FROM pg_database WHERE datistemplate = false');
-    console.log('listDatabases rows: ', rows);
+    // console.log('listDatabases rows: ', rows);
     return rows;
   },
 
