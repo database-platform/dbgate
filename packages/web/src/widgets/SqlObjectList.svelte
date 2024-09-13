@@ -114,13 +114,11 @@
     <ErrorInfo message={$t('widgets.sqlObjectList.error', { values: { database } })} icon="img alert" />
     <div class="m-1" />
     <InlineButton on:click={handleRefreshDatabase}>{$t('common.refresh')}</InlineButton>
-    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
-      && driver?.databaseEngineTypes?.includes('sql')}
+    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE) && driver?.databaseEngineTypes?.includes('sql')}
       <div class="m-1" />
       <InlineButton on:click={() => runCommand('new.table')}>{$t('contextMenu.database.newTable')}</InlineButton>
     {/if}
-    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE)}
-      && driver?.databaseEngineTypes?.includes('document')}
+    {#if hasDataPermission($currentDatabase?.permission, PERMISSION.DDL, PERMISSION.DDL_CREATE) && driver?.databaseEngineTypes?.includes('document')}
       <div class="m-1" />
       <InlineButton on:click={() => runCommand('new.collection')}
         >{$t('contextMenu.database.newCollection')}</InlineButton
