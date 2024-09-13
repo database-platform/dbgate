@@ -83,7 +83,7 @@ class OnlineDatabase {
       const databasesOrigin = group.DatabaseGroups.map(dbGroup => dbGroup.Database);
       const databases = databasesOrigin.map(database => {
         const item = database.get({ plain: true });
-        return {
+        const result = {
           server: item.db_ip,
           engine: getEngine(item.db_type),
           port: item.db_port,
@@ -93,12 +93,17 @@ class OnlineDatabase {
           originId: item.id,
           _id: `${username}_${groupId}_${item.id}`,
           displayName: item.db_name ?? item.db_ip,
-          singleDatabase: item.db_dbname ? true : false,
-          defaultDatabase: item.db_dbname ?? '',
           orgGroupId: item.group_id,
           trinoFlag: item.trino_flag === 1 ? true : false,
           trinoCatalog: item.trino_catalog,
         };
+        if (item.db_type === 'oracle') {
+          result.serviceName = item.db_dbname;
+        } else {
+          result.singleDatabase = item.db_dbname ? true : false;
+          result.defaultDatabase = item.db_dbname ?? '';
+        }
+        return result;
       });
       return acc.concat(databases);
     }, []);

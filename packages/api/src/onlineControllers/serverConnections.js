@@ -254,7 +254,7 @@ module.exports = {
   refresh_meta: true,
   async refresh({ conid, keepOpen }, req) {
     // testConnectionPermission(conid, req);
-    console.log('server connections: ', this.opened, this.closed, this.requests, this.lastPinged);
+    // console.log('server connections: ', this.opened, this.closed, this.requests, this.lastPinged);
     if (!keepOpen) this.close(conid);
 
     await this.ensureOpened(conid);

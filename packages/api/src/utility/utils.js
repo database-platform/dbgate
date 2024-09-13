@@ -24,8 +24,35 @@ function getEngine(val) {
       break;
     case 'amazonredshift':
       engine = 'redshift@dbgate-plugin-postgres';
+    case 'tidb':
+      engine = 'tidb@dbgate-plugin-mysql';
+      break;
+    case 'oceanbase':
+      engine = 'oceanbase@dbgate-plugin-mysql';
+      break;
+    case 'gbase':
+      engine = 'gbase@dbgate-plugin-mysql';
+      break;
+    case 'gauss':
+      engine = 'gauss@dbgate-plugin-mysql';
+      break;
+    case 'golder':
+      engine = 'golder@dbgate-plugin-mysql';
+      break;
+    case 'opengauss':
+      engine = 'opengauss@dbgate-plugin-postgres';
+      break;
+    case 'polardb':
+      engine = 'polardb@dbgate-plugin-postgres';
+      break;
+    case 'kingbase':
+      engine = 'kingbase@dbgate-plugin-oracle';
+      break;
+    case 'dameng':
+      engine = 'dameng@dbgate-plugin-dameng';
+      break;
     default:
-      engine = '';
+      engine = 'unknow type';
       break;
   }
   return engine;
