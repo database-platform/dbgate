@@ -46,7 +46,7 @@ function getEngine(val) {
       engine = 'polardb@dbgate-plugin-postgres';
       break;
     case 'kingbase':
-      engine = 'kingbase@dbgate-plugin-oracle';
+      engine = 'kingbase@dbgate-plugin-postgres';
       break;
     case 'dameng':
       engine = 'dameng@dbgate-plugin-dameng';

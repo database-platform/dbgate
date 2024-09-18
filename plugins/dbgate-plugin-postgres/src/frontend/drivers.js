@@ -297,4 +297,29 @@ const opengaussDriver = {
     return dialect;
   },
 };
-module.exports = [postgresDriver, cockroachDriver, redshiftDriver, polardbDriver, opengaussDriver];
+/** @type {import('dbgate-types').EngineDriver} */
+const kingbaseDriver = {
+  ...postgresDriverBase,
+  engine: 'kingbase@dbgate-plugin-postgres',
+  title: 'Kingbase',
+  defaultPort: 54321,
+  dialect: {
+    ...dialect,
+    materializedViews: true,
+  },
+
+  dialectByVersion(version) {
+    if (version) {
+      return {
+        ...dialect,
+        materializedViews:
+          version &&
+          version.versionMajor != null &&
+          version.versionMinor != null &&
+          (version.versionMajor > 9 || version.versionMajor == 9 || version.versionMinor >= 3),
+      };
+    }
+    return dialect;
+  },
+};
+module.exports = [postgresDriver, cockroachDriver, redshiftDriver, polardbDriver, opengaussDriver, kingbaseDriver];

@@ -12,7 +12,7 @@ const logger = getLogger('damengDriver');
 
 function extractColumns(fields) {
   if (fields) {
-    const res = fields.map(col => ({
+    const res = fields.map((col) => ({
       columnName: col.name,
     }));
     makeUniqueColumnNames(res);
@@ -23,7 +23,7 @@ function extractColumns(fields) {
 
 function zipDataRow(rowArray, columns) {
   return _.zipObject(
-    columns.map(x => x.columnName),
+    columns.map((x) => x.columnName),
     rowArray
   );
 }
@@ -33,16 +33,18 @@ const driver = {
   ...driverBase,
   analyserClass: Analyser,
   // creating connection
-  async connect({ server, port, user, password, databaseUrl, host, database }) {
-    console.log('user ', user, server);
+  async connect({ server, port, user, password, databaseUrl, useDatabaseUrl, database }) {
     const pool = await dmdb.createPool({
       // connectString: "dm://SYSDBA:SYSDBA\@localhost:5236?autoCommit=false",
       connectString: `dm://${user}:${password}\@${server}:${port}?autoCommit=false&loginEncrypt=false`,
-      poolMax: 10,
-      poolMin: 1
+      poolMax: 2,
+      poolMin: 1,
     });
-    console.log('pool ', pool);
     const connection = await pool.getConnection();
+    if (database) {
+      await connection.execute(`ALTER SESSION SET CURRENT_SCHEMA = ${database}`);
+    }
+    client._schema_name = database;
     return connection;
   },
   async close(pool) {
@@ -57,12 +59,12 @@ const driver = {
         columns: [],
       };
     }
-    
+
     const res = await connection.execute(sql);
     // logger.info({ res }, 'res');
     const columns = extractColumns(res.metaData);
     // logger.info({ columns }, 'columns');
-    return { rows: (res.rows || []).map(row => zipDataRow(row, columns)), columns };
+    return { rows: (res.rows || []).map((row) => zipDataRow(row, columns)), columns };
   },
   // called in query console
   async stream(connection, sql, options) {

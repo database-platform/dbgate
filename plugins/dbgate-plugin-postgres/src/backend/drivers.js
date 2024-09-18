@@ -67,17 +67,23 @@ const drivers = driverBases.map(driverBase => ({
         connectionString: url,
       };
     } else {
+      let dbase = database;
+      if (engine == 'kingbase@dbgate-plugin-postgres') {
+        dbase = database || 'TEST';
+      } else {
+        dbase = database || 'postgres';
+      }
       options = useDatabaseUrl
         ? {
             connectionString: databaseUrl,
-            application_name: 'DbGate',
+            application_name: 'Dbmanager',
           }
         : {
             host: authType == 'socket' ? socketPath || driverBase.defaultSocketPath : server,
             port: authType == 'socket' ? null : port,
             user,
             password,
-            database: database || 'postgres',
+            database: dbase,
             ssl,
             application_name: 'DbGate',
           };
@@ -171,13 +177,23 @@ const drivers = driverBases.map(driverBase => ({
     const { rows } = await this.query(client, 'SELECT version()');
     const { version } = rows[0];
     //  PostgreSQL 15.8 (PolarDB 15.8.2.0 build unknown) on x86_64-linux-gnu
+    //  KingbaseES V008R006C008B0020 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-28), 64-bit
+    //
     console.log('version: ', version);
     const isCockroach = version.toLowerCase().includes('cockroachdb');
     const isRedshift = version.toLowerCase().includes('redshift');
     const isPolardb = version.toLowerCase().includes('polardb');
     const isOpengauss = version.toLowerCase().includes('opengauss');
-    const isPostgres = !isCockroach && !isRedshift && !isPolardb && !isOpengauss;
-
+    const isKingbase = version.toLowerCase().includes('kingbase');
+    const isPostgres = !isCockroach && !isRedshift && !isPolardb && !isOpengauss && !isKingbase;
+    let kingbaseVersion;
+    if (isKingbase) {
+      try {
+        kingbaseVersion = version.split(' ')[1];
+      } catch (error) {
+        console.error('postgres driver: ', error);
+      }
+    }
     const m = version.match(/([\d\.]+)/);
     let versionText = null;
     let versionMajor = null;
@@ -187,6 +203,7 @@ const drivers = driverBases.map(driverBase => ({
       if (isRedshift) versionText = `Redshift ${m[1]}`;
       if (isPolardb) versionText = `PolarDB-PG ${m[1]}`;
       if (isOpengauss) versionText = `Opengauss ${m[1]}`;
+      if (isKingbase) versionText = `KingbaseES ${kingbaseVersion}`;
       if (isPostgres) versionText = `PostgreSQL ${m[1]}`;
       const numbers = m[1].split('.');
       if (numbers[0]) versionMajor = parseInt(numbers[0]);

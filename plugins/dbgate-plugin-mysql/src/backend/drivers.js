@@ -156,6 +156,7 @@ const drivers = driverBases.map(driverBase => ({
   async getVersion(connection) {
     const { rows } = await this.query(connection, "show variables like 'version'");
     const version = rows[0].Value;
+    console.log('mysql version: ', version);
     if (version) {
       const m = version.match(/(.*)-MariaDB-/);
       if (m) {
