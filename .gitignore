@@ -14,11 +14,12 @@ dist
 
 app/packages/web/public
 app/packages/plugins
+
 docker/api
-docker/public
-docker/bundle.js
-docker/plugins
+/docker/public
+/docker/plugins/**
 docker/*.node
+docker/bundle.js
 
 # misc
 .DS_Store
