@@ -32,18 +32,21 @@
 
     <FormTextField name="columnName" label={$t('tab.tableStructure.columns.name')} focused />
     <DataTypeEditor dialect={driver?.dialect} />
-
-    <FormCheckboxField name="notNull" label={$t('tab.tableStructure.columns.notNull')} />
-    <FormCheckboxField name="isPrimaryKey" label={$t('tab.tableStructure.columns.isPrimaryKey')} />
-    <FormCheckboxField name="autoIncrement" label={$t('tab.tableStructure.columns.isAutoincrement')} />
+    <div class="flex">
+      <FormCheckboxField name="notNull" label={$t('tab.tableStructure.columns.notNull')} />
+      <FormCheckboxField name="isPrimaryKey" label={$t('tab.tableStructure.columns.isPrimaryKey')} />
+      <FormCheckboxField name="autoIncrement" label={$t('tab.tableStructure.columns.isAutoincrement')} />
+    </div>
     <FormTextField name="defaultValue" label={$t('tab.tableStructure.columns.defaultValueDetail')} />
     <FormTextField name="computedExpression" label={$t('tab.tableStructure.columns.computedExpression')} />
-    {#if driver?.dialect?.columnProperties?.isUnsigned}
-      <FormCheckboxField name="isUnsigned" label={$t('tab.tableStructure.columns.unsigned')} />
-    {/if}
-    {#if driver?.dialect?.columnProperties?.isZerofill}
-      <FormCheckboxField name="isZerofill" label={$t('tab.tableStructure.columns.zeroFill')} />
-    {/if}
+    <div class="flex">
+      {#if driver?.dialect?.columnProperties?.isUnsigned}
+        <FormCheckboxField name="isUnsigned" label={$t('tab.tableStructure.columns.unsigned')} />
+      {/if}
+      {#if driver?.dialect?.columnProperties?.isZerofill}
+        <FormCheckboxField name="isZerofill" label={$t('tab.tableStructure.columns.zeroFill')} />
+      {/if}
+    </div>
     {#if driver?.dialect?.columnProperties?.columnComment}
       <FormTextField name="columnComment" label={$t('tab.tableStructure.columns.comment')} />
     {/if}

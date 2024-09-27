@@ -1,6 +1,6 @@
 {
-  "short_name": "DbGate",
-  "name": "DbGate database tool",
+  "short_name": "DbManager",
+  "name": "DbManager database tool",
   "icons": [
     {
       "src": "favicon.ico",

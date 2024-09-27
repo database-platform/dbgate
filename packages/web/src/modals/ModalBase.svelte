@@ -19,7 +19,7 @@
 
   function handleClickOutside() {
     if ($currentDropDownMenu) return;
-    handleCloseModal();
+    // handleCloseModal();
   }
 
   function handleEscape(e) {
@@ -66,9 +66,11 @@
 <style>
   .bglayer {
     position: fixed;
-    z-index: 1;
-    top: var(--dim-micro-app-top);
-    left: var(--dim-micro-app-left);
+    z-index: 2000;
+    /* top: var(--dim-micro-app-top); */
+    /* left: var(--dim-micro-app-left); */
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -86,7 +88,7 @@
   .window:not(.fullScreen):not(.simple) {
     border-radius: 10px;
     margin: auto;
-    margin-top: 1vh;
+    margin-top: 6vh;
     width: 50%;
   }
 
@@ -143,7 +145,9 @@
     right: 0;
     bottom: 100px;
   }
-
+  .footer {
+    text-align: right;
+  }
   .footer:not(.fullScreen) {
     border-bottom: 1px solid var(--theme-border);
     padding: 8px 15px;

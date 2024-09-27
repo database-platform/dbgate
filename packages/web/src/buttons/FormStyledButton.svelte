@@ -24,12 +24,14 @@
 <style>
   input {
     border: 1px solid var(--theme-bg-button-inv-2);
-    padding: 5px;
+    padding: 6px;
     margin: 2px;
     width: 100px;
     background-color: var(--theme-bg-button-inv);
     color: var(--theme-font-inv-1);
-    border-radius: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
   }
 
   input:hover:not(.disabled) {

@@ -9,7 +9,7 @@
 <div class="largeFormMarker" class:noMargin>
   {#if type == 'checkbox'}
     <slot />
-    <span {...labelProps} on:click={labelProps.onClick} class:disabled class='checkLabel'>{label}</span>
+    <span {...labelProps} on:click={labelProps.onClick} class:disabled class="checkLabel">{label}</span>
   {:else}
     <div class="label" {...labelProps} on:click={labelProps.onClick}>
       <span {...labelProps} on:click={labelProps.onClick} class:disabled>{label}</span>
@@ -21,7 +21,8 @@
 <style>
   .label {
     margin-bottom: 3px;
-    color: var(--theme-font-3);
+    color: var(--theme-font-2);
+    font-weight: 700;
   }
   .checkLabel {
     cursor: default;
