@@ -21,9 +21,9 @@
     "icon.svg"
   ],
   "scripts": {
-    "build:frontend": "webpack --config webpack-frontend.config",
-    "build:frontend:watch": "webpack --watch --config webpack-frontend.config",
-    "build:backend": "webpack --config webpack-backend.config.js",
+    "build:frontend": "webpack --mode=production --config webpack-frontend.config",
+    "build:frontend:watch": "webpack --mode=production --watch --config webpack-frontend.config",
+    "build:backend": "webpack --mode=production --config webpack-backend.config.js",
     "build": "yarn build:frontend && yarn build:backend",
     "prepublishOnly": "yarn build",
     "plugin": "yarn build && yarn pack && dbgate-plugin dbgate-plugin-mssql",
@@ -31,12 +31,12 @@
     "plugout": "dbgate-plugout dbgate-plugin-mssql"
   },
   "devDependencies": {
-    "dbgate-plugin-tools": "^1.0.7",
-    "dbgate-query-splitter": "^4.9.3",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11",
+    "async-lock": "^1.2.6",
+    "dbgate-query-splitter": "^4.10.1",
     "dbgate-tools": "^5.0.0-alpha.1",
-    "tedious": "^14.5.0",
-    "async-lock": "^1.2.6"
+    "r-dbgate-plugin-tools": "^2.0.0",
+    "tedious": "^18.2.0",
+    "webpack": "5.92.0",
+    "webpack-cli": "5.1.4"
   }
 }

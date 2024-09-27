@@ -17,6 +17,7 @@
   import FontIcon from '../icons/FontIcon.svelte';
   import DictionaryLookupModal from '../modals/DictionaryLookupModal.svelte';
   import ValueLookupModal from '../modals/ValueLookupModal.svelte';
+  import SearchBoxWrapper from '../elements/SearchBoxWrapper.svelte';
 
   export let isReadOnly = false;
   export let filterType;
@@ -41,6 +42,7 @@
   export let uniqueName = null;
 
   export let placeholder = 'Filter';
+  export let inputStyle = '';
 
   let value;
   let isError;
@@ -349,6 +351,7 @@
     class:isError
     class:isOk
     {placeholder}
+    style={inputStyle}
   />
   {#if customCommandIcon && onCustomCommand}
     <InlineButton on:click={onCustomCommand} title={customCommandTooltip} narrow square>
@@ -381,6 +384,8 @@
     flex: 1;
     min-width: 10px;
     width: 1px;
+    border: none;
+    padding-left: 6px;
   }
 
   input.isError {

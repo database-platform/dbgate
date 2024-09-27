@@ -22,9 +22,9 @@
     "icon.svg"
   ],
   "scripts": {
-    "build:frontend": "webpack --config webpack-frontend.config",
-    "build:frontend:watch": "webpack --watch --config webpack-frontend.config",
-    "build:backend": "webpack --config webpack-backend.config.js",
+    "build:frontend": "webpack --mode=production --config webpack-frontend.config",
+    "build:frontend:watch": "webpack --mode=production --watch --config webpack-frontend.config",
+    "build:backend": "webpack --mode=production --config webpack-backend.config.js",
     "build": "yarn build:frontend && yarn build:backend",
     "plugin": "yarn build && yarn pack && dbgate-plugin dbgate-plugin-csv",
     "copydist": "yarn build && yarn pack && dbgate-copydist ../dist/dbgate-plugin-csv",
@@ -33,9 +33,9 @@
   },
   "devDependencies": {
     "csv": "^5.3.2",
-    "dbgate-plugin-tools": "^1.0.7",
     "lodash": "^4.17.21",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "r-dbgate-plugin-tools": "^2.0.0",
+    "webpack": "5.92.0",
+    "webpack-cli": "5.1.4"
   }
 }

@@ -7,6 +7,7 @@
   import { showModal } from '../modals/modalTools';
   import ColumnEditorModal from '../tableeditor/ColumnEditorModal.svelte';
   import { editorDeleteColumn } from 'dbgate-tools';
+  import CheckboxField from '../forms/CheckboxField.svelte';
 
   export let column;
   export let display;
@@ -64,8 +65,7 @@
     {#if isJsonView}
       <FontIcon icon="img column" />
     {:else}
-      <input
-        type="checkbox"
+      <CheckboxField
         checked={column.isChecked}
         on:click={e => {
           e.stopPropagation();
@@ -79,6 +79,21 @@
           dispatch('setvisibility', newValue);
         }}
       />
+      <!-- <input -->
+      <!--   type="checkbox" -->
+      <!--   checked={column.isChecked} -->
+      <!--   on:click={e => { -->
+      <!--     e.stopPropagation(); -->
+      <!--   }} -->
+      <!--   on:mousedown={e => { -->
+      <!--     e.stopPropagation(); -->
+      <!--   }} -->
+      <!--   on:change={() => { -->
+      <!--     const newValue = !column.isChecked; -->
+      <!--     display.setColumnVisibility(column.uniquePath, newValue); -->
+      <!--     dispatch('setvisibility', newValue); -->
+      <!--   }} -->
+      <!-- /> -->
     {/if}
     <ColumnLabel {...column} showDataType {conid} {database} />
   </div>
@@ -111,8 +126,7 @@
 
 <style>
   .row {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 4px 5px;
     cursor: pointer;
     white-space: nowrap;
     display: flex;

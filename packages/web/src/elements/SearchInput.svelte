@@ -4,6 +4,7 @@
 
   export let placeholder;
   export let value;
+  export let styleName = '';
 
   $: searchValue = value || '';
   export let isDebounced = false;
@@ -23,6 +24,7 @@
   type="text"
   {placeholder}
   value={searchValue}
+  style={styleName}
   on:input={e => {
     if (isDebounced) debouncedSet(domInput.value);
     else value = domInput.value;
@@ -39,5 +41,8 @@
     min-height: 22px;
     width: 10px;
     border: none;
+    padding: 6px 8px 6px 24px;
+    font-size: 13px;
+    border-radius: 6px;
   }
 </style>

@@ -22,13 +22,13 @@
     --bg-1: var(--theme-bg-1);
     --bg-2: var(--theme-bg-3);
 
-    background: linear-gradient(to bottom, var(--bg-1) 5%, var(--bg-2) 100%);
+    /* background: linear-gradient(to bottom, var(--bg-1) 5%, var(--bg-2) 100%); */
     background-color: var(--bg-1);
-    border: 1px solid var(--bg-2);
+    /* border: 1px solid var(--bg-2); */
     display: inline-block;
     cursor: pointer;
     vertical-align: middle;
-    color: var(--theme-font-1);
+    color: var(--theme-font-2);
     font-size: 12px;
     padding: 3px;
     margin: 0;
@@ -45,7 +45,7 @@
   }
 
   .outer:hover:not(.disabled) {
-    border: 1px solid var(--theme-font-1);
+    background-color: var(--theme-bg-hover);
   }
 
   .outer:active:not(.disabled) {

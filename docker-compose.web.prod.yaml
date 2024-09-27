@@ -1,6 +1,6 @@
 services:
   web:
-    image: myregistry.dataleapinfo.com:5443/dbgate-web:latest
+    image: myregistry.dataleapinfo.com:5443/dbgate-web:5.3.1
     networks:
       - dbserver
     deploy:

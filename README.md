@@ -9,7 +9,8 @@ docker stack deploy -c docker-compose.traefik.prod.yaml traefik -d
 yarn prepare:docker:web
 
 cd docker
-docker build -f Dockerfile.alpine.web -t myregistry.dataleapinfo.com:5443/dbgate-web:latest .
+docker build -f Dockerfile.alpine.web -t myregistry.dataleapinfo.com:5443/dbgate-web:{version} .
+docker push myregistry.dataleapinfo.com:5443/dbgate-web:{version}
 cd ..
 
 docker stack deploy -c docker-compose.web.prod.yaml dbgatex-web -d
@@ -19,7 +20,8 @@ docker stack deploy -c docker-compose.web.prod.yaml dbgatex-web -d
 yarn prepare:docker
 
 cd docker
-docker build -f Dockerfile.alpine -t myregistry.dataleapinfo.com:5443/dbgate-server:latest .
+docker build -f Dockerfile.alpine -t myregistry.dataleapinfo.com:5443/dbgate-server:{version} .
+docker push myregistry.dataleapinfo.com:5443/dbgate-server:{version}
 cd ..
 
 docker stack deploy -c docker-compose.server.prod.yaml dbgatex-server -d

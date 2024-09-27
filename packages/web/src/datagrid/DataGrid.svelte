@@ -167,7 +167,13 @@
 >
   <div class="left" slot="1">
     <WidgetColumnBar>
-      <WidgetColumnBarItem title={$t('widgets.dataGrid.columns')} name="columns" height="45%" skip={isFormView}>
+      <WidgetColumnBarItem
+        title={$t('widgets.dataGrid.columns')}
+        name="columns"
+        height="45%"
+        skip={isFormView}
+        hrStyle="margin-bottom: 0;"
+      >
         <ColumnManager {...$$props} {managerSize} {isJsonView} {isDynamicStructure} bind:this={domColumnManager} />
       </WidgetColumnBarItem>
 
@@ -177,6 +183,7 @@
         height={showReferences && display?.hasReferences && !isFormView ? '15%' : '30%'}
         skip={!display?.filterable}
         collapsed={isDetailView}
+        hrStyle="margin-bottom: 0;"
       >
         <FormViewFilters
           {...$$props}

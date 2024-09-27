@@ -1,6 +1,6 @@
 services:
   server:
-    image: myregistry.dataleapinfo.com:5443/dbgate-server:latest
+    image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.1
     init: true
     environment:
       - ENABLE_ONLINE=1

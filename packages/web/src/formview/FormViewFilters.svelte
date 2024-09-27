@@ -8,6 +8,7 @@
   import FontIcon from '../icons/FontIcon.svelte';
   import keycodes from '../utility/keycodes';
   import FormViewFilterColumn from './FormViewFilterColumn.svelte';
+  import SearchInput from '../elements/SearchInput.svelte';
   // import PrimaryKeyFilterEditor from './PrimaryKeyFilterEditor.svelte';
 
   export let managerSize;
@@ -38,10 +39,11 @@
   <div class="m-1">
     <div>{$t('widgets.formView.nameFilter')}</div>
     <div class="flex">
-      <input
-        type="text"
+      <SearchInput
+        placeholder="filter"
         value={display?.config?.formColumnFilterText || ''}
         on:keydown={e => {
+          // @ts-ignore
           if (e.keyCode == keycodes.escape) {
             setConfig(x => ({
               ...x,
@@ -56,6 +58,24 @@
             formColumnFilterText: e.target.value,
           }))}
       />
+      <!-- <input -->
+      <!--   type="text" -->
+      <!--   value={display?.config?.formColumnFilterText || ''} -->
+      <!--   on:keydown={e => { -->
+      <!--     if (e.keyCode == keycodes.escape) { -->
+      <!--       setConfig(x => ({ -->
+      <!--         ...x, -->
+      <!--         formColumnFilterText: '', -->
+      <!--       })); -->
+      <!--     } -->
+      <!--   }} -->
+      <!--   on:input={e => -->
+      <!--     setConfig(x => ({ -->
+      <!--       ...x, -->
+      <!--       // @ts-ignore -->
+      <!--       formColumnFilterText: e.target.value, -->
+      <!--     }))} -->
+      <!-- /> -->
     </div>
   </div>
 {/if}
@@ -81,6 +101,7 @@
       filterType="string"
       filter={multiColumnFilter}
       setFilter={value => display.setMutliColumnFilter(value)}
+      inputStyle="background-color: var(--theme-bg-1);min-height: 22px;padding: 6px 8px 6px 24px;font-size: 13px;border-radius: 6px;"
       {driver}
       {conid}
       {database}

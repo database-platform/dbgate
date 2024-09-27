@@ -8,11 +8,12 @@
 
 <style>
   div {
-    padding: 5px;
+    padding: 16px;
+    font-size: 16px;
     font-weight: bold;
     text-transform: uppercase;
+    color: var(--theme-font-2);
     background-color: var(--theme-bg-1);
-    border: 2px solid var(--theme-border);
   }
   div.clickable:hover {
     background-color: var(--theme-bg-2);

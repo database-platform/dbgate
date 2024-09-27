@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "5.3.0",
+  "version": "5.3.1",
   "name": "dbgate-all",
   "workspaces": [
     "packages/*",
@@ -35,7 +35,8 @@
     "build:web:docker": "yarn workspace dbgate-web build",
     "build:plugins:frontend": "workspaces-run --only=\"dbgate-plugin-*\" -- yarn build:frontend",
     "build:plugins:frontend:watch": "workspaces-run --parallel --only=\"dbgate-plugin-*\" -- yarn build:frontend:watch",
-    "plugins:copydist": "workspaces-run --only=\"dbgate-plugin-{mysql,postgres,redis,sqlite}\" -- yarn copydist",
+    "build:plugins:backend": "workspaces-run --only=\"dbgate-plugin-*\" -- yarn build:backend",
+    "plugins:copydist": "workspaces-run --only=\"dbgate-plugin-{mysql,postgres,redis,sqlite,oracle,mssql,mongo}\" -- yarn copydist",
     "build:app:local": "yarn plugins:copydist && cd app && yarn build:local",
     "start:app:local": "cd app && yarn start:local",
     "setCurrentVersion": "node setCurrentVersion",

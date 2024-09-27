@@ -136,7 +136,9 @@
       currentGroup = e.detail;
     }}
     options={$groups}
+    styleName="--border: none; --background: transparent;"
   />
+  <hr style="margin: 0 0 8px 8px; width: 93%" />
 </div>
 <SearchBoxWrapper>
   <SearchInput placeholder={$t('widgets.connectionList.search')} bind:value={filter} />

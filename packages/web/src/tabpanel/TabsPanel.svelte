@@ -683,7 +683,7 @@
   .db-name {
     display: flex;
     text-align: center;
-    font-size: 8pt;
+    font-size: 10pt;
     border-bottom: 1px solid var(--theme-border);
     border-right: 1px solid var(--theme-border);
     cursor: pointer;

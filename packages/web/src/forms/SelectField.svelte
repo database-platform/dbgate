@@ -11,6 +11,7 @@
   export let isMulti = false;
   export let notSelected = null;
   export let defaultValue = '';
+  export let styleName = '';
 
   let listOpen = false;
   let isFocused = false;
@@ -40,13 +41,13 @@
     {/each}
   </select>
 {:else}
-  <div class="select">
+  <div class="select" style={styleName}>
     <SvelteSelect
       {...$$restProps}
       items={options}
       value={isMulti
         ? _.compact(value?.map(item => options.find(x => x.value == item)) ?? [])
-        : options.find(x => x.value == value) ?? null}
+        : (options.find(x => x.value == value) ?? null)}
       on:select={e => {
         if (isMulti) {
           dispatch(
@@ -74,6 +75,7 @@
     --listBackground: var(--theme-bg-1);
     --itemActiveBackground: var(--theme-bg-selected);
     --itemIsActiveBG: var(--theme-bg-selected);
+    --itemIsActiveColor: var(--theme-font-1);
     --itemHoverBG: var(--theme-bg-hover);
     --itemColor: var(--theme-font-1);
     --listEmptyColor: var(--theme-bg-0);

@@ -54,6 +54,7 @@
       name="connections"
       height="35%"
       storageName="connectionsWidget"
+      hrStyle="margin-bottom: 0;"
     >
       <ConnectionList />
     </WidgetColumnBarItem>

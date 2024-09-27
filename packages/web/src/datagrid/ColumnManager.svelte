@@ -172,7 +172,11 @@
   </div>
 {/if}
 <SearchBoxWrapper>
-  <SearchInput placeholder={$t('widgets.column.search')} bind:value={filter} />
+  <SearchInput
+    styleName="background-color: var(--theme-bg-1);"
+    placeholder={$t('widgets.column.search')}
+    bind:value={filter}
+  />
   <CloseSearchButton bind:filter />
   {#if isDynamicStructure && !isJsonView}
     <InlineButton

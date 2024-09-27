@@ -6,6 +6,7 @@
   export let style = null;
 
   const iconNames = {
+    'icon magnify': 'mdi mdi-magnify',
     'icon minus-box': 'mdi mdi-minus-box-outline',
     'icon plus-box': 'mdi mdi-plus-box-outline',
     'icon plus-thick': 'mdi mdi-plus-thick',
@@ -56,7 +57,7 @@
     'icon play': 'mdi mdi-play',
     'icon play-stop': 'mdi mdi-stop',
     'icon pause': 'mdi mdi-pause',
-    'icon filter': 'mdi mdi-filter',
+    'icon filter': 'mdi mdi-filter-outline',
     'icon filter-off': 'mdi mdi-filter-off',
     'icon reload': 'mdi mdi-reload',
     'icon refresh': 'mdi mdi-refresh',

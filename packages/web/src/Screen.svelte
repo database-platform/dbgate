@@ -54,7 +54,10 @@
   class={`${$currentTheme} ${currentThemeType} root dbgate-screen`}
   class:isElectron
   use:dragDropFileTarget
-  on:contextmenu={e => e.preventDefault()}
+  on:contextmenu={e => {
+    return;
+    e.preventDefault();
+  }}
 >
   {#if $visibleTitleBar}
     <div class="titlebar">

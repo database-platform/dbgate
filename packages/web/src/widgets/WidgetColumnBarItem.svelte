@@ -14,7 +14,7 @@
   export let skip = false;
   export let height = null;
   export let collapsed = null;
-
+  export let hrStyle = '';
   export let storageName = null;
 
   let size = 0;
@@ -68,6 +68,7 @@
 
 {#if !skip}
   <WidgetTitle clickable={collapsible} on:click={collapsible ? () => (visible = !visible) : null}>{title}</WidgetTitle>
+  <hr style={hrStyle} />
 
   {#if visible}
     <div class="wrapper" style={$dynamicProps.splitterVisible ? `height:${size}px` : 'flex: 1 1 0'}>
