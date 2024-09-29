@@ -18,6 +18,7 @@
   import SelectField from '../forms/SelectField.svelte';
   import ColumnEditorModal from '../tableeditor/ColumnEditorModal.svelte';
   import { tick } from 'svelte';
+  import FontIcon from '../icons/FontIcon.svelte';
 
   export let managerSize;
   export let display: GridDisplay;
@@ -36,6 +37,7 @@
   let currentColumnUniqueName = null;
   let dragStartColumnIndex = null;
   let shiftOriginColumnIndex = null;
+  let isColumnShow = true;
 
   $: items = display?.getColumns(filter)?.filter(column => filterName(filter, column.columnName)) || [];
 
@@ -195,8 +197,19 @@
   {#if allowChangeChangeSetStructure && !isDynamicStructure}
     <InlineButton on:click={handleAddColumn}>{$t('button.add.add')}</InlineButton>
   {/if}
-  <InlineButton on:click={() => display.hideAllColumns()}>{$t('button.hide')}</InlineButton>
-  <InlineButton on:click={() => display.showAllColumns()}>{$t('button.show')}</InlineButton>
+  <InlineButton
+    wrapperStyle="position: absolute; top: 11px; right: 16px;"
+    on:click={() => {
+      if (isColumnShow) {
+        display.hideAllColumns();
+      } else {
+        display.showAllColumns();
+      }
+      isColumnShow = !isColumnShow;
+    }}
+  >
+    <FontIcon icon={isColumnShow ? 'icon eye-off' : 'icon eye'} />
+  </InlineButton>
 </SearchBoxWrapper>
 <ManagerInnerContainer width={managerSize}>
   <input

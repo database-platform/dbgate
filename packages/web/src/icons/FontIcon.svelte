@@ -6,7 +6,10 @@
   export let style = null;
 
   const iconNames = {
+    'icon eye': 'mdi mdi-eye',
+    'icon eye-off': 'mdi mdi-eye-off',
     'icon magnify': 'mdi mdi-magnify',
+
     'icon minus-box': 'mdi mdi-minus-box-outline',
     'icon plus-box': 'mdi mdi-plus-box-outline',
     'icon plus-thick': 'mdi mdi-plus-thick',

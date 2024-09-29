@@ -3,6 +3,7 @@
   export let square = false;
   export let narrow = false;
   export let title = null;
+  export let wrapperStyle = '';
 
   let domButton;
 
@@ -11,7 +12,16 @@
   }
 </script>
 
-<div class="outer buttonLike" {title} class:disabled class:square class:narrow on:click bind:this={domButton}>
+<div
+  class="outer buttonLike"
+  style={wrapperStyle}
+  {title}
+  class:disabled
+  class:square
+  class:narrow
+  on:click
+  bind:this={domButton}
+>
   <div class="inner">
     <slot />
   </div>
@@ -45,7 +55,7 @@
   }
 
   .outer:hover:not(.disabled) {
-    background-color: var(--theme-bg-hover);
+    color: var(--theme-bg-hover);
   }
 
   .outer:active:not(.disabled) {
