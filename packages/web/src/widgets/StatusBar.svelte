@@ -60,17 +60,7 @@
         {databaseName}
       </div>
       {#if dbid}
-        <div
-          class="item clickable"
-          title="Database color. Overrides connection color"
-          on:click={() => {
-            showModal(ChooseConnectionColorModal, {
-              ...dbid,
-              header: $t('modal.color.database.header'),
-              text: $t('modal.color.database.text'),
-            });
-          }}
-        >
+        <div class="item clickable" title="Database color. Overrides connection color">
           <div style={$databaseButtonBackground} class="colorbox">
             <FontIcon icon="icon palette" />
           </div>
@@ -83,17 +73,7 @@
         {connectionLabel}
       </div>
       {#if dbid}
-        <div
-          class="item clickable"
-          title="Connection color. Can be overriden by database color"
-          on:click={() => {
-            showModal(ChooseConnectionColorModal, {
-              conid: dbid.conid,
-              header: $t('modal.color.connection.header'),
-              text: $t('modal.color.connection.text'),
-            });
-          }}
-        >
+        <div class="item clickable" title="Connection color. Can be overriden by database color">
           <div style={$connectionButtonBackground} class="colorbox">
             <FontIcon icon="icon palette" />
           </div>
@@ -176,7 +156,7 @@
 <style>
   .main {
     display: flex;
-    color: var(--theme-font-inv-15);
+    color: var(--theme-font-inv-1);
     align-items: stretch;
     justify-content: space-between;
     cursor: default;
