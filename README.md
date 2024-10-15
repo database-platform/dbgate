@@ -1,5 +1,10 @@
 ## 部署
 
+### prepost
+
+docker network create -d overlay dbserver
+docker network create -d overlay uccserver
+
 ### deploy gateway
 
 docker stack deploy -c docker-compose.traefik.prod.yaml traefik -d

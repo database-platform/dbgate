@@ -5,9 +5,9 @@ services:
     environment:
       - ENABLE_ONLINE=1
       - TRINO_URL=http://trion:8080
-      - ONLINE_ADMIN_API=https://platform.dataleapinfo.com/dbapi
-      - ONLINE_ADMIN_HOME=https://platform.dataleapinfo.com/db
-      - ONLINE_DATABASE_URL=mysql://dbsun:@Sun12345@172.30.246.29:3306/smartdata
+      - ONLINE_ADMIN_API=http://192.168.3.100/dbapi
+      - ONLINE_ADMIN_HOME=http://192.168.3.100/db
+      - ONLINE_DATABASE_URL=mysql://smartdb:Sun%23123@192.168.3.100:2881/smartdata
       # redis sentinel
       # - REDIS_TYPE=sentinel
       # - REDIS_NAME=mymaster
