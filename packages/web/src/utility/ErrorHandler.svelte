@@ -22,7 +22,7 @@
         if (lastDbGateCrash && new Date().getTime() - lastDbGateCrash < 30 * 1000) {
           if (
             window.confirm(
-              'Sorry, DbGate has crashed again.\nDo you want to close all tabs in order to avoid crashing after next reload?\nYou can reopen closed tabs in closed tabs history.'
+              'Sorry, Dbmanager has crashed again.\nDo you want to close all tabs in order to avoid crashing after next reload?\nYou can reopen closed tabs in closed tabs history.'
             )
           ) {
             try {
@@ -48,7 +48,7 @@
         } else {
           if (
             window.confirm(
-              'Sorry, DbGate has crashed.\nPress OK for reload application\nPress Cancel and inspect Console in Developer tools for error details'
+              'Sorry, Dbmanager has crashed.\nPress OK for reload application\nPress Cancel and inspect Console in Developer tools for error details'
             )
           ) {
             localStorage.setItem('lastDbGateCrash', JSON.stringify(new Date().getTime()));
@@ -62,4 +62,4 @@
   };
 </script>
 
-<svelte:window on:unhandledrejection={onunhandledrejection} />
+<!-- <svelte:window on:unhandledrejection={onunhandledrejection} /> -->

@@ -85,8 +85,13 @@ module.exports = {
     let databases = [];
     try {
       let auth = req.auth;
-      databases = await this.datastore.find(auth.username, auth.groupId);
-      // console.log('databases ', databases);
+      const dataBaseUserGroup = await this.datastore.findDataBaseUserGroup(auth.username);
+      logger.info(dataBaseUserGroup, 'db group: ');
+      if (!dataBaseUserGroup) {
+        return databases;
+      }
+      databases = await this.datastore.find(auth.username, dataBaseUserGroup.group.groupId);
+      logger.info({ len: databases.length }, 'databases: ');
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
       return {

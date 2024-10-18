@@ -1,7 +1,23 @@
-const { OrgGroup, Database, Group, DatabaseGroup } = require('../models');
+const { OrgGroup, Database, Group, DatabaseGroup, SysUser, DataBaseUserGroup } = require('../models');
 const { getEngine } = require('../../utility/utils');
 
 class OnlineDatabase {
+  async findDataBaseUserGroup(username) {
+    const user = await SysUser.findOne({
+      where: { user_name: username },
+      attributes: ['user_id', 'user_name'],
+      include: [
+        {
+          model: DataBaseUserGroup,
+          as: 'group',
+          attributes: ['groupId'],
+          require: false,
+        },
+      ],
+    });
+    return user?.get({ plain: true });
+  }
+
   async findOrgGroup() {
     const orgGroups = await OrgGroup.findAll({
       where: { status: 0 },
