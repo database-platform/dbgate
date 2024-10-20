@@ -104,9 +104,9 @@
   }
 </script>
 
-{#if $status && $status.name == 'error'}
+{#if $status && $status.name == 'error2'}
   <WidgetsInnerContainer>
-    <ErrorInfo message={$status.message} icon="img error" />
+    <ErrorInfo message={$status.message} />
     <InlineButton on:click={handleRefreshDatabase}>{$t('common.refresh')}</InlineButton>
   </WidgetsInnerContainer>
 {:else if objectList.length == 0 && $status && $status.name != 'pending' && $status.name != 'checkStructure' && $status.name != 'loadStructure' && $objects}

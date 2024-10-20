@@ -35,7 +35,7 @@
   $: connection = useConnectionInfo({ conid });
   $: driver = findEngineDriver($connection, $extensions);
   $: config = useConfig();
-  $: console.log('=$currentDatabase: ', $currentDatabase, conid);
+  // $: console.log('=$currentDatabase: ', $currentDatabase, conid);
 </script>
 
 <WidgetColumnBar {hidden}>

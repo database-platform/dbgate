@@ -75,9 +75,8 @@ export async function getClipboardText() {
     if (window.__MICRO_APP_ENVIRONMENT__) {
       result = await window.parent.navigator.permissions.query({ name: 'clipboard-read' });
     } else {
-      result = navigator.permissions.query({ name: 'clipboard-read' });
+      result = await navigator.permissions.query({ name: 'clipboard-read' });
     }
-    console.log('result ', result);
     if (result.state === 'granted' || result.state === 'prompt') {
       if (window.__MICRO_APP_ENVIRONMENT__) {
         return await window.parent.navigator.clipboard.readText();
@@ -86,7 +85,45 @@ export async function getClipboardText() {
       }
     }
   } catch (error) {
-    console.log('Failed to read text from clipboard: ', error);
+    // console.log('Failed to read text from clipboard: ', error);
+    return getPlanBClipboardText();
+  }
+  return '';
+}
+
+export async function getPlanBClipboardText() {
+  try {
+    const text = await navigator.clipboard.readText();
+    // console.log('Clipboard text: ', text);
+    return text;
+  } catch (err) {
+    // console.error('Failed to read clipboard contents: ', err);
+    return getClipboardTextManually();
+  }
+}
+
+function getClipboardTextUsingExecCommand() {
+  const textArea = document.createElement('textarea');
+  document.body.appendChild(textArea);
+  textArea.focus();
+  const success = document.execCommand('paste');
+  if (success) {
+    const clipboardText = textArea.value;
+    console.log('Pasted text: ', clipboardText);
+    document.body.removeChild(textArea);
+    return clipboardText;
+  } else {
+    console.log('Failed to paste text using execCommand');
+    document.body.removeChild(textArea);
+    return '';
+  }
+}
+
+async function getClipboardTextManually() {
+  const userClipboardText = prompt('请粘贴 (Ctrl+V) 文本到这里:');
+  if (userClipboardText !== null) {
+    // console.log('User pasted: ', userClipboardText);
+    return userClipboardText;
   }
   return '';
 }

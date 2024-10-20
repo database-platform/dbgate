@@ -14,7 +14,10 @@ export default function newQuery({
   const currentDb = getCurrentDatabase();
   const connection = currentDb?.connection || {};
   const database = currentDb?.name;
-
+  if (!currentDb) {
+    alert('请先选择数据库。');
+    return;
+  }
   const tooltip = `${getConnectionLabel(connection)}\n${database}`;
 
   openNewTab(

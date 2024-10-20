@@ -14,7 +14,7 @@
   export function openConnection(connection) {
     // const config = getCurrentConfig();
     if (connection.singleDatabase) {
-      console.log('currentDatabase open connection single: ', connection);
+      // console.log('currentDatabase open connection single: ', connection);
       currentDatabase.set({ connection, name: connection.defaultDatabase });
       apiCall('database-connections/refresh', {
         conid: connection._id,
@@ -144,7 +144,7 @@
       return;
     }
     if ($openedSingleDatabaseConnections.includes(data._id)) {
-      console.log('currentDatabase change current db: ', data);
+      // console.log('currentDatabase change current db: ', data);
       currentDatabase.set({ connection: data, name: data.defaultDatabase });
       return;
     }
@@ -167,14 +167,13 @@
   };
 
   const getContextMenu = () => {
-    console.log('connection app object: ', data);
+    // console.log('connection app object: ', data);
     const driver = $extensions.drivers.find(x => x.engine == data.engine);
     const config = getCurrentConfig();
     const handleRefresh = () => {
       apiCall('server-connections/refresh', { conid: data._id });
     };
     const handleDisconnect = () => {
-      console.log('xxx disconnect');
       disconnectServerConnection(data._id);
     };
     const handleDelete = () => {

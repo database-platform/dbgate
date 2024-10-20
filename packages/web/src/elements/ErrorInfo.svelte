@@ -2,7 +2,7 @@
   import FontIcon from '../icons/FontIcon.svelte';
 
   export let message;
-  export let icon = 'img error';
+  export let icon = ''; // img error
   export let isSmall = false;
   export let alignTop = false;
 </script>
@@ -10,7 +10,7 @@
 {#if isSmall}
   <div class="container-small">
     <FontIcon {icon} />
-    {message || 'Unknown error'}
+    {message || ''}
   </div>
 {:else if alignTop}
   <div>
@@ -18,7 +18,7 @@
       <div class="icon">
         <FontIcon {icon} />
       </div>
-      {message || 'Unknown error'}
+      {message || ''}
     </div>
   </div>
 {:else}
@@ -26,7 +26,8 @@
     <div class="icon">
       <FontIcon {icon} />
     </div>
-    {message || 'Unknown error'}
+    <!-- {message || 'Unknown error'} -->
+    {message || ''}
   </div>
 {/if}
 

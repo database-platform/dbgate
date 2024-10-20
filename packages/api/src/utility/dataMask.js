@@ -34,6 +34,9 @@ const { repeat } = require('lodash');
  * */
 function processMask(field, authMask, rows) {
   console.log('processMask ', field, authMask);
+  if (!authMask || !rows) {
+    return;
+  }
   rows.map(row => {
     if (row[field]) {
       row[field] = dataMask(row[field], authMask);
@@ -63,6 +66,9 @@ function processMask(field, authMask, rows) {
  * */
 function processScanMask(field, authMask, rows) {
   console.log('processScanMask ', field, authMask);
+  if (!authMask || !rows) {
+    return;
+  }
   rows.map(row => {
     if (row[field]) {
       row[field] = buildinProcess(row[field], authMask.DesensType);

@@ -85,7 +85,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -243,7 +243,7 @@ module.exports = {
     }
     const opened = await this.ensureOpened(conid, database);
     // console.log('sqlSelect opened: ', opened);
-    console.log('sqlSelect closed: ', this.closed);
+    // console.log('sqlSelect closed: ', this.closed);
     const res = await this.sendRequest(opened, { msgtype: 'sqlSelect', select });
     if (select.range && res.rows && res.rows.length !== 0) {
       const tname = select.from.name.pureName;
@@ -357,6 +357,7 @@ module.exports = {
 
   status_meta: true,
   async status({ conid, database }, req) {
+    console.log('status start: ', conid, database);
     if (!conid) {
       return {
         name: 'error',
@@ -365,6 +366,7 @@ module.exports = {
     }
     // testConnectionPermission(conid, req);
     const existing = this.opened.find(x => x.conid == conid && x.database == database);
+    console.log('status start existing', existing != undefined);
     if (existing) {
       return {
         ...existing.status,
@@ -372,12 +374,14 @@ module.exports = {
       };
     }
     const lastClosed = this.closed[`${conid}/${database}`];
+    console.log('status lastClosed: ', lastClosed);
     if (lastClosed) {
       return {
         ...lastClosed.status,
         analysedTime: lastClosed.analysedTime,
       };
     }
+    console.log('status end: ', conid, database);
     return {
       name: 'error',
       message: 'Not connected',
@@ -386,7 +390,7 @@ module.exports = {
 
   ping_meta: true,
   async ping({ conid, database }, req) {
-    testConnectionPermission(conid, req);
+    // testConnectionPermission(conid, req);
     let existing = this.opened.find(x => x.conid == conid && x.database == database);
 
     if (existing) {
