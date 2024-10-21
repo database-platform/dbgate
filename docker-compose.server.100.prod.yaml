@@ -1,12 +1,12 @@
 services:
   server:
-    image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.1
+    image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.6
     init: true
     environment:
       - ENABLE_ONLINE=1
       - TRINO_URL=http://trion:8080
-      - ONLINE_ADMIN_API=http://192.168.3.100/dbapi
-      - ONLINE_ADMIN_HOME=http://192.168.3.100/db
+      - ONLINE_ADMIN_API=https://192.168.3.100/dbapi
+      - ONLINE_ADMIN_HOME=https://192.168.3.100/db
       - ONLINE_DATABASE_URL=mysql://smartdb:Sun%23123@192.168.3.100:2881/smartdata
       # redis sentinel
       # - REDIS_TYPE=sentinel

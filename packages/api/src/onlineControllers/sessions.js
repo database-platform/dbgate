@@ -13,6 +13,7 @@ const pipeForkLogs = require('../utility/pipeForkLogs');
 const config = require('./config');
 const axios = require('axios');
 const { getRealIp } = require('../utility/utils');
+const { agent } = require('../utility/http');
 
 const logger = getLogger('sessions');
 
@@ -109,7 +110,7 @@ module.exports = {
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   create_meta: true,
   async create({ conid, database }, req) {
@@ -216,6 +217,7 @@ module.exports = {
       // console.log('verifysql token: ', auth);
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
       const response = await axios.default.post(url, params, {
+        httpsAgent: agent,
         headers: {
           authorization: `Bearer ${auth}`,
           'content-type': 'application/json',

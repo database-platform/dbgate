@@ -18,7 +18,14 @@ docker build -f Dockerfile.alpine.web -t myregistry.dataleapinfo.com:5443/dbgate
 docker push myregistry.dataleapinfo.com:5443/dbgate-web:{version}
 cd ..
 
+#### start up
+
 docker stack deploy -c docker-compose.web.prod.yaml dbgatex-web -d
+
+#### update
+
+docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.4 dbgatex-web_web
+docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.5 dbgatex-web_web
 
 ### deploy server
 
@@ -29,7 +36,16 @@ docker build -f Dockerfile.alpine -t myregistry.dataleapinfo.com:5443/dbgate-ser
 docker push myregistry.dataleapinfo.com:5443/dbgate-server:{version}
 cd ..
 
+#### start up
+
 docker stack deploy -c docker-compose.server.prod.yaml dbgatex-server -d
+
+#### update
+
+docker service update --image myregistry.dataleapinfo.com:5443/dbgate-server:5.3.2 dbgatex-server_server
+docker service update --image myregistry.dataleapinfo.com:5443/dbgate-server:5.3.5 dbgatex-server_server
+
+####
 
 [![NPM version](https://img.shields.io/npm/v/dbgate-serve.svg)](https://www.npmjs.com/package/dbgate-serve)
 ![GitHub All Releases](https://img.shields.io/github/downloads/dbgate/dbgate/total)

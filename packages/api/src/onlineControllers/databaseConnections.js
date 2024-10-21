@@ -34,6 +34,7 @@ const PermissionService = require('../db/services/permissionService');
 const { processMask, processScanMask } = require('../utility/dataMask');
 const { getRealIp } = require('../utility/utils');
 const { default: axios } = require('axios');
+const { agent } = require('../utility/http');
 
 const logger = getLogger('databaseConnections');
 const permissionService = new PermissionService();
@@ -85,7 +86,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -224,6 +225,7 @@ module.exports = {
           const auth = req.headers.authorization;
           const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
           const response = await axios.post(url, params, {
+            httpsAgent: agent,
             headers: {
               authorization: `Bearer ${auth}`,
               'content-type': 'application/json',
