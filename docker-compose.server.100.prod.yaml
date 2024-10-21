@@ -3,6 +3,7 @@ services:
     image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.6
     init: true
     environment:
+      - NODE_ENV=production_self
       - ENABLE_ONLINE=1
       - TRINO_URL=http://trion:8080
       - ONLINE_ADMIN_API=https://192.168.3.100/dbapi
@@ -19,6 +20,11 @@ services:
       # - REDIS_PORT=6379
       # - REDIS_HOST=redis
       # - REDIS_PASSWORD=redis-123456
+    configs:
+      - source: selfsigned.crt
+        target: /etc/ssl/certs/selfsigned.crt
+      - source: selfsigned.key
+        target: /etc/ssl/private/selfsigned.key
     networks:
       - dbserver
       - uccserver
@@ -47,6 +53,12 @@ services:
       timeout: 10s
       retries: 3
       start_period: 5s
+
+configs:
+  selfsigned.crt:
+    external: true
+  selfsigned.key:
+    external: true
 
 networks:
   dbserver:

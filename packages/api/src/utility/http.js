@@ -1,8 +1,15 @@
 const https = require('https');
+const fs = require('https');
 
-const agent = new https.Agent({
-  rejectUnauthorized: false, // 忽略自签名证书
-});
+let agent;
+if (process.env.NODE_ENV === 'production_self') {
+  const cert = fs.readFileSync('/etc/ssl/certs/selfsigned.crt');
+  agent = new https.Agent({
+    ca: cert,
+  });
+} else {
+  agent = null;
+}
 
 module.exports = {
   agent,

@@ -63,6 +63,7 @@ function start() {
   const app = express();
 
   app.set('trust proxy', true);
+
   const server = http.createServer(app);
 
   const logins = getLogins();
@@ -71,7 +72,7 @@ function start() {
       basicAuth({
         users: _.fromPairs(logins.filter(x => x.password).map(x => [x.login, x.password])),
         challenge: true,
-        realm: 'DbGate Web App',
+        realm: 'Dbmanager Web App',
       })
     );
   }
@@ -89,7 +90,7 @@ function start() {
     app.use(getExpressPath('/'), express.static(path.join(__dirname, '../../web/public')));
   } else {
     app.get(getExpressPath('/'), (req, res) => {
-      res.send('DbGate API');
+      res.send('Dbmanager API');
     });
   }
 

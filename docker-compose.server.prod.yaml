@@ -3,6 +3,7 @@ services:
     image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.1
     init: true
     environment:
+      - NODE_ENV=production
       - ENABLE_ONLINE=1
       - TRINO_URL=http://trion:8080
       - ONLINE_ADMIN_API=https://platform.dataleapinfo.com/dbapi

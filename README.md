@@ -1,5 +1,10 @@
 ## 部署
 
+### config selfsigned
+
+docker config create selfsigned.crt /etc/nginx/ssl/selfsigned.crt
+docker config create selfsigned.key /etc/nginx/ssl/selfsigned.key
+
 ### prepost
 
 docker network create -d overlay dbserver
