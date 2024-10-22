@@ -7,20 +7,135 @@ const Analyser = require('./Analyser');
 const oracledb = require('oracledb');
 const { createBulkInsertStreamBase, makeUniqueColumnNames } = require('dbgate-tools');
 const createOracleBulkInsertStream = require('./createOracleBulkInsertStream');
-
+const { Parser } = require('node-sql-parser');
+const parser = new Parser();
 /*
 pg.types.setTypeParser(1082, 'text', val => val); // date
 pg.types.setTypeParser(1114, 'text', val => val); // timestamp without timezone
 pg.types.setTypeParser(1184, 'text', val => val); // timestamp
 */
 
-function extractOracleColumns(result) {
+function extractOracleColumns(result, sql) {
   if (!result /*|| !result.fields */) return [];
-  const res = result.map(fld => ({
-    columnName: fld.name, //columnName: fld.name.toLowerCase(),
-  }));
+  let from;
+  let res;
+  if (sql) {
+    try {
+      const ast = parser.astify(sql);
+      from = ast.from;
+      // console.log('ast: ', ast);
+      const star = ast.columns.find(item => item.expr.column === '*');
+      if (star) {
+        res = getColumnsByStar(result, from);
+      } else {
+        res = ast.columns.map(item => {
+          return {
+            columnName: item.expr.column,
+            oname: getOriginColumnName(item.expr.column),
+            table: getTableByAs(from, item.expr.table),
+          };
+        });
+      }
+    } catch (error) {
+      console.error('extractOracleColumns parser sql: ', error.message);
+    }
+  } else {
+    res = getColumnsByDefault(result);
+  }
+  // console.log('oracle columns: ', res);
   makeUniqueColumnNames(res);
   return res;
+}
+
+// column: { expr: { type: 'column_ref', table: 't', column: 'age' }, as: null }
+// from: { db: null, table: 'EMPLOYEES', as: 'e' },
+function getTableByAs(from, as) {
+  // console.log('as: ', as);
+  const find = from.find(item => item.as === as);
+  return find ? find.table : '';
+}
+
+function getColumnsByDefault(result, from) {
+  return result.map(fld => ({
+    columnName: fld.name, //columnName: fld.name.toLowerCase(),
+    oname: getOriginColumnName(fld.name),
+    table: from ? getTableNameByStar(from, fld.name) : null,
+  }));
+}
+
+/**
+ *
+ * select * from xxx
+ *from: [
+  { db: null, table: 'EMPLOYEES', as: 'e' },
+  {
+    db: null,
+    table: 'TBL_USER',
+    as: 't',
+    join: 'LEFT JOIN',
+    on: [Object]
+  }
+]
+name: NAME, NAME_1, FIRST_NAME, FIRST_NAME_1
+ */
+function getColumnsByStar(result, from) {
+  const columns = [];
+  let preIndex = 0;
+  let obj;
+  result.map(fld => {
+    const lastIndex = fld.name.lastIndexOf('_');
+    if (!obj && lastIndex === -1) {
+      obj = from[0];
+    } else {
+      const asIndex = fld.name.substring(lastIndex + 1, fld.name.length);
+      // console.log('asIndex ', asIndex);
+      if (!isNaN(Number(asIndex))) {
+        if (preIndex !== asIndex) {
+          obj = from[asIndex];
+          preIndex = asIndex;
+        }
+      }
+    }
+    // console.log('obj ', obj);
+    columns.push({
+      columnName: fld.name, //columnName: fld.name.toLowerCase(),
+      oname: getOriginColumnName(fld.name),
+      table: obj.table,
+    });
+  });
+  return columns;
+}
+/**
+ *
+ * select * from xxx
+ *from: [
+  { db: null, table: 'EMPLOYEES', as: 'e' },
+  {
+    db: null,
+    table: 'TBL_USER',
+    as: 't',
+    join: 'LEFT JOIN',
+    on: [Object]
+  }
+]
+name: NAME, NAME_1, FIRST_NAME, FIRST_NAME_1
+ */
+function getTableNameByStar(from, name) {
+  from?.forEach(item => {
+    if (name.includes(item.as + '.')) {
+      return item.table;
+    }
+  });
+}
+
+// NAME, NAME_1, FIRST_NAME, FIRST_NAME_1
+// return NAME, FIRST_NAME
+function getOriginColumnName(name) {
+  const lastIndex = name.lastIndexOf('_');
+  if (lastIndex === -1) {
+    return name;
+  }
+  return name.substring(0, lastIndex);
 }
 
 function zipDataRow(rowArray, columns) {
@@ -28,7 +143,7 @@ function zipDataRow(rowArray, columns) {
     columns.map(x => x.columnName),
     rowArray
   );
-  //console.log('zipDataRow columns', columns);
+  // console.log('zipDataRow columns', columns);
   //console.log('zipDataRow', obj);
   return obj;
 }
@@ -106,7 +221,7 @@ const drivers = driverBases.map(driverBase => ({
       rowMode: 'array',
     });
 */
-    console.log('queryStream', sql);
+    console.log('stream', sql);
     if (sql.trim().toLowerCase().startsWith('select')) {
       const query = client.queryStream(sql);
       // const consumeStream = new Promise((resolve, reject) => {
@@ -114,9 +229,8 @@ const drivers = driverBases.map(driverBase => ({
       let wasHeader = false;
 
       query.on('metadata', row => {
-        // console.log('metadata', row);
         if (!wasHeader) {
-          columns = extractOracleColumns(row);
+          columns = extractOracleColumns(row, sql);
           if (columns && columns.length > 0) {
             options.recordset(columns);
           }
@@ -127,7 +241,6 @@ const drivers = driverBases.map(driverBase => ({
       });
 
       query.on('data', row => {
-        // console.log('stream DATA');
         if (!wasHeader) {
           columns = extractOracleColumns(row);
           if (columns && columns.length > 0) {
@@ -150,6 +263,7 @@ const drivers = driverBases.map(driverBase => ({
         }
 
         if (!wasHeader) {
+          // console.log('_result: ', row);
           columns = extractOracleColumns(query._result);
           if (columns && columns.length > 0) {
             options.recordset(columns);
@@ -161,7 +275,6 @@ const drivers = driverBases.map(driverBase => ({
       });
 
       query.on('error', error => {
-        console.log('ERROR', error);
         const { message, lineNumber, procName } = error;
         options.info({
           message,
@@ -181,7 +294,6 @@ const drivers = driverBases.map(driverBase => ({
     } else {
       client.execute(sql, (err, res) => {
         if (err) {
-          console.log('Error query', err, sql);
           options.info({
             message: err.message,
             time: new Date(),
@@ -232,7 +344,7 @@ const drivers = driverBases.map(driverBase => ({
 
       const m = version.match(/(\d+[a-z])\s+(\w+).*(\d+)\.(\d+)/);
 
-      console.log('M', version);
+      // console.log('M', version);
       let versionText = null;
       let versionMajor = null;
       let versionMinor = null;
@@ -264,7 +376,7 @@ const drivers = driverBases.map(driverBase => ({
       rowMode: 'array',
     });
   */
-    console.log('readQuery', sql, structure);
+    // console.log('readQuery', sql, structure);
     const query = await client.queryStream(sql);
 
     let wasHeader = false;
@@ -301,7 +413,7 @@ const drivers = driverBases.map(driverBase => ({
     });
 
     query.on('error', error => {
-      console.error(error);
+      // console.error(error);
       pass.end();
     });
 
@@ -316,7 +428,7 @@ const drivers = driverBases.map(driverBase => ({
   async listDatabases(client) {
     const { rows } = await this.query(client, 'SELECT username AS "name" FROM all_users order by username');
     // const { rows } = await this.query(client, 'SELECT ORA_DATABASE_NAME AS "name" FROM DUAL');
-    console.log('rows ', rows);
+    // console.log('rows ', rows);
     return rows;
   },
 

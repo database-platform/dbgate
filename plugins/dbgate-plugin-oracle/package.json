@@ -38,6 +38,7 @@
     "webpack-cli": "5.1.4"
   },
   "dependencies": {
+    "node-sql-parser": "^5.3.3",
     "oracledb": "^6.5.1"
   }
 }
