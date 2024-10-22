@@ -10,7 +10,7 @@ console.log('env base url: ', process.env.ONLINE_DATABASE_URL);
 const db = {};
 const sequelize = new Sequelize(process.env.ONLINE_DATABASE_URL, {
   dialect: 'mysql',
-  logging: env === 'production' ? false : true,
+  logging: env === 'production' || env === 'production_self' ? false : true,
 });
 
 fs.readdirSync(__dirname)

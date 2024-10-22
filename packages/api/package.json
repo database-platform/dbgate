@@ -53,6 +53,7 @@
     "mysql2": "^3.10.2",
     "ncp": "^2.0.0",
     "node-cron": "^2.0.3",
+    "node-sql-parser": "^5.3.3",
     "on-finished": "^2.4.1",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",

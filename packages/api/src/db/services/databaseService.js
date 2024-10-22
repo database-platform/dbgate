@@ -116,7 +116,8 @@ class OnlineDatabase {
         if (item.db_type === 'oracle') {
           result.serviceName = item.db_dbname;
         } else {
-          result.singleDatabase = item.db_dbname ? true : false;
+          // result.singleDatabase = item.db_dbname ? true : false;
+          result.singleDatabase = false;
           result.defaultDatabase = item.db_dbname ?? '';
         }
         return result;

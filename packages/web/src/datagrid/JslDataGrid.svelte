@@ -5,6 +5,7 @@
   import JslFormView from '../formview/JslFormView.svelte';
   import { apiOff, apiOn, useApiCall } from '../utility/api';
   import useEffect from '../utility/useEffect';
+  //import { currentDatabase } from '../stores';
 
   import DataGrid from './DataGrid.svelte';
   import JslDataGridCore from './JslDataGridCore.svelte';

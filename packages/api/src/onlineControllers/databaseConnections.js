@@ -86,7 +86,39 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() { },
+  handle_ping() {},
+
+  async preVerifySql(conid, database, sql, req) {
+    const srcIp = getRealIp(req);
+    const main = conid.split('_');
+    try {
+      const params = {
+        userId: main[0],
+        groupId: main[1],
+        dataBaseId: main[2],
+        dbName: database,
+        srcIp: srcIp,
+        sql,
+      };
+      console.log('preVerifysql params: ', params);
+      const auth = req.headers.authorization;
+      const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
+      const response = await axios.post(url, params, {
+        httpsAgent: agent,
+        headers: {
+          authorization: `Bearer ${auth}`,
+          'content-type': 'application/json',
+        },
+      });
+      const respdata = response.data;
+      console.log('preVerifysql result: ', respdata);
+      if (respdata.code !== 200) {
+        throw new Error(respdata.msg);
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
 
   async ensureOpened(conid, database) {
     // console.log('database connections ensureOpened ', conid, database);
@@ -210,37 +242,44 @@ module.exports = {
         sql = `select * from ${select.from.name.pureName} limit 100`;
       }
       if (sql) {
-        const srcIp = getRealIp(req);
-        const main = conid.split('_');
         try {
-          const params = {
-            userId: main[0],
-            groupId: main[1],
-            dataBaseId: main[2],
-            dbName: database,
-            srcIp: srcIp,
-            sql,
-          };
-          console.log('sqlSelect verifysql params: ', params);
-          const auth = req.headers.authorization;
-          const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
-          const response = await axios.post(url, params, {
-            httpsAgent: agent,
-            headers: {
-              authorization: `Bearer ${auth}`,
-              'content-type': 'application/json',
-            },
-          });
-          const respdata = response.data;
-          console.log('sqlSelect verifysql result: ', respdata);
-          if (respdata.code !== 200) {
-            throw new Error(respdata.msg);
-          }
+          await this.preVerifySql(conid, database, sql, req);
         } catch (err) {
           return {
             errorMessage: err.message,
           };
         }
+        // const srcIp = getRealIp(req);
+        // const main = conid.split('_');
+        // try {
+        //   const params = {
+        //     userId: main[0],
+        //     groupId: main[1],
+        //     dataBaseId: main[2],
+        //     dbName: database,
+        //     srcIp: srcIp,
+        //     sql,
+        //   };
+        //   console.log('sqlSelect verifysql params: ', params);
+        //   const auth = req.headers.authorization;
+        //   const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
+        //   const response = await axios.post(url, params, {
+        //     httpsAgent: agent,
+        //     headers: {
+        //       authorization: `Bearer ${auth}`,
+        //       'content-type': 'application/json',
+        //     },
+        //   });
+        //   const respdata = response.data;
+        //   console.log('sqlSelect verifysql result: ', respdata);
+        //   if (respdata.code !== 200) {
+        //     throw new Error(respdata.msg);
+        //   }
+        // } catch (err) {
+        //   return {
+        //     errorMessage: err.message,
+        //   };
+        // }
       }
     }
     const opened = await this.ensureOpened(conid, database);
@@ -274,6 +313,13 @@ module.exports = {
   async runScript({ conid, database, sql, useTransaction }, req) {
     // testConnectionPermission(conid, req);
     logger.info({ conid, database, sql }, 'Processing script');
+    try {
+      await this.preVerifySql(conid, database, sql, req);
+    } catch (err) {
+      return {
+        errorMessage: err.message,
+      };
+    }
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype: 'runScript', sql, useTransaction });
     return res;

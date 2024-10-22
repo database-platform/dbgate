@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  async function loadRow(props, index) {
+  async function loadRow(props, index, conid, database) {
     const { jslid, formatterFunction, display } = props;
 
     const response = await apiCall('jsldata/get-rows', {
@@ -8,6 +8,8 @@
       limit: 1,
       formatterFunction,
       filters: display ? display.compileJslFilters() : null,
+      conid,
+      database,
     });
 
     if (response.errorMessage) return response;
@@ -19,11 +21,17 @@
   import { apiCall } from '../utility/api';
   import _ from 'lodash';
   import LoadingFormView from './LoadingFormView.svelte';
+  import { currentDatabase } from '../stores';
 
   export let display;
 
   async function handleLoadRow() {
-    return await loadRow($$props, display.config.formViewRecordNumber || 0);
+    return await loadRow(
+      $$props,
+      display.config.formViewRecordNumber || 0,
+      $currentDatabase.connection?._id,
+      $currentDatabase.name
+    );
   }
 
   async function handleLoadRowCount() {

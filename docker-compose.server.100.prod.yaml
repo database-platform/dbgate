@@ -1,6 +1,6 @@
 services:
   server:
-    image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.6
+    image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.8
     init: true
     environment:
       - NODE_ENV=production_self

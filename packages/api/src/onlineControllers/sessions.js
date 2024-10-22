@@ -61,6 +61,7 @@ module.exports = {
       const auth = req.headers.authorization;
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/afterprocess`;
       axios.default.post(url, params, {
+        httpsAgent: agent,
         headers: {
           authorization: `Bearer ${auth}`,
           'content-type': 'application/json',
@@ -71,7 +72,7 @@ module.exports = {
     }
   },
   handle_info(sesid, props) {
-    console.log('handle_recordset: ', sesid, props);
+    console.log('handle_info: ', sesid, props);
     const { info } = props;
     this.dispatchMessage(sesid, info);
   },
@@ -100,7 +101,7 @@ module.exports = {
   handle_stats(sesid, stats) {
     console.log('handle_stats: ', sesid, stats);
     const session = this.opened.find(x => x.sesid == sesid);
-    console.log('stats: ', session);
+    // console.log('stats: ', session);
     jsldata.notifyChangedStats({ ...stats, sesid });
   },
 

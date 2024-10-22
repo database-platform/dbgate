@@ -11,7 +11,9 @@ const requireEngineDriver = require('../utility/requireEngineDriver');
 const connectUtility = require('../utility/connectUtility');
 const { handleProcessCommunication } = require('../utility/processComm');
 const { getLogger, extractIntSettingsValue, extractBoolSettingsValue } = require('dbgate-tools');
-
+// const PermissionService = require('../db/services/permissionService');
+//
+// const permissionService = new PermissionService();
 const logger = getLogger('sessionProcess');
 
 let systemConnection;
@@ -135,6 +137,7 @@ class StreamHandler {
   recordset(columns) {
     this.closeCurrentWriter();
     this.currentWriter = new TableWriter();
+    // console.log('columns: ', columns);
     this.currentWriter.initializeFromQuery(
       Array.isArray(columns) ? { columns } : columns,
       this.resultIndexHolder.value
@@ -150,6 +153,7 @@ class StreamHandler {
     // }, 500);
   }
   row(row) {
+    // console.log('row: ', row);
     if (this.currentWriter) {
       this.currentWriter.row(row);
     } else if (row.message) {
@@ -275,6 +279,7 @@ async function handleExecuteQuery({ sql }) {
       ...driver.getQuerySplitterOptions('stream'),
       returnRichInfo: true,
     })) {
+      console.log('sqlItem: ', sqlItem);
       await handleStream(driver, resultIndexHolder, sqlItem);
       // const handler = new StreamHandler(resultIndex);
       // const stream = await driver.stream(systemConnection, sqlItem, handler);
@@ -309,6 +314,7 @@ async function handleExecuteReader({ jslid, sql, fileName }) {
   const reader = await driver.readQuery(systemConnection, sql);
 
   reader.on('data', data => {
+    console.log('execute reader: ', data);
     writer.rowFromReader(data);
   });
   reader.on('end', () => {

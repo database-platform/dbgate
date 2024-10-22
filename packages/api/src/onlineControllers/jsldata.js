@@ -2,12 +2,15 @@ const { filterName } = require('dbgate-tools');
 const fs = require('fs');
 const lineReader = require('line-reader');
 const _ = require('lodash');
-const { __ } = require('lodash/fp');
 // const DatastoreProxy = require('../utility/DatastoreProxy');
 const getJslFileName = require('../utility/getJslFileName');
 const JsonLinesDatastore = require('../utility/JsonLinesDatastore');
 const requirePluginFunction = require('../utility/requirePluginFunction');
 const socket = require('../utility/socket');
+const PermissionService = require('../db/services/permissionService');
+const { processMask, processScanMask } = require('../utility/dataMask');
+
+const permissionService = new PermissionService();
 
 function readFirstLine(file) {
   return new Promise((resolve, reject) => {
@@ -77,7 +80,7 @@ module.exports = {
   },
 
   getRows_meta: true,
-  async getRows({ jslid, offset, limit, filters, sort, formatterFunction }) {
+  async getRows({ jslid, offset, limit, filters, sort, formatterFunction, conid, database }) {
     const datastore = await this.ensureDatastore(jslid, formatterFunction);
     console.log('getRows: ', jslid);
     const rows = await datastore.getRows(
@@ -86,8 +89,30 @@ module.exports = {
       _.isEmpty(filters) ? null : filters,
       _.isEmpty(sort) ? null : sort
     );
+    const info = await this.getInfo({ jslid });
+    // console.log('get rows info: ', info);
+    if (info.columns?.length !== 0) {
+      const groups = _.groupBy(info.columns, 'table');
+      // console.log('group2: ', groups);
+      for (const table in groups) {
+        console.log('group: ', table);
 
-    console.log('getRows session: ');
+        const [, groupId, dbId] = conid.split('_');
+        // console.log('groupId ', groupId, dbId);
+        const desenScans = await permissionService.findDesenScan(dbId, database, table);
+        console.log('get rows desen scan: ', desenScans?.length);
+        desenScans?.map(scan => {
+          processScanMask(scan.col_name, scan, rows);
+        });
+
+        const columnPermission = await permissionService.findColumn(groupId, dbId, database, table);
+        console.log('get rows permission: ', columnPermission?.length);
+        columnPermission.map(permission => {
+          processMask(permission.tcolumn, permission.AuthMask, rows);
+        });
+      }
+    }
+
     return rows;
   },
 

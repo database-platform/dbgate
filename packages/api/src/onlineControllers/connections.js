@@ -90,6 +90,9 @@ module.exports = {
       if (!dataBaseUserGroup) {
         return databases;
       }
+      if (!dataBaseUserGroup.group) {
+        return databases;
+      }
       databases = await this.datastore.find(auth.username, dataBaseUserGroup.group.groupId);
       logger.info({ len: databases.length }, 'databases: ');
     } catch (err) {

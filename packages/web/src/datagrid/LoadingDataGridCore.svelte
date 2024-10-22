@@ -3,6 +3,7 @@
 
   import createRef from '../utility/createRef';
   // import { useSettings } from '../utility/metadataLoaders';
+  import { currentDatabase } from '../stores';
 
   import DataGridCore from './DataGridCore.svelte';
 
@@ -53,7 +54,9 @@
     const nextRows = await loadDataPage(
       $$props,
       loadedRows.length,
-      getIntSettingsValue('dataGrid.pageSize', 100, 5, 1000)
+      getIntSettingsValue('dataGrid.pageSize', 100, 5, 1000),
+      $currentDatabase.connection?._id,
+      $currentDatabase.name
     );
     if (loadedTimeRef.get() !== loadStart) {
       // new load was dispatched
@@ -78,7 +81,6 @@
       }
 
       // console.log(`loadedRows: ${loadedRows.length}, nextRows: ${nextRows.length} `);
-
       //   const loadedInfo = {
       //     loadedRows: [...loadedRows, ...nextRows],
       //     loadedTime,

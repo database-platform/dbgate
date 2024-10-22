@@ -11,9 +11,14 @@ const logger = getLogger('mysqlDriver');
 
 function extractColumns(fields) {
   if (fields) {
-    const res = fields.map(col => ({
-      columnName: col.name,
-    }));
+    const res = fields.map(col => {
+      // console.log('col: ', col);
+      return {
+        columnName: col.name,
+        oname: col.name,
+        table: col.orgTable,
+      };
+    });
     makeUniqueColumnNames(res);
     return res;
   }

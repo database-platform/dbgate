@@ -1851,6 +1851,11 @@
   resolved "https://registry.yarnpkg.com/@types/parsimmon/-/parsimmon-1.10.9.tgz#14e60db223c1d213fea0e15985d480b5cfe1789a"
   integrity sha512-O2M2x1w+m7gWLen8i5DOy6tWRnbRcsW6Pke3j3HAsJUrPb4g0MgjksIUm2aqUtCYxy7Qjr3CzjjwQBzhiGn46A==
 
+"@types/pegjs@^0.10.0":
+  version "0.10.6"
+  resolved "https://registry.npmmirror.com/@types/pegjs/-/pegjs-0.10.6.tgz#bc20fc4809fed4cddab8d0dbee0e568803741a82"
+  integrity sha512-eLYXDbZWXh2uxf+w8sXS8d6KSoXTswfps6fvCUuVAGN8eRpfe7h9eSRydxiSJvo9Bf+GzifsDOr9TMQlmJdmkw==
+
 "@types/prettier@^2.1.5":
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.7.3.tgz#3e51a17e291d01d17d3fc61422015a933af7a08f"
@@ -2719,6 +2724,11 @@ better-sqlite3@^11.0.0:
   dependencies:
     bindings "^1.5.0"
     prebuild-install "^7.1.1"
+
+big-integer@^1.6.48:
+  version "1.6.52"
+  resolved "https://registry.npmmirror.com/big-integer/-/big-integer-1.6.52.tgz#60a887f3047614a8e1bffe5d7173490a97dc8c85"
+  integrity sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -8319,6 +8329,14 @@ node-releases@^2.0.14:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.14.tgz#2ffb053bceb8b2be8495ece1ab6ce600c4461b0b"
   integrity sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==
+
+node-sql-parser@^5.3.3:
+  version "5.3.3"
+  resolved "https://registry.npmmirror.com/node-sql-parser/-/node-sql-parser-5.3.3.tgz#8ce56de857450dada7bd0d1a38003cbba5f6ed9c"
+  integrity sha512-KRVnneHhy5zaylFmtojHxpXqjmThFSOn7n6x1J/38gTE6NL5Wj/yY7hjbFqpYcpPwIpXM7sFDnvV3ejxmoPAJQ==
+  dependencies:
+    "@types/pegjs" "^0.10.0"
+    big-integer "^1.6.48"
 
 node-xml-stream-parser@^1.0.12:
   version "1.0.12"

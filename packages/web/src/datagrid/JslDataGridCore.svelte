@@ -11,9 +11,8 @@
     onClick: () => getCurrentEditor().exportGrid(),
   });
 
-  async function loadDataPage(props, offset, limit) {
+  async function loadDataPage(props, offset, limit, conid, database) {
     const { jslid, display, formatterFunction } = props;
-
     const response = await apiCall('jsldata/get-rows', {
       jslid,
       offset,
@@ -21,6 +20,8 @@
       formatterFunction,
       filters: display ? display.compileJslFilters() : null,
       sort: display.config.sort,
+      conid,
+      database,
     });
 
     return response;
