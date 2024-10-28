@@ -8,7 +8,7 @@
   import FontIcon from '../icons/FontIcon.svelte';
   import resizeObserver from '../utility/resizeObserver';
 
-  $: console.log('dataGridRowHeight', $dataGridRowHeight);
+  // $: console.log('dataGridRowHeight', $dataGridRowHeight);
 </script>
 
 <div>

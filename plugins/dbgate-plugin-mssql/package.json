@@ -34,6 +34,7 @@
     "async-lock": "^1.2.6",
     "dbgate-query-splitter": "^4.10.1",
     "dbgate-tools": "^5.0.0-alpha.1",
+    "node-sql-parser": "^5.3.3",
     "r-dbgate-plugin-tools": "^2.0.0",
     "tedious": "^18.2.0",
     "webpack": "5.92.0",

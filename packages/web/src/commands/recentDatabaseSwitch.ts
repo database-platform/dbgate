@@ -10,7 +10,7 @@ currentDatabase.subscribe(value => {
   if (userInfo.username !== username) {
     return;
   }
-  console.log('recentDatabases switch: ', value);
+  // console.log('recentDatabases switch: ', value);
   recentDatabases.update(list => {
     const res = [
       value,

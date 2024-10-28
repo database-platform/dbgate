@@ -89,5 +89,6 @@
     --multiItemBG: var(--theme-bg-1);
     --multiItemDisabledHoverBg: var(--theme-bg-1);
     --multiItemDisabledHoverColor: var(--theme-bg-1);
+    --listMaxHeight: 220px;
   }
 </style>

@@ -2,24 +2,85 @@ const _ = require('lodash');
 const stream = require('stream');
 const tedious = require('tedious');
 const makeUniqueColumnNames = require('./makeUniqueColumnNames');
+const { getTableByAs, getColumnsByStar, getOriginColumnName } = require('./utils');
+const { Parser } = require('node-sql-parser');
+const parser = new Parser();
 
-function extractTediousColumns(columns, addDriverNativeColumn = false) {
-  const res = columns.map(col => {
-    const resCol = {
-      columnName: col.colName,
-      dataType: col.type.name.toLowerCase(),
-      driverNativeColumn: addDriverNativeColumn ? col : undefined,
+// function extractTediousColumns(columns, addDriverNativeColumn = false) {
+//   const res = columns.map(col => {
+//     const resCol = {
+//       columnName: col.colName,
+//       dataType: col.type.name.toLowerCase(),
+//       driverNativeColumn: addDriverNativeColumn ? col : undefined,
+//
+//       notNull: !(col.flags & 0x01),
+//       autoIncrement: !!(col.flags & 0x10),
+//     };
+//     if (col.dataLength) resCol.dataType += `(${col.dataLength})`;
+//     return resCol;
+//   });
+//
+//   makeUniqueColumnNames(res);
+//
+//   return res;
+// }
 
-      notNull: !(col.flags & 0x01),
-      autoIncrement: !!(col.flags & 0x10),
-    };
-    if (col.dataLength) resCol.dataType += `(${col.dataLength})`;
-    return resCol;
-  });
+function extractTediousColumns(columns, addDriverNativeColumn = false, sql) {
+  // console.log('sql: ', sql);
+  if (!columns) return [];
+  let from;
+  let res;
+  if (sql) {
+    try {
+      const ast = parser.astify(sql);
+      from = ast.from;
+      // console.info('ast: ', ast);
+      const star = ast.columns.find(item => item.expr.column === '*');
+      if (star) {
+        res = getColumnsByStar(columns, 'colName', from).map(item => {
+          const originColumn = columns.find(col => col.colName === item.columnName);
+          const resCol = getTediousCol(originColumn, addDriverNativeColumn);
 
+          return {
+            ...resCol,
+            ...item,
+          };
+        });
+      } else {
+        res = ast.columns.map(item => {
+          const originColumn = columns.find(col => col.colName === item.expr.column);
+          const resCol = getTediousCol(originColumn, addDriverNativeColumn);
+          return {
+            ...resCol,
+            columnName: item.expr.column,
+            oname: getOriginColumnName(item.expr.column),
+            table: getTableByAs(from, item.expr.table),
+          };
+        });
+      }
+    } catch (error) {
+      console.error('extractTediousColumns parser sql: ', error.message);
+    }
+  } else {
+    res = columns.map(col => {
+      return getTediousCol(col, addDriverNativeColumn);
+    });
+  }
   makeUniqueColumnNames(res);
-
+  // console.log('res: ', res);
   return res;
+}
+
+function getTediousCol(col, addDriverNativeColumn) {
+  const resCol = {
+    columnName: col.colName,
+    dataType: col.type.name.toLowerCase(),
+    driverNativeColumn: addDriverNativeColumn ? col : undefined,
+    notNull: !(col.flags & 0x01),
+    autoIncrement: !!(col.flags & 0x10),
+  };
+  if (col.dataLength) resCol.dataType += `(${col.dataLength})`;
+  return resCol;
 }
 
 async function tediousConnect({ server, port, user, password, database, ssl, trustServerCertificate, windowsDomain }) {
@@ -33,7 +94,7 @@ async function tediousConnect({ server, port, user, password, database, ssl, tru
       requestTimeout: 1000 * 3600,
       port: port ? parseInt(port) : undefined,
       trustServerCertificate: !!trustServerCertificate,
-      appName: 'DbGate',
+      appName: 'Dbmanager',
     };
 
     if (database) {
@@ -110,7 +171,7 @@ async function tediousReadQuery(pool, sql, structure) {
     pass.end();
   });
   request.on('columnMetadata', function (columns) {
-    currentColumns = extractTediousColumns(columns);
+    currentColumns = extractTediousColumns(columns, false, sql);
     pass.write({
       __isStreamHeader: true,
       ...(structure || { columns: currentColumns }),
@@ -168,7 +229,7 @@ async function tediousStream(pool, sql, options) {
     });
   });
   request.on('columnMetadata', function (columns) {
-    currentColumns = extractTediousColumns(columns);
+    currentColumns = extractTediousColumns(columns, false, sql);
     options.recordset(currentColumns);
   });
   request.on('row', function (columns) {

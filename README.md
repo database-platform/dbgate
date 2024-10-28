@@ -34,6 +34,7 @@ docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.5 
 docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.6 dbgatex-web_web
 docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.7 dbgatex-web_web
 docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.8 dbgatex-web_web
+docker service update --image myregistry.dataleapinfo.com:5443/dbgate-web:5.3.9 dbgatex-web_web
 
 ### deploy server
 
@@ -52,6 +53,7 @@ docker stack deploy -c docker-compose.server.prod.yaml dbgatex-server -d
 
 docker service update --image myregistry.dataleapinfo.com:5443/dbgate-server:5.3.2 dbgatex-server_server
 docker service update --image myregistry.dataleapinfo.com:5443/dbgate-server:5.3.5 dbgatex-server_server
+docker service update --image myregistry.dataleapinfo.com:5443/dbgate-server:5.3.9 dbgatex-server_server
 
 ####
 

@@ -10,6 +10,7 @@
   import * as connectionAppObject from '../appobj/ConnectionAppObject.svelte';
   import SubDatabaseList from '../appobj/SubDatabaseList.svelte';
   import {
+    currentDatabase,
     commandsCustomized,
     expandedConnections,
     openedConnections,
@@ -42,6 +43,21 @@
   groups.subscribe(value => {
     if (value && value.length !== 0) {
       currentGroup = value[0].value;
+    }
+  });
+  //   isBold={_.get($currentDatabase, 'connection._id') == _.get(data.connection, '_id') &&
+  //  _.get($currentDatabase, 'name') == data.name}
+
+  currentDatabase.subscribe(value => {
+    if (!value) {
+      return;
+    }
+    if ($groups && $groups.length === 0) {
+      return;
+    }
+    const findGroup = $groups?.find(group => group.id === value.connection?.orgGroupId);
+    if (findGroup) {
+      currentGroup = findGroup.value;
     }
   });
 

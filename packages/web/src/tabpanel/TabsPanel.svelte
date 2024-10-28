@@ -164,6 +164,15 @@
   const closeOthersInMultiTab = multiTabIndex =>
     closeTabFunc((x, active) => x.tabid != active.tabid && (x.multiTabIndex || 0) == multiTabIndex);
 
+  function getTabDbDisplayName(tab) {
+    if (tab.props && tab.props.conid && tab.props.database) {
+      if (tab.tooltip) {
+        return tab.tooltip.split('\n')[0] ?? '';
+      }
+    }
+    return '';
+  }
+
   function getTabDbName(tab, connectionList) {
     if (tab.tabComponent == 'ConnectionTab') return 'Connections';
     if (tab.props && tab.props.conid && tab.props.database) return tab.props.database;
@@ -320,6 +329,7 @@
   $: tabsWithDb = $openedTabs.filter(showTabFilterFunc).map(tab => ({
     ...tab,
     tabDbName: getTabDbName(tab, $connectionList),
+    tabDbDisplayName: getTabDbDisplayName(tab),
     tabDbKey: getTabDbKey(tab),
   }));
 
@@ -544,6 +554,7 @@
           >
             <div class="db-name-inner">
               <FontIcon icon={getDbIcon(tabGroup.tabDbKey)} />
+              {tabGroup.tabDbDisplayName}
               {tabGroup.tabDbName}
               {#if $connectionList?.find(x => x._id == tabGroup.tabs[0]?.props?.conid)?.isReadOnly}
                 <FontIcon icon="icon lock" />

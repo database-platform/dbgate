@@ -70,7 +70,7 @@
     ),
   ]);
 
-  $: console.log('sqlObjectList: ', $objects, objectList);
+  // $: console.log('sqlObjectList: ', $objects, objectList);
 
   // let generateIndex = 0;
   // setInterval(() => (generateIndex += 1), 2000);

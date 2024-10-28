@@ -26,7 +26,7 @@ export function writableWithStorage<T>(defaultValue: T, storageName) {
   const init = localStorage.getItem(storageName);
   const res = writable<T>(init ? safeJsonParse(init, defaultValue, true) : defaultValue);
   res.subscribe(value => {
-    console.log('storageName ', storageName, value);
+    // console.log('storageName ', storageName, value);
     localStorage.setItem(storageName, JSON.stringify(value));
   });
   return res;
@@ -233,7 +233,7 @@ recentDatabases.subscribe(value => {
     const username = item.connection._id.split('_')[0];
     return username === userInfo.username;
   });
-  console.log('store recentDatabases: ', recentDatabasesValue);
+  // console.log('store recentDatabases: ', recentDatabasesValue);
 });
 export const getRecentDatabases = () => _.compact(recentDatabasesValue);
 
@@ -269,7 +269,7 @@ currentDatabase.subscribe(value => {
         }
       }
       currentDatabaseValue = value;
-      console.log('store currentDatabase: ', value);
+      // console.log('store currentDatabase: ', value);
     }
   }
   invalidateCommands();
@@ -302,7 +302,7 @@ export function subscribeApiDependendStores() {
     currentConfigValue = value;
     invalidateCommands();
     if (value.singleDbConnection) {
-      console.log('store use config currentDatabase: ', value);
+      // console.log('store use config currentDatabase: ', value);
       currentDatabase.set(value.singleDbConnection);
     }
   });

@@ -178,6 +178,7 @@ export function groupTabs(tabs: any[]) {
       res.push({
         tabDbKey: tab.tabDbKey,
         tabDbName: tab.tabDbName,
+        tabDbDisplayName: tab.tabDbDisplayName,
         tabs: [tab],
         grpid: tab.tabid,
       });
