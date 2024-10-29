@@ -20,12 +20,10 @@ async function init() {
     dialect: 'mysql',
     logging: env === 'production' || env === 'production_self' ? false : true,
   });
-  try {
-    await sequelize.authenticate();
-    logger.info('Connection has been established successfully.');
-  } catch (error) {
-    logger.error(`Unable to connect to the database: ${error.message}`);
-  }
+  // const sequelize = new Sequelize(process.env.ONLINE_DATABASE_URL, {
+  //   dialect: 'mysql',
+  //   logging: env === 'production' || env === 'production_self' ? false : true,
+  // });
 
   fs.readdirSync(__dirname)
     .filter(file => {
@@ -46,6 +44,17 @@ async function init() {
   db.Sequelize = Sequelize;
 }
 
+async function testConnection() {
+  try {
+    await db.sequelize.authenticate();
+    logger.info('Connection has been established successfully.');
+  } catch (error) {
+    logger.error(`Unable to connect to the database: ${error.message}`);
+  }
+}
+
 init();
+
+testConnection();
 
 module.exports = db;
