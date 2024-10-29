@@ -8,7 +8,10 @@ services:
       - TRINO_URL=http://trion:8080
       - ONLINE_ADMIN_API=https://192.168.3.100:8443/dbapi
       - ONLINE_ADMIN_HOME=https://192.168.3.100:8443/db
-      - ONLINE_DATABASE_URL=mysql://smartdb:Sun%23123@192.168.3.100:2881/smartdata
+      # - ONLINE_DATABASE_URL=mysql://smartdb:Sun%23123@192.168.3.100:2881/smartdata
+      - DB_URL=jdbc:mysql://192.168.3.100:3306/smartdata
+      - DB_USER=smart
+      - DB_PASSWORD_FILE=/run/secrets/db_password
       # redis sentinel
       # - REDIS_TYPE=sentinel
       # - REDIS_NAME=mymaster
@@ -20,14 +23,10 @@ services:
       # - REDIS_PORT=6379
       # - REDIS_HOST=redis
       # - REDIS_PASSWORD=redis-123456
-    # configs:
-    #   - source: selfsigned.crt
-    #     target: /etc/ssl/certs/selfsigned.crt
-    #   - source: selfsigned.key
-    #     target: /etc/ssl/private/selfsigned.key
+    secrets:
+      - db_password
     networks:
       - dbserver
-      - uccserver
     deploy:
       replicas: 3
       resources:
@@ -54,14 +53,10 @@ services:
       retries: 3
       start_period: 5s
 
-# configs:
-#   selfsigned.crt:
-#     external: true
-#   selfsigned.key:
-#     external: true
+secrets:
+  db_password:
+    external: true
 
 networks:
   dbserver:
-    external: true
-  uccserver:
     external: true

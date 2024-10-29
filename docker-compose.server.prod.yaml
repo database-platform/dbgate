@@ -7,8 +7,11 @@ services:
       - ENABLE_ONLINE=1
       - TRINO_URL=http://trion:8080
       - ONLINE_ADMIN_API=https://platform.dataleapinfo.com/dbapi
-      - ONLINE_ADMIN_HOME=https://platform.dataleapinfo.com/db
+      - ONLINE_ADMIN_HOME=/db
       - ONLINE_DATABASE_URL=mysql://dbsun:@Sun12345@172.30.246.29:3306/smartdata
+      - DB_URL=jdbc:mysql://172.30.246.29:3306/smartdata
+      - DB_USER=dbsun
+      - DB_PASSWORD_FILE=/run/secrets/db_password
       # redis sentinel
       # - REDIS_TYPE=sentinel
       # - REDIS_NAME=mymaster
@@ -20,6 +23,8 @@ services:
       # - REDIS_PORT=6379
       # - REDIS_HOST=redis
       # - REDIS_PASSWORD=redis-123456
+    secrets:
+      - db_password
     networks:
       - dbserver
       - uccserver
@@ -48,6 +53,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 5s
+
+secrets:
+  db_password:
+    external: true
 
 networks:
   dbserver:
