@@ -11,7 +11,7 @@ logger.info(`NODE_ENV: ${env}, ${basename}`);
 
 const db = {};
 function init() {
-  const dbUri = process.env.DB_URL.replace('java:', '');
+  const dbUri = process.env.DB_URL.replace('jdbc:', '');
   logger.info(`DB db uri: ${dbUri}`);
   const pwd = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf-8');
   const sequelize = new Sequelize(dbUri, {

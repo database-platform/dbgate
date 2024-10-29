@@ -1,5 +1,5 @@
 services:
-  server:
+  service:
     image: myregistry.dataleapinfo.com:5443/dbgate-server:5.3.9
     init: true
     environment:
