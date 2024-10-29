@@ -2,14 +2,17 @@ const fs = require('fs');
 const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
 const basename = path.basename(__filename);
+const { getLogger } = require('dbgate-tools');
+
+const logger = getLogger('db');
 
 const env = process.env.NODE_ENV;
-console.log('NODE_ENV: ', env);
+logger.info(`NODE_ENV: ${env}`);
 
 const db = {};
 function init() {
   const dbUri = process.env.DB_URL.replace('java:', '');
-  console.log('DB db uri: ', dbUri);
+  logger.info(`DB db uri: ${dbUri}`);
   const pwd = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf-8');
   const sequelize = new Sequelize(dbUri, {
     username: process.env.DB_USER,

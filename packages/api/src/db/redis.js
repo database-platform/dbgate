@@ -33,19 +33,23 @@ function getConfig() {
   return options;
 }
 let redisClient;
-if (!redisClient) {
-  const options = getConfig();
-  console.log('options: ', options);
-  if (options) {
-    redisClient = new Redis(options);
-    redisClient.on('connect', () => {
-      logger.info('Redis Client connect.');
-    });
-    redisClient.on('error', err => {
-      console.log('Redis Client Error', err);
-    });
-  } else {
-    logger.info('Redis config error.');
+function init() {
+  if (!redisClient) {
+    const options = getConfig();
+    if (options) {
+      redisClient = new Redis(options);
+      redisClient.on('connect', () => {
+        logger.info('Redis connected.');
+      });
+      redisClient.on('error', err => {
+        logger.error(`Redis connect error: ${err.message}`);
+      });
+    } else {
+      logger.info('Redis no config.');
+    }
   }
 }
+
+init();
+
 module.exports = redisClient;
