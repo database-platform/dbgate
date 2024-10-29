@@ -7,7 +7,7 @@ const { getLogger } = require('dbgate-tools');
 const logger = getLogger('db');
 
 const env = process.env.NODE_ENV;
-logger.info(`NODE_ENV: ${env}`);
+logger.info(`NODE_ENV: ${env}, ${basename}`);
 
 const db = {};
 function init() {
