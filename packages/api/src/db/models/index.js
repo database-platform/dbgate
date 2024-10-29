@@ -10,16 +10,22 @@ const env = process.env.NODE_ENV;
 logger.info(`NODE_ENV: ${env}, ${basename}`);
 
 const db = {};
-function init() {
+async function init() {
   const dbUri = process.env.DB_URL.replace('jdbc:', '');
   logger.info(`DB db uri: ${dbUri}`);
-  const pwd = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf-8');
+  const pwd = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf8').trim();
   const sequelize = new Sequelize(dbUri, {
     username: process.env.DB_USER,
     password: pwd,
     dialect: 'mysql',
     logging: env === 'production' || env === 'production_self' ? false : true,
   });
+  try {
+    await sequelize.authenticate();
+    logger.info('Connection has been established successfully.');
+  } catch (error) {
+    logger.error(`Unable to connect to the database: ${error.message}`);
+  }
 
   fs.readdirSync(__dirname)
     .filter(file => {

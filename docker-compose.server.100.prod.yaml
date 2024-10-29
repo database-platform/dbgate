@@ -9,8 +9,8 @@ services:
       - ONLINE_ADMIN_API=https://192.168.3.100:8443/dbapi
       - ONLINE_ADMIN_HOME=https://192.168.3.100:8443/db
       # - ONLINE_DATABASE_URL=mysql://smartdb:Sun%23123@192.168.3.100:2881/smartdata
-      - DB_URL=jdbc:mysql://192.168.3.100:3306/smartdata
-      - DB_USER=smart
+      - DB_URL=mysql://192.168.3.100:2881/smartdata
+      - DB_USER=smartdb
       - DB_PASSWORD_FILE=/run/secrets/db_password
       # redis sentinel
       # - REDIS_TYPE=sentinel
@@ -47,7 +47,7 @@ services:
         - 'traefik.http.services.server.loadbalancer.sticky=true'
         - 'traefik.http.services.server.loadbalancer.sticky.cookie.name=dbgatex_cookie'
     healthcheck:
-      test: ['CMD-SHELL', 'wget --spider http://localhost:3000 || exit 1']
+      test: ['CMD-SHELL', 'wget --spider http://localhost:3000/health || exit 1']
       interval: 30s
       timeout: 10s
       retries: 3

@@ -102,6 +102,10 @@ function start() {
     app.use(onlineAuth.authMiddleware);
   }
 
+  app.get(getExpressPath('/health'), async function (req, res) {
+    res.sendStatus(200);
+  });
+
   app.get(getExpressPath('/stream'), async function (req, res) {
     const strmid = req.query.strmid;
     res.set({

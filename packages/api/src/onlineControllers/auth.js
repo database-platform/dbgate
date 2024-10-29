@@ -12,7 +12,7 @@ const logger = getLogger('auth');
 
 const tokenSecret = crypto.randomUUID();
 const onlineSecret = 'abcdefghijklmnopqrstuvwxyz';
-const SKIP_AUTH_PATHS = ['/config/get', '/auth/oauth-token', '/auth/login', '/stream'];
+const SKIP_AUTH_PATHS = ['/health', '/config/get', '/auth/oauth-token', '/auth/login', '/stream'];
 
 function shouldAuthorizeApi() {
   const logins = getLogins();
