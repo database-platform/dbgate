@@ -12,7 +12,6 @@ const logger = getLogger('mysqlDriver');
 function extractColumns(fields) {
   if (fields) {
     const res = fields.map(col => {
-      // console.log('col: ', col);
       return {
         columnName: col.name,
         oname: col.name,
@@ -143,7 +142,6 @@ const drivers = driverBases.map(driverBase => ({
     let columns = [];
     query
       .on('error', err => {
-        console.error(err);
         pass.end();
       })
       .on('fields', fields => {
@@ -161,7 +159,6 @@ const drivers = driverBases.map(driverBase => ({
   async getVersion(connection) {
     const { rows } = await this.query(connection, "show variables like 'version'");
     const version = rows[0].Value;
-    console.log('mysql version: ', version);
     if (version) {
       const m = version.match(/(.*)-MariaDB-/);
       if (m) {
@@ -179,7 +176,6 @@ const drivers = driverBases.map(driverBase => ({
   },
   async listDatabases(connection) {
     const { rows } = await this.query(connection, 'show databases');
-    console.log('mysql listDatabases: ', rows);
     return rows.map(x => ({ name: x.Database }));
   },
   async writeTable(pool, name, options) {
@@ -194,6 +190,16 @@ const drivers = driverBases.map(driverBase => ({
       outputFile,
     });
     return res;
+  },
+  async tabColumns(client, inCondition) {
+    if (!inCondition) {
+      logger.error('tabColumns in condition is null.');
+      return [];
+    }
+    const sql = `select TABLE_NAME as pureName, COLUMN_NAME as columnName from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '${client._database_name}' and TABLE_NAME in (${inCondition})`;
+    logger.debug(sql);
+    const { rows } = await this.query(client, sql);
+    return rows;
   },
   getAuthTypes() {
     return [

@@ -86,7 +86,7 @@ module.exports = {
     socket.emitChanged(`database-status-changed`, { conid, database });
   },
 
-  handle_ping() {},
+  handle_ping() { },
 
   async preVerifySql(conid, database, sql, req) {
     const srcIp = getRealIp(req);
@@ -100,7 +100,7 @@ module.exports = {
         srcIp: srcIp,
         sql,
       };
-      console.log('preVerifysql params: ', params);
+      logger.debug({ params }, 'preVerifysql params: ');
       const auth = req.headers.authorization;
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
       const response = await axios.post(url, params, {
@@ -111,7 +111,7 @@ module.exports = {
         },
       });
       const respdata = response.data;
-      console.log('preVerifysql result: ', respdata);
+      logger.debug({ result: respdata }, 'preVerifysql result: ');
       if (respdata.code !== 200) {
         throw new Error(respdata.msg);
       }
@@ -182,7 +182,7 @@ module.exports = {
     const msgid = crypto.randomUUID();
     const promise = new Promise((resolve, reject) => {
       this.requests[msgid] = [resolve, reject];
-      console.log('sendRequest: ', this.requests);
+      // console.log('sendRequest: ', this.requests);
       try {
         conn.subprocess.send({ msgid, ...message });
       } catch (err) {
@@ -249,37 +249,6 @@ module.exports = {
             errorMessage: err.message,
           };
         }
-        // const srcIp = getRealIp(req);
-        // const main = conid.split('_');
-        // try {
-        //   const params = {
-        //     userId: main[0],
-        //     groupId: main[1],
-        //     dataBaseId: main[2],
-        //     dbName: database,
-        //     srcIp: srcIp,
-        //     sql,
-        //   };
-        //   console.log('sqlSelect verifysql params: ', params);
-        //   const auth = req.headers.authorization;
-        //   const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
-        //   const response = await axios.post(url, params, {
-        //     httpsAgent: agent,
-        //     headers: {
-        //       authorization: `Bearer ${auth}`,
-        //       'content-type': 'application/json',
-        //     },
-        //   });
-        //   const respdata = response.data;
-        //   console.log('sqlSelect verifysql result: ', respdata);
-        //   if (respdata.code !== 200) {
-        //     throw new Error(respdata.msg);
-        //   }
-        // } catch (err) {
-        //   return {
-        //     errorMessage: err.message,
-        //   };
-        // }
       }
     }
     const opened = await this.ensureOpened(conid, database);
@@ -291,7 +260,7 @@ module.exports = {
       const conids = conid.split('_');
 
       const desenScans = await permissionService.findDesenScan(conids[2], database, tname);
-      console.log('select desen scan: ', desenScans?.length);
+      logger.info(`sqlSelect desenScan: ${desenScans?.length}`);
       if (desenScans && desenScans.length !== 0) {
         desenScans.map(scan => {
           processScanMask(scan.col_name, scan, res.rows);
@@ -299,7 +268,7 @@ module.exports = {
       }
 
       const columnPermission = await permissionService.findColumn(conids[1], conids[2], database, tname);
-      console.log('select permission: ', columnPermission?.length);
+      logger.info(`sqlSelect columnPermission: ${columnPermission?.length}`);
       if (columnPermission && columnPermission.length !== 0) {
         columnPermission.map(permission => {
           processMask(permission.tcolumn, permission.AuthMask, res.rows);
@@ -338,7 +307,7 @@ module.exports = {
     const opened = await this.ensureOpened(conid, database);
     const res = await this.sendRequest(opened, { msgtype, ...args });
     if (res.errorMessage) {
-      console.error(res.errorMessage);
+      // console.error(res.errorMessage);
 
       return {
         errorMessage: res.errorMessage,
@@ -405,16 +374,11 @@ module.exports = {
 
   status_meta: true,
   async status({ conid, database }, req) {
-    console.log('status start: ', conid, database);
-    if (!conid) {
-      return {
-        name: 'error',
-        message: 'No connection',
-      };
+    if (!conid || !database) {
+      return {};
     }
     // testConnectionPermission(conid, req);
     const existing = this.opened.find(x => x.conid == conid && x.database == database);
-    console.log('status start existing', existing != undefined);
     if (existing) {
       return {
         ...existing.status,
@@ -422,14 +386,12 @@ module.exports = {
       };
     }
     const lastClosed = this.closed[`${conid}/${database}`];
-    console.log('status lastClosed: ', lastClosed);
     if (lastClosed) {
       return {
         ...lastClosed.status,
         analysedTime: lastClosed.analysedTime,
       };
     }
-    console.log('status end: ', conid, database);
     return {
       name: 'error',
       message: 'Not connected',
@@ -575,11 +537,11 @@ module.exports = {
     }
 
     const opened = await this.ensureOpened(conid, database);
-    if (opened.structure) {
+    if (opened?.structure) {
       const { tables, views, procedures, functions } = opened.structure;
       // username_groupId_dbId_dbName
       const conids = conid.split('_');
-      if (tables.length !== 0) {
+      if (tables?.length !== 0) {
         const tablePermissions = await permissionService.findStructure(conids[1], conids[2], database, 'table');
         opened.structure.tables = tables.filter(table => {
           const tablePermission = tablePermissions.find(p => p.tname === table.pureName);
@@ -590,7 +552,7 @@ module.exports = {
           return true;
         });
       }
-      if (views.length) {
+      if (views?.length) {
         const viewPermissions = await permissionService.findStructure(conids[1], conids[2], database, 'view');
         views.map(view => {
           const viewPermission = viewPermissions.find(p => p.tname === view.pureName);
@@ -601,7 +563,7 @@ module.exports = {
           return true;
         });
       }
-      if (procedures.length) {
+      if (procedures?.length) {
         const procedurePermissions = await permissionService.findStructure(conids[1], conids[2], database, 'procedure');
         procedures.map(procedure => {
           const procedurePermission = procedurePermissions.find(p => p.tname === procedure.pureName);
@@ -612,7 +574,7 @@ module.exports = {
           return true;
         });
       }
-      if (functions.length) {
+      if (functions?.length) {
         const functionPermissions = await permissionService.findStructure(conids[1], conids[2], database, 'function');
         functions.map(func => {
           const functionPermission = functionPermissions.find(p => p.tname === func.pureName);
@@ -626,12 +588,6 @@ module.exports = {
     }
 
     return opened.structure;
-    // const existing = this.opened.find((x) => x.conid == conid && x.database == database);
-    // if (existing) return existing.status;
-    // return {
-    //   name: 'error',
-    //   message: 'Not connected',
-    // };
   },
 
   serverVersion_meta: true,

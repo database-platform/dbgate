@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const { pluginsdir, packagedPluginsDir, getPluginBackendPath } = require('../utility/directories');
 const nativeModules = require('../nativeModules');
-const platformInfo = require('../utility/platformInfo');
-const { getLogger } = require('dbgate-tools');
-const logger = getLogger('requirePlugin');
+// const platformInfo = require('../utility/platformInfo');
+// const { getLogger } = require('dbgate-tools');
+// const logger = getLogger('requirePlugin');
 
 const loadedPlugins = {};
 
@@ -19,7 +19,7 @@ function requirePlugin(packageName, requiredPlugin = null) {
   if (requiredPlugin == null) {
     let module;
     const modulePath = getPluginBackendPath(packageName);
-    logger.info(`Loading module ${packageName} from ${modulePath}`);
+    // logger.info(`Loading module ${packageName} from ${modulePath}`);
     try {
       // @ts-ignore
       module = __non_webpack_require__(modulePath);

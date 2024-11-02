@@ -35,7 +35,7 @@ module.exports = {
   //   socket.emit('sessionRow', row);
   // },
   getSession(jslid) {
-    console.log('getSession: ', jslid, this.opened);
+    // console.log('getSession: ', jslid, this.opened);
     const openItem = this.opened.find(item => item.loadingReader_jslid === jslid);
     return _.pick(openItem, ['conid', 'session']);
   },
@@ -57,7 +57,6 @@ module.exports = {
   },
   saveLog(params, req) {
     try {
-      logger.info(params, 'save log params ');
       const auth = req.headers.authorization;
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/afterprocess`;
       axios.default.post(url, params, {
@@ -72,13 +71,13 @@ module.exports = {
     }
   },
   handle_info(sesid, props) {
-    console.log('handle_info: ', sesid, props);
+    // console.log('handle_info: ', sesid, props);
     const { info } = props;
     this.dispatchMessage(sesid, info);
   },
 
   handle_done(sesid, props) {
-    console.log('handle_done: ', sesid, props);
+    // console.log('handle_done: ', sesid, props);
     socket.emit(`session-done-${sesid}`);
     if (!props.skipFinishedMessage) {
       this.dispatchMessage(sesid, 'Query execution finished');
@@ -93,29 +92,28 @@ module.exports = {
   },
 
   handle_recordset(sesid, props) {
-    console.log('handle_recordset: ', sesid, props);
+    // console.log('handle_recordset: ', sesid, props);
     const { jslid, resultIndex } = props;
     socket.emit(`session-recordset-${sesid}`, { jslid, resultIndex });
   },
 
   handle_stats(sesid, stats) {
-    console.log('handle_stats: ', sesid, stats);
+    // console.log('handle_stats: ', sesid, stats);
     const session = this.opened.find(x => x.sesid == sesid);
     // console.log('stats: ', session);
     jsldata.notifyChangedStats({ ...stats, sesid });
   },
 
   handle_initializeFile(sesid, props) {
-    console.log('handle_initializeFile: ', sesid, props);
+    // console.log('handle_initializeFile: ', sesid, props);
     const { jslid } = props;
     socket.emit(`session-initialize-file-${jslid}`);
   },
 
-  handle_ping() { },
+  handle_ping() {},
 
   create_meta: true,
   async create({ conid, database }, req) {
-    console.log('api package: ', global['API_PACKAGE'], process.argv[1]);
     const sesid = crypto.randomUUID();
     const connection = await connections.getCore({ conid });
     const subprocess = fork(
@@ -213,7 +211,7 @@ module.exports = {
         srcIp: srcIp,
         sql,
       };
-      console.log('verifysql params: ', params);
+      logger.debug({ params }, 'executeQuery verify sql params: ');
       const auth = req.headers.authorization;
       // console.log('verifysql token: ', auth);
       const url = `${process.env.ONLINE_ADMIN_API}/system/databaseexcute/verifysql`;
@@ -225,7 +223,7 @@ module.exports = {
         },
       });
       const respdata = response.data;
-      console.log('verifysql result: ', respdata);
+      logger.debug({ result: respdata }, 'executeQuery verify sql result: ');
       if (respdata.code !== 200) {
         throw new Error(respdata.msg);
       }

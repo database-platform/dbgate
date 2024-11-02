@@ -338,7 +338,7 @@ function start() {
   setInterval(() => {
     const time = new Date().getTime();
     if (time - lastPing > 40 * 1000) {
-      logger.info('Database connection not alive, exiting');
+      logger.info(`Database connection not alive, exiting, ${storedConnection._id}, ${storedConnection.displayName}`);
       process.exit(0);
     }
   }, 10 * 1000);

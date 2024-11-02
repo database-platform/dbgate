@@ -1,3 +1,4 @@
+const { repeat } = require('lodash');
 /*
   *
     AuthMask: {
@@ -22,18 +23,14 @@
         mask_type: '0'
       }
     }
-  * 
-  */
-
-const { repeat } = require('lodash');
-
+* */
 /**
  * @param {string} field
  * @param {object} authMask
  * @param {Array[]} rows
  * */
 function processMask(field, authMask, rows) {
-  console.log('processMask ', field, authMask);
+  // console.log('processMask ', field, authMask);
   if (!authMask || !rows) {
     return;
   }
@@ -65,7 +62,6 @@ function processMask(field, authMask, rows) {
  * @param {Array[]} rows
  * */
 function processScanMask(field, authMask, rows) {
-  console.log('processScanMask ', field, authMask);
   if (!authMask || !rows) {
     return;
   }
@@ -81,6 +77,9 @@ function processScanMask(field, authMask, rows) {
  * @param {object} authMask
  * */
 function dataMask(value, authMask) {
+  if (!value) {
+    return value;
+  }
   if (authMask.type === 0) {
     return buildinProcess(value, authMask.DesensType);
   } else if (authMask.type === 1) {
@@ -181,4 +180,5 @@ function customProcess(value, authMask) {
 module.exports = {
   processMask,
   processScanMask,
+  dataMask,
 };

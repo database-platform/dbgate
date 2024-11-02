@@ -38,7 +38,7 @@ function authMiddleware(req, res, next) {
   // if (!shouldAuthorizeApi()) {
   //   return next();
   // }
-  console.log('authMiddleware path: ', req.path);
+  // console.log('authMiddleware path: ', req.path);
   let skipAuth = !!SKIP_AUTH_PATHS.find(x => req.path == getExpressPath(x));
   const authHeader = req.headers.authorization;
   if (!authHeader) {

@@ -1,4 +1,4 @@
-const { filterName } = require('dbgate-tools');
+const { filterName, getLogger } = require('dbgate-tools');
 const fs = require('fs');
 const lineReader = require('line-reader');
 const _ = require('lodash');
@@ -10,6 +10,7 @@ const socket = require('../utility/socket');
 const PermissionService = require('../db/services/permissionService');
 const { processMask, processScanMask } = require('../utility/dataMask');
 
+const logger = getLogger('jsldata');
 const permissionService = new PermissionService();
 
 function readFirstLine(file) {
@@ -35,7 +36,7 @@ module.exports = {
   datastores: {},
 
   async ensureDatastore(jslid, formatterFunction) {
-    console.log('ensureDatastore ', jslid, formatterFunction);
+    // console.log('ensureDatastore ', jslid, formatterFunction);
     let datastore = this.datastores[jslid];
     if (!datastore || datastore.formatterFunction != formatterFunction) {
       if (datastore) {
@@ -49,7 +50,7 @@ module.exports = {
   },
 
   async closeDataStore(jslid) {
-    console.log('closeDataStore ', jslid);
+    // console.log('closeDataStore ', jslid);
     const datastore = this.datastores[jslid];
     if (datastore) {
       await datastore._closeReader();
@@ -59,7 +60,7 @@ module.exports = {
 
   getInfo_meta: true,
   async getInfo({ jslid }) {
-    console.log('getInfo ', jslid);
+    // console.log('getInfo ', jslid);
     const file = getJslFileName(jslid);
     try {
       const firstLine = await readFirstLine(file);
@@ -82,43 +83,18 @@ module.exports = {
   getRows_meta: true,
   async getRows({ jslid, offset, limit, filters, sort, formatterFunction, conid, database }) {
     const datastore = await this.ensureDatastore(jslid, formatterFunction);
-    console.log('getRows: ', jslid);
     const rows = await datastore.getRows(
       offset,
       limit,
       _.isEmpty(filters) ? null : filters,
       _.isEmpty(sort) ? null : sort
     );
-    const info = await this.getInfo({ jslid });
-    // console.log('get rows info: ', info);
-    if (info.columns?.length !== 0) {
-      const groups = _.groupBy(info.columns, 'table');
-      // console.log('group2: ', groups);
-      for (const table in groups) {
-        console.log('group: ', table);
-
-        const [, groupId, dbId] = conid.split('_');
-        // console.log('groupId ', groupId, dbId);
-        const desenScans = await permissionService.findDesenScan(dbId, database, table);
-        console.log('get rows desen scan: ', desenScans?.length);
-        desenScans?.map(scan => {
-          processScanMask(scan.col_name, scan, rows);
-        });
-
-        const columnPermission = await permissionService.findColumn(groupId, dbId, database, table);
-        console.log('get rows permission: ', columnPermission?.length);
-        columnPermission.map(permission => {
-          processMask(permission.tcolumn, permission.AuthMask, rows);
-        });
-      }
-    }
-
     return rows;
   },
 
   exists_meta: true,
   async exists({ jslid }) {
-    console.log('exists ', jslid);
+    // console.log('exists ', jslid);
 
     const fileName = getJslFileName(jslid);
     return fs.existsSync(fileName);
@@ -126,7 +102,7 @@ module.exports = {
 
   getStats_meta: true,
   getStats({ jslid }) {
-    console.log('getStats ', jslid);
+    // console.log('getStats ', jslid);
 
     const file = `${getJslFileName(jslid)}.stats`;
     if (fs.existsSync(file)) {
@@ -141,7 +117,7 @@ module.exports = {
 
   loadFieldValues_meta: true,
   async loadFieldValues({ jslid, field, search, formatterFunction }) {
-    console.log('loadFieldValues ', jslid);
+    // console.log('loadFieldValues ', jslid);
 
     const datastore = await this.ensureDatastore(jslid, formatterFunction);
     const res = new Set();
@@ -155,7 +131,7 @@ module.exports = {
   },
 
   async notifyChangedStats(stats) {
-    console.log('SENDING STATS', JSON.stringify(stats));
+    // console.log('SENDING STATS', JSON.stringify(stats));
     const datastore = this.datastores[stats.jslid];
     if (datastore) await datastore.notifyChanged();
     socket.emit(`jsldata-stats-${stats.jslid}`, stats);
@@ -171,7 +147,7 @@ module.exports = {
 
   saveText_meta: true,
   async saveText({ jslid, text }) {
-    console.log('saveText ', jslid);
+    // console.log('saveText ', jslid);
 
     await fs.promises.writeFile(getJslFileName(jslid), text);
     return true;
@@ -179,7 +155,7 @@ module.exports = {
 
   saveRows_meta: true,
   async saveRows({ jslid, rows }) {
-    console.log('saveRows ', jslid);
+    // console.log('saveRows ', jslid);
 
     const fileStream = fs.createWriteStream(getJslFileName(jslid));
     for (const row of rows) {
@@ -191,7 +167,7 @@ module.exports = {
 
   extractTimelineChart_meta: true,
   async extractTimelineChart({ jslid, timestampFunction, aggregateFunction, measures }) {
-    console.log('extractTimelineChart ', jslid);
+    // console.log('extractTimelineChart ', jslid);
 
     const timestamp = requirePluginFunction(timestampFunction);
     const aggregate = requirePluginFunction(aggregateFunction);
@@ -216,11 +192,6 @@ module.exports = {
     const stepDuration = duration / stepCount;
     const labels = _.range(stepCount).map(i => new Date(minTime + stepDuration / 2 + stepDuration * i));
 
-    // const datasets = measures.map(m => ({
-    //   label: m.label,
-    //   data: Array(stepCount).fill(0),
-    // }));
-
     const mproc = measures.map(m => ({
       ...m,
     }));
@@ -242,27 +213,6 @@ module.exports = {
     });
 
     datastore._closeReader();
-
-    // const measureByField = _.fromPairs(measures.map((m, i) => [m.field, i]));
-
-    // for (let mindex = 0; mindex < measures.length; mindex++) {
-    //   for (let stepIndex = 0; stepIndex < stepCount; stepIndex++) {
-    //     const measure = measures[mindex];
-    //     if (measure.perSecond) {
-    //       datasets[mindex].data[stepIndex] /= stepDuration / 1000;
-    //     }
-    //     if (measure.perField) {
-    //       datasets[mindex].data[stepIndex] /= datasets[measureByField[measure.perField]].data[stepIndex];
-    //     }
-    //   }
-    // }
-
-    // for (let i = 0; i < measures.length; i++) {
-    //   if (measures[i].hidden) {
-    //     datasets[i] = null;
-    //   }
-    // }
-
     return {
       labels,
       datasets: mproc.map(m => ({

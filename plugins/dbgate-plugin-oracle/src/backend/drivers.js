@@ -3,139 +3,25 @@ const stream = require('stream');
 
 const driverBases = require('../frontend/drivers');
 const Analyser = require('./Analyser');
-//--const pg = require('pg');
 const oracledb = require('oracledb');
-const { createBulkInsertStreamBase, makeUniqueColumnNames } = require('dbgate-tools');
+const { makeUniqueColumnNames } = require('dbgate-tools');
 const createOracleBulkInsertStream = require('./createOracleBulkInsertStream');
-const { Parser } = require('node-sql-parser');
-const parser = new Parser();
+// const { Parser } = require('node-sql-parser');
+// const parser = new Parser();
 /*
 pg.types.setTypeParser(1082, 'text', val => val); // date
 pg.types.setTypeParser(1114, 'text', val => val); // timestamp without timezone
 pg.types.setTypeParser(1184, 'text', val => val); // timestamp
 */
 
-function extractOracleColumns(result, sql) {
-  if (!result /*|| !result.fields */) return [];
-  let from;
-  let res;
-  if (sql) {
-    try {
-      const ast = parser.astify(sql);
-      from = ast.from;
-      // console.log('ast: ', ast);
-      const star = ast.columns.find(item => item.expr.column === '*');
-      if (star) {
-        res = getColumnsByStar(result, from);
-      } else {
-        res = ast.columns.map(item => {
-          return {
-            columnName: item.expr.column,
-            oname: getOriginColumnName(item.expr.column),
-            table: getTableByAs(from, item.expr.table),
-          };
-        });
-      }
-    } catch (error) {
-      console.error('extractOracleColumns parser sql: ', error.message);
-    }
-  } else {
-    res = getColumnsByDefault(result);
-  }
-  // console.log('oracle columns: ', res);
+function extractOracleColumns(columns, sql) {
+  if (!columns /*|| !result.fields */) return [];
+  const res = columns.map(fld => ({
+    columnName: fld.name, //columnName: fld.name.toLowerCase(),
+  }));
+
   makeUniqueColumnNames(res);
   return res;
-}
-
-// column: { expr: { type: 'column_ref', table: 't', column: 'age' }, as: null }
-// from: { db: null, table: 'EMPLOYEES', as: 'e' },
-function getTableByAs(from, as) {
-  // console.log('as: ', as);
-  const find = from.find(item => item.as === as);
-  return find ? find.table : '';
-}
-
-function getColumnsByDefault(result, from) {
-  return result.map(fld => ({
-    columnName: fld.name, //columnName: fld.name.toLowerCase(),
-    oname: getOriginColumnName(fld.name),
-    table: from ? getTableNameByStar(from, fld.name) : null,
-  }));
-}
-
-/**
- *
- * select * from xxx
- *from: [
-  { db: null, table: 'EMPLOYEES', as: 'e' },
-  {
-    db: null,
-    table: 'TBL_USER',
-    as: 't',
-    join: 'LEFT JOIN',
-    on: [Object]
-  }
-]
-name: NAME, NAME_1, FIRST_NAME, FIRST_NAME_1
- */
-function getColumnsByStar(result, from) {
-  const columns = [];
-  let preIndex = 0;
-  let obj;
-  result.map(fld => {
-    const lastIndex = fld.name.lastIndexOf('_');
-    if (!obj && lastIndex === -1) {
-      obj = from[0];
-    } else {
-      const asIndex = fld.name.substring(lastIndex + 1, fld.name.length);
-      // console.log('asIndex ', asIndex);
-      if (!isNaN(Number(asIndex))) {
-        if (preIndex !== asIndex) {
-          obj = from[asIndex];
-          preIndex = asIndex;
-        }
-      }
-    }
-    // console.log('obj ', obj);
-    columns.push({
-      columnName: fld.name, //columnName: fld.name.toLowerCase(),
-      oname: getOriginColumnName(fld.name),
-      table: obj.table,
-    });
-  });
-  return columns;
-}
-/**
- *
- * select * from xxx
- *from: [
-  { db: null, table: 'EMPLOYEES', as: 'e' },
-  {
-    db: null,
-    table: 'TBL_USER',
-    as: 't',
-    join: 'LEFT JOIN',
-    on: [Object]
-  }
-]
-name: NAME, NAME_1, FIRST_NAME, FIRST_NAME_1
- */
-function getTableNameByStar(from, name) {
-  from?.forEach(item => {
-    if (name.includes(item.as + '.')) {
-      return item.table;
-    }
-  });
-}
-
-// NAME, NAME_1, FIRST_NAME, FIRST_NAME_1
-// return NAME, FIRST_NAME
-function getOriginColumnName(name) {
-  const lastIndex = name.lastIndexOf('_');
-  if (lastIndex === -1) {
-    return name;
-  }
-  return name.substring(0, lastIndex);
 }
 
 function zipDataRow(rowArray, columns) {
@@ -143,8 +29,6 @@ function zipDataRow(rowArray, columns) {
     columns.map(x => x.columnName),
     rowArray
   );
-  // console.log('zipDataRow columns', columns);
-  //console.log('zipDataRow', obj);
   return obj;
 }
 
@@ -190,7 +74,6 @@ const drivers = driverBases.map(driverBase => ({
     return pool.end();
   },
   async query(client, sql) {
-    console.log('query sql', sql);
     if (sql.trim() == 'COMMIT;') {
       sql = 'COMMIT';
     }
@@ -202,11 +85,8 @@ const drivers = driverBases.map(driverBase => ({
       };
     }
     try {
-      //console.log('sql3', sql);
       const res = await client.execute(sql);
-      //console.log('res', res);
       const columns = extractOracleColumns(res.metaData);
-      //console.log('columns', columns);
       return { rows: (res.rows || []).map(row => zipDataRow(row, columns)), columns };
     } catch (err) {
       console.log('Error query', err, sql);
@@ -215,15 +95,8 @@ const drivers = driverBases.map(driverBase => ({
     }
   },
   stream(client, sql, options) {
-    /*
-    const query = new pg.Query({
-      text: sql,
-      rowMode: 'array',
-    });
-*/
-    console.log('stream', sql);
     if (sql.trim().toLowerCase().startsWith('select')) {
-      const query = client.queryStream(sql);
+      const query = client.queryStream(sql, {}, { extendedMetaData: true });
       // const consumeStream = new Promise((resolve, reject) => {
       let rowcount = 0;
       let wasHeader = false;
@@ -253,7 +126,6 @@ const drivers = driverBases.map(driverBase => ({
 
       query.on('end', () => {
         const { command, rowCount } = query._result || {};
-
         if (command != 'SELECT' && _.isNumber(rowCount)) {
           options.info({
             message: `${rowCount} rows affected`,
@@ -263,7 +135,6 @@ const drivers = driverBases.map(driverBase => ({
         }
 
         if (!wasHeader) {
-          // console.log('_result: ', row);
           columns = extractOracleColumns(query._result);
           if (columns && columns.length > 0) {
             options.recordset(columns);
@@ -300,7 +171,7 @@ const drivers = driverBases.map(driverBase => ({
             serverity: 'error',
           });
         } else {
-          const { rowAffected, metaData, rows } = res || {};
+          const { rowsAffected, metaData, rows } = res || {};
 
           if (rows && metaData) {
             const colums = extractOracleColumns(metaData);
@@ -308,7 +179,7 @@ const drivers = driverBases.map(driverBase => ({
             for (const row of rows) {
               options.row(zipDataRow(row, colums));
             }
-          } else if (rowAffected) {
+          } else if (rowsAffected) {
             options.info({
               message: `${rowsAffected} rows affected`,
               time: new Date(),
@@ -344,7 +215,7 @@ const drivers = driverBases.map(driverBase => ({
 
       const m = version.match(/(\d+[a-z])\s+(\w+).*(\d+)\.(\d+)/);
 
-      // console.log('M', version);
+      // console.log('oracle getVersion ', version);
       let versionText = null;
       let versionMajor = null;
       let versionMinor = null;
@@ -370,13 +241,6 @@ const drivers = driverBases.map(driverBase => ({
     }
   },
   async readQuery(client, sql, structure) {
-    /*
-    const query = new pg.Query({
-      text: sql,
-      rowMode: 'array',
-    });
-  */
-    // console.log('readQuery', sql, structure);
     const query = await client.queryStream(sql);
 
     let wasHeader = false;
@@ -388,7 +252,6 @@ const drivers = driverBases.map(driverBase => ({
     });
 
     query.on('metadata', row => {
-      // console.log('readQuery metadata', row);
       if (!wasHeader) {
         columns = extractOracleColumns(row);
         if (columns && columns.length > 0) {
@@ -404,7 +267,6 @@ const drivers = driverBases.map(driverBase => ({
     });
 
     query.on('data', row => {
-      // console.log('readQuery data', row);
       pass.write(zipDataRow(row, columns));
     });
 
@@ -413,7 +275,6 @@ const drivers = driverBases.map(driverBase => ({
     });
 
     query.on('error', error => {
-      // console.error(error);
       pass.end();
     });
 
@@ -427,8 +288,14 @@ const drivers = driverBases.map(driverBase => ({
   },
   async listDatabases(client) {
     const { rows } = await this.query(client, 'SELECT username AS "name" FROM all_users order by username');
-    // const { rows } = await this.query(client, 'SELECT ORA_DATABASE_NAME AS "name" FROM DUAL');
-    // console.log('rows ', rows);
+    return rows;
+  },
+  async tabColumns(client, inCondition) {
+    if (!inCondition) {
+      return [];
+    }
+    const sql = `SELECT table_name as "pureName", column_name as "columnName" FROM all_tab_columns WHERE owner='${client._schema_name}' and table_name IN (${inCondition})`;
+    const { rows } = await this.query(client, sql);
     return rows;
   },
 

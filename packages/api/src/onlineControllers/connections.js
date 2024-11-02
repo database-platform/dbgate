@@ -86,7 +86,6 @@ module.exports = {
     try {
       let auth = req.auth;
       const dataBaseUserGroup = await this.datastore.findDataBaseUserGroup(auth.username);
-      logger.info(dataBaseUserGroup, 'db group: ');
       if (!dataBaseUserGroup) {
         return databases;
       }
@@ -94,7 +93,7 @@ module.exports = {
         return databases;
       }
       databases = await this.datastore.find(auth.username, dataBaseUserGroup.group.groupId);
-      logger.info({ len: databases.length }, 'databases: ');
+      logger.info(`list databases: ${databases?.length}`);
     } catch (err) {
       logger.error({ err }, 'Error list connections.');
       return {

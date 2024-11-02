@@ -59,7 +59,7 @@ const logger = getLogger('main');
 function start() {
   // logger.info(process.argv, 'process.argv');
   // logger.info(process.env, 'process.env');
-  console.log('platformInfo: ', platformInfo);
+  logger.info({ platformInfo }, 'platformInfo: ');
   const app = express();
 
   app.set('trust proxy', true);

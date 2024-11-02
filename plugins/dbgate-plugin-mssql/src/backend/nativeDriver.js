@@ -1,9 +1,6 @@
 const _ = require('lodash');
 const stream = require('stream');
 const makeUniqueColumnNames = require('./makeUniqueColumnNames');
-const { getTableByAs, getColumnsByStar, getOriginColumnName } = require('./utils');
-const { Parser } = require('node-sql-parser');
-const parser = new Parser();
 
 let requireMsnodesqlv8;
 
@@ -31,72 +28,13 @@ function getMsnodesqlv8() {
   }
   return msnodesqlv8Value;
 }
-
-// function extractNativeColumns(meta) {
-//   const res = meta.map(col => {
-//     const resCol = {
-//       columnName: col.name,
-//       dataType: col.sqlType.toLowerCase(),
-//       notNull: !col.nullable,
-//     };
-//
-//     if (resCol.dataType.endsWith(' identity')) {
-//       resCol.dataType = resCol.dataType.replace(' identity', '');
-//       resCol.autoIncrement = true;
-//     }
-//     if (col.size && resCol.dataType.includes('char')) {
-//       resCol.dataType += `(${col.size})`;
-//     }
-//     return resCol;
-//   });
-//
-//   makeUniqueColumnNames(res);
-//
-//   return res;
-// }
 function extractNativeColumns(meta, sql) {
   if (!columns) return [];
-  let from;
-  let res;
-  if (sql) {
-    try {
-      const ast = parser.astify(sql);
-      from = ast.from;
-      // console.info('ast: ', ast);
-      const star = ast.columns.find(item => item.expr.column === '*');
-      if (star) {
-        res = getColumnsByStar(columns, 'name', from).map(item => {
-          const originColumn = columns.find(col => col.name === item.columnName);
-          const resCol = getNativeCol(originColumn, addDriverNativeColumn);
-
-          return {
-            ...resCol,
-            ...item,
-          };
-        });
-      } else {
-        res = ast.columns.map(item => {
-          const originColumn = columns.find(col => col.name === item.expr.column);
-          const resCol = getNativeCol(originColumn, addDriverNativeColumn);
-          return {
-            ...resCol,
-            columnName: item.expr.column,
-            oname: getOriginColumnName(item.expr.column),
-            table: getTableByAs(from, item.expr.table),
-          };
-        });
-      }
-    } catch (error) {
-      console.error('extractNativeColumns parser sql: ', error.message);
-    }
-  } else {
-    res = columns.map(col => {
-      return getNativeCol(col, addDriverNativeColumn);
-    });
-  }
+  res = columns.map(col => {
+    return getNativeCol(col, addDriverNativeColumn);
+  });
 
   makeUniqueColumnNames(res);
-  // console.log('res: ', res);
   return res;
 }
 

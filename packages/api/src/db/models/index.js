@@ -3,14 +3,13 @@ const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
 const basename = path.basename(__filename);
 const { getLogger } = require('dbgate-tools');
-
-const logger = getLogger('db');
-
-const env = process.env.NODE_ENV;
-logger.info(`NODE_ENV: ${env}, ${basename}`);
+const logger = getLogger('Sequelize');
 
 const db = {};
 async function init() {
+  const env = process.env.NODE_ENV;
+  logger.info(`NODE_ENV: ${env}`);
+
   const dbUri = process.env.DB_URL.replace('jdbc:', '');
   logger.info(`DB db uri: ${dbUri}`);
   const pwd = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf8').trim();
@@ -18,8 +17,15 @@ async function init() {
     username: process.env.DB_USER,
     password: pwd,
     dialect: 'mysql',
-    logging: env === 'production' || env === 'production_self' ? false : true,
+    logging: false,
+    // logging:
+    //   env === 'production' || env === 'production_self'
+    //     ? false
+    //     : message => {
+    //       logger.debug({ message }, '');
+    //     },
   });
+
   // const sequelize = new Sequelize(process.env.ONLINE_DATABASE_URL, {
   //   dialect: 'mysql',
   //   logging: env === 'production' || env === 'production_self' ? false : true,

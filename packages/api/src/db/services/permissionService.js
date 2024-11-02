@@ -1,5 +1,9 @@
-const { pick } = require('lodash');
+const { pick, isArray } = require('lodash');
 const { DatabaseAuth, AuthMask, DesensScanResult, DesensConfig, DesensType } = require('../models');
+const { getLogger } = global.DBGATE_TOOLS;
+const { Op } = require('sequelize');
+
+const logger = getLogger('permissionService');
 
 class PermissionService {
   async findDatbase(group_id, db_id) {
@@ -19,8 +23,12 @@ class PermissionService {
     return this.find({ group_id, db_id, schema, tname, type: 'column' });
   }
 
+  async findColumnDataMask(group_id, db_id, schema, tnames) {
+    return this.find({ group_id, db_id, schema, tname: { [Op.in]: tnames }, type: 'column' });
+  }
+
   async find(where) {
-    console.log('permission find ', where);
+    // logger.info({ where }, 'find where: ');
     try {
       const permissions = await DatabaseAuth.findAll({
         where,
@@ -35,15 +43,19 @@ class PermissionService {
       });
       return permissions?.map(p => p.get({ plain: true }));
     } catch (error) {
-      console.error(error);
+      logger.error({ error }, 'find: ');
+      return [];
     }
-    return [];
   }
 
-  async findDesenScan(db_id, db_name, table_name) {
+  async findDesenScan(db_id, db_name, table_names) {
+    if (!isArray(table_names)) {
+      table_names = [table_names];
+    }
+    logger.info({ db_id, db_name, table_names }, 'findDesenScan: ');
     try {
       const scanList = await DesensScanResult.findAll({
-        where: { db_id, db_name, table_name },
+        where: { db_id, db_name, table_name: { [Op.in]: table_names } },
         include: {
           where: { status: 0 },
           model: DesensConfig,
@@ -62,13 +74,15 @@ class PermissionService {
       }
       return scanList?.map(p => {
         const desens = p.get({ plain: true });
+        desens.type = 0; // buildin
         return {
-          ...pick(desens, ['id', 'db_id', 'db_name', 'table_name', 'col_name', 'desen_id']),
+          ...pick(desens, ['id', 'db_id', 'db_name', 'table_name', 'col_name', 'desen_id', 'type']),
           DesensType: desens.DesensConfig.DesensType,
         };
       });
     } catch (error) {
-      console.error(error);
+      logger.error({ error: error.message }, 'findDesenScan: ');
+      return [];
     }
   }
 }

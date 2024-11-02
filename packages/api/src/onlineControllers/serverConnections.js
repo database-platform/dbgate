@@ -26,6 +26,7 @@ module.exports = {
   handle_databases(conid, { databases }) {
     const existing = this.opened.find(x => x.conid == conid);
     if (!existing) return;
+    // console.log('handle_databases: ', conid, databases);
     existing.databases = databases;
     socket.emitChanged(`database-list-changed`, { conid });
   },
@@ -41,7 +42,7 @@ module.exports = {
     existing.status = status;
     socket.emitChanged(`server-status-changed`);
   },
-  handle_ping() {},
+  handle_ping() { },
   handle_response(conid, { msgid, ...response }) {
     const [resolve, reject] = this.requests[msgid];
     resolve(response);
@@ -151,12 +152,13 @@ module.exports = {
     if (!conid) return [];
     // testConnectionPermission(conid, req);
     const conids = conid.split('_');
-    const opened = await this.ensureOpened(`${conid}:manager`);
-    if (opened.databases && opened.databases.length != 0) {
+    const existing = await this.ensureOpened(`${conid}:manager`);
+    if (existing?.databases && existing.databases?.length != 0) {
       const permissions = await permissionService.findDatbase(conids[1], conids[2]);
-      console.log('list all permissions ', permissions.length);
-      opened.databases?.map(db => {
-        const permission = permissions.find(p => p.schema === db.name);
+      const permissionMap = new Map(permissions.map(p => [p.schema, p]));
+      logger.info(`list databases manager permissions: ${conid}, ${permissions.length}`);
+      existing.databases?.map(db => {
+        const permission = permissionMap?.get(db.name);
         if (permission) {
           db.permission = permission;
         } else {
@@ -164,7 +166,7 @@ module.exports = {
         }
       });
     }
-    return opened.databases;
+    return existing.databases;
   },
 
   listDatabases_meta: true,
@@ -172,34 +174,25 @@ module.exports = {
     if (!conid) return [];
     // testConnectionPermission(conid, req);
     const conids = conid.split('_');
-    const opened = await this.ensureOpened(conid);
-    if (opened.databases && opened.databases.length != 0) {
+    const existing = await this.ensureOpened(conid);
+    if (existing?.databases && existing.databases?.length != 0) {
       const permissions = await permissionService.findDatbase(conids[1], conids[2]);
-      console.log('permissions ', permissions.length);
-      opened.databases = opened.databases?.filter(db => {
-        const permission = permissions.find(p => p.schema === db.name);
-        if (permission) {
-          if (permission.hidden === 1) {
-            return false;
-          }
-          if (permission.dql === 0 && permission.dml === 0 && permission.dcl === 0 && permission.ddl === 0) {
-            return false;
-          }
-          db.permission = permission;
-          return true;
+      logger.info(`list databases permissions: ${conid}, ${permissions.length} `);
+      const permissionMap = new Map(permissions.map(p => [p.schema, p]));
+      existing.databases = existing.databases.filter(db => {
+        const permission = permissionMap?.get(db.name);
+        if (
+          !permission ||
+          permission.hidden === 1 ||
+          (permission.dql === 0 && permission.dml === 0 && permission.dcl === 0 && permission.ddl === 0)
+        ) {
+          return false;
         }
-        return false;
+        db.permission = permission;
+        return true;
       });
-      //   opened.databases?.map(db => {
-      //     const permission = permissions.find(p => p.schema === db.name);
-      //     if (permission) {
-      //       db.permission = permission;
-      //     } else {
-      //       db.permission = null;
-      //     }
-      //   });
     }
-    return opened.databases;
+    return existing.databases;
   },
 
   version_meta: true,

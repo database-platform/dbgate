@@ -115,6 +115,20 @@ const driver = {
     const { rows } = await this.query(pool, 'SELECT name FROM sys.databases order by name');
     return rows;
   },
+  async tabColumns(pool, inCondition) {
+    if (!inCondition) {
+      logger.error('tabColumns in condition is null.');
+      return [];
+    }
+    try {
+      const sql = `SELECT TABLE_NAME as "pureName", COLUMN_NAME as "columnName" FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name IN (${inCondition})`;
+      const { rows } = await this.query(pool, sql);
+      return rows;
+    } catch (error) {
+      console.error('sqlserver error: ', error);
+    }
+    return [];
+  },
 };
 
 driver.initialize = dbgateEnv => {

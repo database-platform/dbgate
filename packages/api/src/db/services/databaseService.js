@@ -106,6 +106,7 @@ class OnlineDatabase {
           user: item.db_userId,
           password: item.db_pwd,
           unsaved: false,
+          groupId,
           originId: item.id,
           _id: `${username}_${groupId}_${item.id}`,
           displayName: item.db_name ?? item.db_ip,

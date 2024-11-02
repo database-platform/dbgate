@@ -27,6 +27,10 @@
       singleDatabase = $currentDatabase?.connection.singleDatabase;
       database = $currentDatabase.name;
       conid = $currentDatabase.connection._id;
+    } else {
+      conid = null;
+      database = null;
+      singleDatabase = null;
     }
   }
   // $: singleDatabase = $currentDatabase?.connection?.singleDatabase;

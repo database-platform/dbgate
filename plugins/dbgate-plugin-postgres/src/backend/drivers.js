@@ -7,7 +7,7 @@ const pg = require('pg');
 const { createBulkInsertStreamBase, makeUniqueColumnNames } = require('dbgate-tools');
 const { getLogger } = global.DBGATE_TOOLS;
 
-const logger = getLogger('postreDriver');
+const logger = getLogger('postresDriver');
 
 pg.types.setTypeParser(1082, 'text', val => val); // date
 pg.types.setTypeParser(1114, 'text', val => val); // timestamp without timezone
@@ -15,9 +15,11 @@ pg.types.setTypeParser(1184, 'text', val => val); // timestamp
 
 function extractPostgresColumns(result) {
   if (!result || !result.fields) return [];
-  const res = result.fields.map(fld => ({
-    columnName: fld.name,
-  }));
+  const res = result.fields.map(fld => {
+    return {
+      columnName: fld.name,
+    };
+  });
   makeUniqueColumnNames(res);
   return res;
 }
@@ -75,18 +77,18 @@ const drivers = driverBases.map(driverBase => ({
       }
       options = useDatabaseUrl
         ? {
-            connectionString: databaseUrl,
-            application_name: 'Dbmanager',
-          }
+          connectionString: databaseUrl,
+          application_name: 'Dbmanager',
+        }
         : {
-            host: authType == 'socket' ? socketPath || driverBase.defaultSocketPath : server,
-            port: authType == 'socket' ? null : port,
-            user,
-            password,
-            database: dbase,
-            ssl,
-            application_name: 'DbGate',
-          };
+          host: authType == 'socket' ? socketPath || driverBase.defaultSocketPath : server,
+          port: authType == 'socket' ? null : port,
+          user,
+          password,
+          database: dbase,
+          ssl,
+          application_name: 'DbGate',
+        };
     }
     const client = new pg.Client(options);
     await client.connect();
@@ -107,7 +109,6 @@ const drivers = driverBases.map(driverBase => ({
         columns: [],
       };
     }
-    // console.log('postgres sql: ', sql);
     const res = await client.query({ text: sql, rowMode: 'array' });
     const columns = extractPostgresColumns(res);
     return { rows: (res.rows || []).map(row => zipDataRow(row, columns)), columns };
@@ -179,7 +180,6 @@ const drivers = driverBases.map(driverBase => ({
     //  PostgreSQL 15.8 (PolarDB 15.8.2.0 build unknown) on x86_64-linux-gnu
     //  KingbaseES V008R006C008B0020 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-28), 64-bit
     //
-    console.log('version: ', version);
     const isCockroach = version.toLowerCase().includes('cockroachdb');
     const isRedshift = version.toLowerCase().includes('redshift');
     const isPolardb = version.toLowerCase().includes('polardb');
@@ -190,9 +190,7 @@ const drivers = driverBases.map(driverBase => ({
     if (isKingbase) {
       try {
         kingbaseVersion = version.split(' ')[1];
-      } catch (error) {
-        console.error('postgres driver: ', error);
-      }
+      } catch (error) { }
     }
     const m = version.match(/([\d\.]+)/);
     let versionText = null;
@@ -223,7 +221,6 @@ const drivers = driverBases.map(driverBase => ({
     };
   },
   async readQuery(client, sql, structure) {
-    // console.log('readQuery sql: ', sql);
     const query = new pg.Query({
       text: sql,
       rowMode: 'array',
@@ -264,7 +261,6 @@ const drivers = driverBases.map(driverBase => ({
     });
 
     query.on('error', error => {
-      console.error(error);
       pass.end();
     });
 
@@ -279,6 +275,16 @@ const drivers = driverBases.map(driverBase => ({
   async listDatabases(client) {
     const { rows } = await this.query(client, 'SELECT datname AS name FROM pg_database WHERE datistemplate = false');
     // console.log('listDatabases rows: ', rows);
+    return rows;
+  },
+  async tabColumns(client, inCondition) {
+    if (!inCondition) {
+      logger.error('tabColumns in condition is null.');
+      return [];
+    }
+    const sql = `select table_name as "pureName", column_name as "columnName" from information_schema.columns where table_schema <> 'information_schema' and table_schema <> 'pg_catalog' and table_schema !~ '^pg_toast' and table_name in (${inCondition})`;
+    logger.debug(sql);
+    const { rows } = await this.query(client, sql);
     return rows;
   },
 

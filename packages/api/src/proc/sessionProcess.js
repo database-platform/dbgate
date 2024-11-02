@@ -4,17 +4,19 @@ const fs = require('fs');
 const _ = require('lodash');
 const childProcessChecker = require('../utility/childProcessChecker');
 const { splitQuery } = require('dbgate-query-splitter');
-
+const { Parser } = require('node-sql-parser');
 const { jsldir } = require('../utility/directories');
 const requireEngineDriver = require('../utility/requireEngineDriver');
 // const { decryptConnection } = require('../utility/crypting');
 const connectUtility = require('../utility/connectUtility');
 const { handleProcessCommunication } = require('../utility/processComm');
-const { getLogger, extractIntSettingsValue, extractBoolSettingsValue } = require('dbgate-tools');
-// const PermissionService = require('../db/services/permissionService');
-//
-// const permissionService = new PermissionService();
+const { makeUniqueColumnNames, getLogger, extractIntSettingsValue, extractBoolSettingsValue } = require('dbgate-tools');
+const PermissionService = require('../db/services/permissionService');
+const { processMask, dataMask } = require('../utility/dataMask');
+
+const permissionService = new PermissionService();
 const logger = getLogger('sessionProcess');
+const parser = new Parser();
 
 let systemConnection;
 let storedConnection;
@@ -110,7 +112,7 @@ class TableWriter {
 }
 
 class StreamHandler {
-  constructor(resultIndexHolder, resolve, startLine) {
+  constructor(resultIndexHolder, resolve, startLine, unionColumns) {
     this.recordset = this.recordset.bind(this);
     this.startLine = startLine;
     this.row = this.row.bind(this);
@@ -125,6 +127,7 @@ class StreamHandler {
     this.resultIndexHolder = resultIndexHolder;
     this.resolve = resolve;
     // currentHandlers = [...currentHandlers, this];
+    this.unionColumns = unionColumns;
   }
 
   closeCurrentWriter() {
@@ -137,7 +140,6 @@ class StreamHandler {
   recordset(columns) {
     this.closeCurrentWriter();
     this.currentWriter = new TableWriter();
-    // console.log('columns: ', columns);
     this.currentWriter.initializeFromQuery(
       Array.isArray(columns) ? { columns } : columns,
       this.resultIndexHolder.value
@@ -153,9 +155,18 @@ class StreamHandler {
     // }, 500);
   }
   row(row) {
-    // console.log('row: ', row);
     if (this.currentWriter) {
-      this.currentWriter.row(row);
+      try {
+        this.unionColumns.map(col => {
+          if (col.authMask) {
+            const colName = col.as ?? col.columnName;
+            row[colName] = dataMask(row[colName], col.authMask);
+          }
+        });
+        this.currentWriter.row(row);
+      } catch (error) {
+        process.send({ msgtype: 'info', info: { message: error.message } });
+      }
     } else if (row.message) {
       process.send({ msgtype: 'info', info: { message: row.message } });
     }
@@ -180,10 +191,10 @@ class StreamHandler {
   }
 }
 
-function handleStream(driver, resultIndexHolder, sqlItem) {
+function handleStream(driver, resultIndexHolder, sqlItem, unionColumns) {
   return new Promise((resolve, reject) => {
     const start = sqlItem.trimStart || sqlItem.start;
-    const handler = new StreamHandler(resultIndexHolder, resolve, start && start.line);
+    const handler = new StreamHandler(resultIndexHolder, resolve, start && start.line, unionColumns);
     driver.stream(systemConnection, sqlItem.text, handler);
   });
 }
@@ -279,8 +290,15 @@ async function handleExecuteQuery({ sql }) {
       ...driver.getQuerySplitterOptions('stream'),
       returnRichInfo: true,
     })) {
-      console.log('sqlItem: ', sqlItem);
-      await handleStream(driver, resultIndexHolder, sqlItem);
+      let unionColumns;
+      // @ts-ignore
+      if (sqlItem.text.trim().toLowerCase().startsWith('select')) {
+        // @ts-ignore
+        unionColumns = await getColumnsFromSql(sqlItem.text, driver);
+        await dataMaskProcess(unionColumns);
+        logger.debug({ unionColumns }, 'handleExecuteQuery columns: ');
+      }
+      await handleStream(driver, resultIndexHolder, sqlItem, unionColumns);
       // const handler = new StreamHandler(resultIndex);
       // const stream = await driver.stream(systemConnection, sqlItem, handler);
       // handler.stream = stream;
@@ -290,6 +308,124 @@ async function handleExecuteQuery({ sql }) {
   } finally {
     executingScripts--;
   }
+}
+
+async function dataMaskProcess(columns) {
+  const { groupId, originId, database } = storedConnection;
+  const pureNames = _.chain(columns).groupBy('pureName').keys().value();
+  logger.debug(`pureNames: ${pureNames}`);
+
+  const globalDesenses = await permissionService.findDesenScan(originId, database, pureNames);
+  logger.debug({ globalDesenses: globalDesenses?.length }, 'global desenses: ');
+  const permissionDesenses = await permissionService.findColumnDataMask(groupId, originId, database, pureNames);
+  logger.debug({ permissionDesenses: permissionDesenses?.length }, 'permission desenses: ');
+
+  columns.map(col => {
+    let gDesense = null;
+    let pDesense = null;
+    if (globalDesenses) {
+      gDesense = globalDesenses.find(item => item.table_name === col.pureName && item.col_name === col.columnName);
+    }
+    if (permissionDesenses) {
+      pDesense = permissionDesenses.find(item => item.tname === col.pureName && item.tcolumn === col.columnName);
+      if (pDesense) {
+        pDesense = pDesense.AuthMask;
+      }
+    }
+    // The desensitization in the permission overrides the auto-scan desensitization
+    if (gDesense || pDesense) {
+      col.authMask = pDesense || gDesense;
+    }
+  });
+  makeUniqueColumnNames(columns);
+}
+
+// select * from CITY
+// ast: {
+//      "with": null,
+//      "type": "select",
+//      "options": null,
+//      "distinct": null,
+//      "columns": [
+//        {
+//          "expr": {
+//            "type": "column_ref",
+//            "table": null,
+//            "column": "*"
+//          },
+//          "as": null
+//        }
+//      ],
+//      "into": {
+//        "position": null
+//      },
+//      "from": [
+//        {
+//          "db": null,
+//          "table": "CITY",
+//          "as": null
+//        }
+//      ],
+//      "where": null,
+//      "groupby": null,
+//      "having": null,
+//      "orderby": null,
+//      "limit": null,
+//      "locking_read": null,
+//      "window": null,
+//      "collate": null
+//    }
+async function getColumnsFromSql(sql, driver) {
+  let columns = [];
+  try {
+    const ast = parser.astify(sql);
+    // logger.debug({ storedConnection }, 'getColumnsFromSql driver: ');
+    //@ts-ignore
+    const pColumns = ast.columns;
+    //@ts-ignore
+    const pFrom = ast.from;
+    logger.debug({ pColumns, pFrom }, 'getColumnsFromSql parser: ');
+    const star = pColumns.find(item => item.expr.column === '*');
+    if (star) {
+      columns = await getColumnsFromDB(pFrom, driver);
+    } else {
+      columns = getColumnsFromAst(pColumns, pFrom);
+    }
+    logger.debug({ columns }, 'getColumnsFromSql columns: ');
+  } catch (error) {
+    logger.error({ error }, 'getColumnsFromSql error: ');
+  }
+  return columns;
+}
+
+function getColumnsFromAst(columns, from) {
+  return columns?.map(item => {
+    const { type, column, value } = item.expr;
+    let columnName = column;
+    if (type === 'double_quote_string' || type === 'single_quote_string') {
+      columnName = value;
+    }
+    return {
+      columnName,
+      as: item.as,
+      pureName: getTableByAs(from, item.expr.table),
+    };
+  });
+}
+
+// column: { expr: { type: 'column_ref', table: 't', column: 'age' }, as: null }
+// from: { db: null, table: 'EMPLOYEES', as: 'e' },
+function getTableByAs(from, as) {
+  const find = from.find(item => item.as === as);
+  return find ? find.table : from[0].table;
+}
+
+/**
+ * return: [{ pureName: 'xx', columnName: 'xxx' }]
+ * */
+async function getColumnsFromDB(from, driver) {
+  const inCondition = from.map(item => `'${item.table}'`).join(', ');
+  return await driver.tabColumns(systemConnection, inCondition);
 }
 
 async function handleExecuteReader({ jslid, sql, fileName }) {
@@ -314,7 +450,6 @@ async function handleExecuteReader({ jslid, sql, fileName }) {
   const reader = await driver.readQuery(systemConnection, sql);
 
   reader.on('data', data => {
-    console.log('execute reader: ', data);
     writer.rowFromReader(data);
   });
   reader.on('end', () => {
