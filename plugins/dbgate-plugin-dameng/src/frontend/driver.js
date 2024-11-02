@@ -1,14 +1,19 @@
 const { driverBase } = require('dbgate-tools');
 const Dumper = require('./Dumper');
+const { oracleSplitterOptions } = require('dbgate-query-splitter/lib/options');
+
+const spatialTypes = ['GEOGRAPHY'];
 
 /** @type {import('dbgate-types').SqlDialect} */
 const dialect = {
-  limitSelect: true,
   rangeSelect: true,
+  limitSelect: true,
   offsetFetchRangeSyntax: true,
+  rowNumberOverPaging: true,
+  ilike: true,
   stringEscapeChar: "'",
   fallbackDataType: 'varchar',
-  anonymousPrimaryKey: true,
+  anonymousPrimaryKey: false,
   enableConstraintsPerTable: true,
   dropColumnDependencies: ['dependencies'],
   quoteIdentifier(s) {
@@ -29,6 +34,7 @@ const dialect = {
   dropCheck: true,
 
   dropReferencesWhenDropTable: true,
+  requireFromDual: true,
 
   predefinedDataTypes: [
     'VARCHAR2',
@@ -56,19 +62,71 @@ const dialect = {
     'UROWID',
     // 'XMLTYPE',
   ],
-};
-
-/** @type {import('dbgate-types').EngineDriver} */
-const driver = {
-  ...driverBase,
-  dumperClass: Dumper,
-  dialect,
-  engine: 'dameng@dbgate-plugin-dameng',
-  title: 'Dameng',
-  defaultPort: 5236,
-  showConnectionField: (field, values) => {
-    return ['server', 'port', 'user', 'password', 'defaultDatabase', 'singleDatabase', 'isReadOnly'].includes(field);
+  createColumnViewExpression(columnName, dataType, source, alias) {
+    if (dataType && spatialTypes.includes(dataType.toUpperCase())) {
+      return {
+        exprType: 'call',
+        func: 'ST_AsText',
+        alias: alias || columnName,
+        args: [
+          {
+            exprType: 'column',
+            columnName,
+            source,
+          },
+        ],
+      };
+    }
   },
 };
 
-module.exports = driver;
+/** @type {import('dbgate-types').EngineDriver} */
+const damengDriver = {
+  ...driverBase,
+  engine: 'dameng@dbgate-plugin-dameng',
+  title: 'Dameng',
+  defaultPort: 5236,
+  // authTypeLabel: 'Driver mode',
+  // defaultAuthTypeName: 'thin',
+  dialect,
+  dumperClass: Dumper,
+  getQuerySplitterOptions: () => oracleSplitterOptions,
+  readOnlySessions: true,
+  // supportsTransactions: true,
+
+  databaseUrlPlaceholder: 'e.g. localhost:5236/test',
+
+  showConnectionField: (field, values) => {
+    if (field === 'useDatabaseUrl') return true;
+    if (values.useDatabaseUrl) {
+      return ['databaseUrl', 'user', 'password'].includes(field);
+    }
+    return ['server', 'port', 'user', 'password', 'defaultDatabase', 'singleDatabase', 'isReadOnly'].includes(field);
+  },
+  getNewObjectTemplates() {
+    return [
+      { label: 'New view', sql: 'CREATE VIEW myview\nAS\nSELECT * FROM table1' },
+      { label: 'New materialized view', sql: 'CREATE MATERIALIZED VIEW myview\nAS\nSELECT * FROM table1' },
+      {
+        label: 'New procedure',
+        sql: `CREATE PROCEDURE myproc (arg1 INT)
+        LANGUAGE SQL
+        AS $$
+          SELECT * FROM table1;
+        $$`,
+      },
+      {
+        label: 'New function (plpgsql)',
+        sql: `CREATE FUNCTION myfunc (arg1 INT)
+        RETURNS INT
+        AS $$
+        BEGIN
+          RETURN 1;
+        END
+        $$ LANGUAGE plpgsql;`,
+      },
+    ];
+  },
+};
+
+module.exports = damengDriver;

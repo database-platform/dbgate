@@ -1,59 +1,186 @@
-const { DatabaseAnalyser } = require('dbgate-tools');
+const { DatabaseAnalyser, isTypeString, isTypeNumeric } = require('dbgate-tools');
 const sql = require('./sql');
 const _ = require('lodash');
 
+function normalizeTypeName(dataType) {
+  if (dataType === 'character varying') return 'varchar';
+  if (dataType === 'timestamp without time zone') return 'timestamp';
+  return dataType;
+}
+
+function getColumnInfo(
+  { is_nullable, column_name, data_type, char_max_length, numeric_precision, numeric_scale, default_value },
+  table = undefined
+) {
+  const normDataType = normalizeTypeName(data_type);
+  let fullDataType = normDataType;
+  if (char_max_length && isTypeString(normDataType)) {
+    fullDataType = `${normDataType}(${char_max_length})`;
+  }
+  if (numeric_precision && numeric_ccale && isTypeNumeric(normDataType)) {
+    fullDataType = `${normDataType}(${numeric_precision},${numeric_scale})`;
+  }
+  const autoIncrement = !!(default_value && default_value.endsWith('.nextval'));
+  return {
+    columnName: column_name,
+    dataType: fullDataType,
+    notNull: is_nullable == 'N',
+    defaultValue: autoIncrement ? undefined : default_value,
+    autoIncrement,
+  };
+}
+
 class Analyser extends DatabaseAnalyser {
-  constructor(connection, driver, version) {
-    super(connection, driver, version);
-    console.log('connection :', connection, driver, version);
+  constructor(pool, driver, version) {
+    super(pool, driver, version);
   }
 
-  createQuery(resFileName, typeFields) {
-    console.log('createQuery :', this.singleObjectFilter);
-    let res = sql[resFileName];
-    // res = res.replace('#SCHEMA_NAME#', this.connection._database_name);
-    const query = super.createQuery(res, typeFields);
-    console.log('createQuery :', query);
+  createQuery(resFileName, typeFields, replacements = {}) {
+    // this.logger.debug({ resFileName, typeFields, replacements }, 'createQuery param:');
+    const query = super.createQuery(sql[resFileName], typeFields, replacements);
     return query;
   }
 
   async _computeSingleObjectId() {
-    const { pureName } = this.singleObjectFilter;
-    this.singleObjectId = pureName;
-    console.log('_computeSingleObjectId :', this.singleObjectId);
+    const { typeFields, pureName } = this.singleObjectFilter;
+    this.singleObjectId = `${typeFields}:${pureName}`;
+    logger.debug(`_computeSingleObjectId: ${this.singleObjectId}`);
   }
 
   async _runAnalysis() {
-    this.feedback({ analysingMessage: 'Loading tables' });
-    const tables = await this.analyserQuery(this.driver.dialect.stringAgg ? 'tableList' : 'tableList', ['tables']);
-    console.log('tables', tables);
+    this.feedback({ analysingMessage: `Loading tables - ${this.pool._schema_name}` });
+    const tables = await this.analyserQuery('tableList', ['tables'], { $owner: this.pool._schema_name });
+    // this.logger.debug({ tables }, 'tables: ');
     this.feedback({ analysingMessage: 'Loading columns' });
-    // const columns = await this.analyserQuery('columns', ['tables', 'views']);
-    // console.log('columns', columns);
-    // return structure as DatabaseInfo (https://github.com/dbgate/dbgate/blob/master/packages/types/dbinfo.d.ts)
+    const columns = await this.analyserQuery('columns', ['tables', 'views'], { $owner: this.pool._schema_name });
+    // this.logger.debug({ columns }, 'columns: ');
+
+    this.feedback({ analysingMessage: 'Loading primary keys' });
+    const pkColumns = await this.analyserQuery('primaryKeys', ['tables'], { $owner: this.pool._schema_name });
+
+    this.feedback({ analysingMessage: 'Loading foreign keys' });
+    const fkColumns = await this.analyserQuery('foreignKeys', ['tables'], { $owner: this.pool._schema_name });
+    // this.logger.debug({ fkColumns }, 'fkColumns: ');
+    this.feedback({ analysingMessage: 'Loading views' });
+    const views = await this.analyserQuery('views', ['views'], { $owner: this.pool._schema_name });
+    // this.logger.debug({ views }, 'views: ');
+
+    // this.feedback({ analysingMessage: 'Loading materialized views' });
+    // const matviews = this.driver.dialect.materializedViews
+    //   ? await this.analyserQuery('matviews', ['matviews'], { $owner: this.pool._schema_name })
+    //   : null;
+    // this.logger.debug({ matviews }, 'matviews: ');
+
+    this.feedback({ analysingMessage: 'Loading routines' });
+    const routines = await this.analyserQuery('routines', ['procedures', 'function'], {
+      $owner: this.pool._schema_name,
+    });
+    // this.logger.debug({ routines }, 'routines: ');
+
+    this.feedback({ analysingMessage: 'Loading indexes' });
+    const indexes = await this.analyserQuery('indexes', ['tables'], {
+      $owner: this.pool._schema_name,
+    });
+    // this.logger.debug({ indexes }, 'indexes: ');
+    this.feedback({ analysingMessage: 'Loading unique names' });
+    const uniqueNames = await this.analyserQuery('uniqueNames', ['tables'], {
+      $owner: this.pool._schema_name,
+    });
+    // this.logger.debug({ uniqueNames }, 'uniqueNames: ');
+    this.feedback({ analysingMessage: `Finalizing DB structure - ${this.pool._schema_name}` });
+
+    const pkColumnsMapped = pkColumns.rows.map((x) => ({
+      pureName: x.pure_name,
+      // schemaName: x.schema_name,
+      constraintSchema: x.constraint_schema,
+      constraintName: x.constraint_name,
+      columnName: x.column_name,
+    }));
+
+    const fkColumnsMapped = fkColumns.rows.map((x) => ({
+      pureName: x.pure_name,
+      constraintSchema: x.constraint_schema,
+      constraintName: x.constraint_name,
+      columnName: x.column_name,
+      refColumnName: x.ref_column_name,
+      updateAction: x.update_action,
+      deleteAction: x.delete_action,
+      refTableName: x.ref_table_name,
+    }));
+
+    const columnGroup = (col) => `${col.schema_name}||${col.pure_name}`;
+    const columnsGrouped = _.groupBy(columns.rows, columnGroup);
     return {
       tables: tables.rows.map((table) => {
         const newTable = {
           pureName: table.pure_name,
-          schemaName: table.schema_name,
-          objectId: `tables:${table.schema_name}.${table.pure_name}`,
+          // schemaName: table.schema_name,
+          objectId: `tables:${table.pure_name}`,
           contentHash: table.hash_code_columns ? `${table.hash_code_columns}-${table.hash_code_constraints}` : null,
         };
         return {
           ...newTable,
+          columns: (columnsGrouped[columnGroup(table)] || []).map((col) => getColumnInfo(col, newTable)),
+          primaryKey: DatabaseAnalyser.extractPrimaryKeys(newTable, pkColumnsMapped),
+          foreignKey: DatabaseAnalyser.extractForeignKeys(newTable, fkColumnsMapped),
+          indexes: _.uniqBy(
+            indexes.rows.filter(
+              (idx) =>
+                idx.tableName == table.pureName && !uniqueNames.rows.find((x) => x.constraintName == idx.constraintName)
+            ),
+            'constraintName'
+          ).map((idx) => ({
+            ..._.pick(idx, ['constraintName', 'indexType']),
+            isUnique: idx.Unique === 'UNIQUE',
+            columns: indexes.rows
+              .filter((col) => col.tableName == idx.tableName && col.constraintName == idx.constraintName)
+              .map((col) => ({
+                ..._.pick(col, ['columnName']),
+                isDescending: col.descending == 'DESC',
+              })),
+          })),
+          uniques: _.uniqBy(
+            indexes.rows.filter(
+              (idx) =>
+                idx.tableName == newTable.pureName &&
+                uniqueNames.rows.find((x) => x.constraintName == idx.constraintName)
+            ),
+            'constraintName'
+          ).map((idx) => ({
+            ..._.pick(idx, ['constraintName']),
+            columns: indexes.rows
+              .filter((col) => col.tableName == idx.tableName && col.constraintName == idx.constraintName)
+              .map((col) => ({
+                ..._.pick(col, ['columnName']),
+              })),
+          })),
         };
-      })
-      /*[
-        {
-          objectId: 'table1',
-          pureName: 't1',
-          columns: [
-            {
-              columnName: 'c1',
-            },
-          ],
-        },
-      ],*/
+      }),
+      views: views.rows.map((view) => ({
+        objectId: `views:${view.pure_name}`,
+        pureName: view.pure_name,
+        contentHash: view.hash_code,
+        createSql: `CREATE VIEW "${view.pure_name}"\nAS\n${view.create_sql}`,
+        columns: (columnsGrouped[columnGroup(view)] || []).map((col) => getColumnInfo(col)),
+      })),
+      matviews: undefined,
+      procedures: routines.rows
+        .filter((x) => x.object_type == 'PROCEDURE')
+        .map((proc) => ({
+          objectId: `procedures:${proc.pure_name}`,
+          pureName: proc.pure_name,
+          createSql: `CREATE PROCEDURE "${proc.pure_name}"() LANGUAGE ${proc.language}\nAS\n${proc.definition}\n$$`,
+          contentHash: proc.hash_code,
+        })),
+      functions: routines.rows
+        .filter((x) => x.object_type == 'FUNCTION')
+        .map((func) => ({
+          objectId: `function:${func.pure_name}`,
+          createSql: `CREATE FUNCTION "${func.pure_name}"() RETURNS ${func.data_type} LANGUAGE ${func.language}\nAS\n$$\n${func.definition}\n$$`,
+          pureName: func.pure_name,
+          // schemaName: func.schema_name,
+          contentHash: func.hash_code,
+        })),
     };
   }
 }

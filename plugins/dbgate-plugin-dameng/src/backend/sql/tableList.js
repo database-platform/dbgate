@@ -1,8 +1,8 @@
 module.exports = `
   select
-    owner "schema_name",                             
+    -- owner "schema_name",                             
     table_name "pure_name"
   from
     all_tables
-  where OWNER ='#SCHEMA_NAME#' and OWNER =OBJECT_ID_CONDITION
+  where OWNER ='$owner' and 'tables:' || TABLE_NAME =OBJECT_ID_CONDITION
 `;
