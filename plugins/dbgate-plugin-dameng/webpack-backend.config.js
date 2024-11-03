@@ -15,6 +15,14 @@ var config = {
       type: 'commonjs2',
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.node$/,
+        use: 'node-loader',
+      },
+    ],
+  },
 
   // uncomment for disable minimalization
   //   optimization: {

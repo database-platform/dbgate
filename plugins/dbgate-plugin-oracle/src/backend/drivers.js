@@ -6,8 +6,6 @@ const Analyser = require('./Analyser');
 const oracledb = require('oracledb');
 const { makeUniqueColumnNames } = require('dbgate-tools');
 const createOracleBulkInsertStream = require('./createOracleBulkInsertStream');
-// const { Parser } = require('node-sql-parser');
-// const parser = new Parser();
 /*
 pg.types.setTypeParser(1082, 'text', val => val); // date
 pg.types.setTypeParser(1114, 'text', val => val); // timestamp without timezone

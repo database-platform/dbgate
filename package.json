@@ -36,7 +36,7 @@
     "build:plugins:frontend": "workspaces-run --only=\"dbgate-plugin-*\" -- yarn build:frontend",
     "build:plugins:frontend:watch": "workspaces-run --parallel --only=\"dbgate-plugin-*\" -- yarn build:frontend:watch",
     "build:plugins:backend": "workspaces-run --only=\"dbgate-plugin-*\" -- yarn build:backend",
-    "plugins:copydist": "workspaces-run --only=\"dbgate-plugin-{mysql,postgres,redis,sqlite,oracle,mssql,mongo}\" -- yarn copydist",
+    "plugins:copydist": "workspaces-run --only=\"dbgate-plugin-*\" -- yarn copydist",
     "build:app:local": "yarn plugins:copydist && cd app && yarn build:local",
     "start:app:local": "cd app && yarn start:local",
     "setCurrentVersion": "node setCurrentVersion",
