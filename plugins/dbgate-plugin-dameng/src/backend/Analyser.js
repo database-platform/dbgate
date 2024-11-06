@@ -33,6 +33,7 @@ function getColumnInfo(
 class Analyser extends DatabaseAnalyser {
   constructor(pool, driver, version) {
     super(pool, driver, version);
+    // console.log('dm constructor ', pool);
   }
 
   createQuery(resFileName, typeFields, replacements = {}) {
@@ -48,6 +49,7 @@ class Analyser extends DatabaseAnalyser {
   }
 
   async _runAnalysis() {
+    console.log('dm _runAnalysis ', this.pool);
     this.feedback({ analysingMessage: `Loading tables - ${this.pool._schema_name}` });
     const tables = await this.analyserQuery('tableList', ['tables'], { $owner: this.pool._schema_name });
     // this.logger.debug({ tables }, 'tables: ');

@@ -1,12 +1,15 @@
 FROM node:20.12.2-alpine3.19 as builder
 
-WORKDIR /home/dbgate-docker
+# WORKDIR /home/dbgate-docker
 
 RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories \
     && echo "http://mirrors.ustc.edu.cn/alpine/v3.19/community/" >> /etc/apk/repositories \
     && apk --no-cache upgrade \
-    && apk add --no-cache iputils \
+    && apk --no-cache add iputils \
+    && apk --no-cache add python3 make g++ \
     && rm -rf /var/cache/apk/*
+
+WORKDIR /app
 
 COPY package.json yarn.lock ./
 
@@ -16,11 +19,11 @@ COPY . .
 
 RUN yarn run prepare:docker
 
-FROM node:20.12.2-alpine3.19 as deploy
+FROM node:20.12.2-alpine3.19 as production
 
 WORKDIR /home/dbgate-docker
 
-COPY --from=builder /home/dbgate-docker/docker .
+COPY --from=builder /app/docker .
 
 RUN ["chmod", "+x", "/home/dbgate-docker/entrypoint.sh"]
 
@@ -28,4 +31,3 @@ EXPOSE 3000
 VOLUME /root/.dbgate
 
 CMD ["/home/dbgate-docker/entrypoint.sh"]
-

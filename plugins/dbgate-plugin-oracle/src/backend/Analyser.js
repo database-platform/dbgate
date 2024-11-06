@@ -47,6 +47,7 @@ class Analyser extends DatabaseAnalyser {
   }
 
   async _runAnalysis() {
+    // console.log('oracle _runAnalysis : ', this.pool);
     this.feedback({ analysingMessage: 'Loading tables' });
     const tables = await this.analyserQuery('tableList', ['tables'], { $owner: this.pool._schema_name });
     this.feedback({ analysingMessage: 'Loading columns' });
@@ -155,13 +156,13 @@ class Analyser extends DatabaseAnalyser {
       })),
       matviews: matviews
         ? matviews.rows.map(matview => ({
-          objectId: `matviews:${matview.pure_name}`,
-          pureName: matview.pure_name,
-          // schemaName: matview.schema_name,
-          contentHash: matview.hash_code,
-          createSql: `CREATE MATERIALIZED VIEW "${matview.pure_name}"\nAS\n${matview.definition}`,
-          columns: (columnsGrouped[columnGroup(view)] || []).map(col => getColumnInfo(col)),
-        }))
+            objectId: `matviews:${matview.pure_name}`,
+            pureName: matview.pure_name,
+            // schemaName: matview.schema_name,
+            contentHash: matview.hash_code,
+            createSql: `CREATE MATERIALIZED VIEW "${matview.pure_name}"\nAS\n${matview.definition}`,
+            columns: (columnsGrouped[columnGroup(view)] || []).map(col => getColumnInfo(col)),
+          }))
         : undefined,
       procedures: routines.rows
         .filter(x => x.object_type == 'PROCEDURE')

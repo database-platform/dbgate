@@ -53,7 +53,7 @@ export class DatabaseAnalyser {
     return null;
   }
 
-  async _computeSingleObjectId() { }
+  async _computeSingleObjectId() {}
 
   addEngineField(db: DatabaseInfo) {
     if (!this.driver?.engine) return;
@@ -68,6 +68,7 @@ export class DatabaseAnalyser {
   }
 
   async fullAnalysis() {
+    logger.info(`Performing full analysis, engine=${this.driver?.engine}`);
     const res = this.addEngineField(await this._runAnalysis());
     // console.log('FULL ANALYSIS', res);
     return res;
@@ -276,18 +277,18 @@ export class DatabaseAnalyser {
 
         const action = obj
           ? {
-            newName: { schemaName, pureName },
-            oldName: _pick(obj, ['schemaName', 'pureName']),
-            action: 'change',
-            objectTypeField: field,
-            objectId,
-          }
+              newName: { schemaName, pureName },
+              oldName: _pick(obj, ['schemaName', 'pureName']),
+              action: 'change',
+              objectTypeField: field,
+              objectId,
+            }
           : {
-            newName: { schemaName, pureName },
-            action: 'add',
-            objectTypeField: field,
-            objectId,
-          };
+              newName: { schemaName, pureName },
+              action: 'add',
+              objectTypeField: field,
+              objectId,
+            };
         res.push(action);
       }
     }

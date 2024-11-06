@@ -38,17 +38,21 @@ const driver = {
     //   poolMax: 2,
     //   poolMin: 1,
     // });
-    client = await dmdb.getConnection({
-      user,
-      password,
-      connectString: useDatabaseUrl ? databaseUrl : `${server}:${port || 5236}`,
-      loginEncrypt: false,
-      extendedMetaData: true,
-    });
-    if (database) {
-      await client.execute(`ALTER SESSION SET CURRENT_SCHEMA = ${database}`);
+    try {
+      client = await dmdb.getConnection({
+        user,
+        password,
+        connectString: useDatabaseUrl ? databaseUrl : `${server}:${port || 5236}`,
+        loginEncrypt: false,
+        extendedMetaData: true,
+      });
+      if (database) {
+        await client.execute(`ALTER SESSION SET CURRENT_SCHEMA = ${database}`);
+      }
+      client._schema_name = database;
+    } catch (error) {
+      logger.error({ error }, 'DM connection error: ');
     }
-    client._schema_name = database;
     return client;
   },
   async close(pool) {
@@ -62,6 +66,7 @@ const driver = {
         columns: [],
       };
     }
+    console.log('query ', client, sql);
     const mtrim = sql.match(/^(.*);\s*$/s);
     if (mtrim) {
       sql = mtrim[1];
@@ -167,7 +172,7 @@ const driver = {
   // called when exporting table or view
   async readQuery(client, sql, structure) {
     const query = await client.queryStream(sql);
-
+    console.log('readQuery :', client, sql);
     let wasHeader = false;
     let columns = null;
 
@@ -246,6 +251,7 @@ const driver = {
   // list databases on server
   async listDatabases(client) {
     const { rows } = await this.query(client, 'SELECT username AS "name" FROM all_users ORDER BY username');
+    console.log('dm listDatabases: ', rows);
     return rows;
   },
   async tabColumns(client, inCondition) {

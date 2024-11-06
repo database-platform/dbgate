@@ -1,5 +1,14 @@
 ## 部署
 
+```
+python --version
+>= 3.8.5
+
+msnodesqlv8 依赖于 GLIBC 2.29
+
+node-gyp -v
+```
+
 ### config selfsigned
 
 docker config create selfsigned.crt /etc/nginx/ssl/selfsigned.crt

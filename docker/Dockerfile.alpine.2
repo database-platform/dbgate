@@ -1,0 +1,23 @@
+FROM node:20.12.2-alpine3.19 AS build
+
+# WORKDIR /home/dbgate-docker
+
+RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.19/main/" > /etc/apk/repositories \
+    && echo "http://mirrors.ustc.edu.cn/alpine/v3.19/community/" >> /etc/apk/repositories \
+    && apk --no-cache upgrade \
+    && apk --no-cache add iputils \
+    && apk --no-cache python3 make g++
+
+# 设置工作目录
+WORKDIR /app
+
+COPY 
+COPY . .
+
+# RUN ["chmod", "+x", "/home/dbgate-docker/entrypoint.sh"]
+
+# WORKDIR /home/dbgate-docker
+# EXPOSE 3000
+# VOLUME /root/.dbgate
+
+# CMD ["/home/dbgate-docker/entrypoint.sh"]
